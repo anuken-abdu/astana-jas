@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth overflow-x-hidden">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ASTANA JAS | Elite Football Academy</title>
+  <meta name="description" content="Профессиональная футбольная школа в Астане. Тренировки для детей 5–14 лет. Программы по возрастам, индивидуальные занятия, экипировка и локации." />
+
+  <!-- OpenGraph / Share -->
+  <meta property="og:title" content="ASTANA JAS | Elite Football Academy" />
+  <meta property="og:description" content="Футбольная школа в Астане. Запись в 1 клик через WhatsApp." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:image" content="images/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500;700&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+
+  <!-- Icons & Leaflet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            header: ['"Oswald"', 'sans-serif'],
+            body: ['"Roboto"', 'sans-serif']
+          },
+          colors: {
+            ink: {
+              950: '#07070b',
+              900: '#0b0b10',
+              800: '#121220',
+              700: '#1b1b2a'
+            },
+            paper: {
+              50: '#fbfbfc',
+              100: '#f2f3f5',
+              200: '#e6e8ee'
+            },
+            gold: {
+              500: '#D4AF37',
+              400: '#E2C86A'
+            }
+          },
+          boxShadow: {
+            soft: '0 18px 60px rgba(0,0,0,.45)',
+            hard: '0 28px 90px rgba(0,0,0,.65)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root{
+      --bg:#07070b;
+      --bg2:#0b0b10;
+      --card: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --gold:#D4AF37;
+    }
+
+    html, body { max-width:100%; overflow-x:hidden; }
+    body { background: var(--bg); color: var(--text); }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 99px; }
+
+    /* Minimal “premium” noise */
+    .noise:before{
+      content:"";
+      position:absolute; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      opacity:.45;
+      pointer-events:none;
+    }
+
+    /* Reveal */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: opacity .75s ease, transform .75s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.is-visible{ opacity:1; transform: translateY(0); }
+
+    /* Buttons */
+    .btn{
+      position:relative;
+      overflow:hidden;
+      transform: translateZ(0);
+      transition: transform .25s ease, background-color .25s ease, color .25s ease, border-color .25s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0); }
+
+    /* Scroll progress */
+    #scrollProgress{
+      position:fixed; top:0; left:0;
+      height:3px;
+      width:0%;
+      background: var(--gold);
+      z-index:99999;
+      box-shadow: 0 8px 18px rgba(212,175,55,0.35);
+    }
+
+    /* Lightbox */
+    #lightbox{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.88);
+      display:none;
+      align-items:center; justify-content:center;
+      z-index:99999;
+      padding:24px;
+    }
+    #lightbox.show{ display:flex; }
+    #lightbox img{
+      max-width:min(1200px, 100%);
+      max-height:90vh;
+      object-fit:contain;
+      border-radius:18px;
+      box-shadow:0 25px 110px rgba(0,0,0,0.75);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    #lightbox button{
+      position:absolute; top:18px; right:18px;
+      width:44px; height:44px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.12);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(12px);
+      font-size:18px;
+    }
+    #lightbox button:hover{ background: rgba(255,255,255,0.18); }
+
+    /* Modal */
+    #modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.74);
+      display:none;
+      align-items:center; justify-content:center;
+      z-index:99998;
+      padding:18px;
+    }
+    #modal.show{ display:flex; }
+    .modal-card{
+      width:min(980px, 100%);
+      max-height: calc(100vh - 36px);
+      display:flex;
+      flex-direction:column;
+      border-radius:22px;
+      overflow:hidden;
+      background: rgba(12,12,18,0.92);
+      backdrop-filter: blur(18px);
+      border:1px solid rgba(255,255,255,0.12);
+      box-shadow:0 35px 120px rgba(0,0,0,0.65);
+    }
+    #modalBody{
+      overflow-y:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Masonry (simple) */
+    .masonry{ column-count: 3; column-gap: 14px; }
+    @media (max-width: 1024px){ .masonry{ column-count: 2; } }
+    @media (max-width: 640px){ .masonry{ column-count: 1; } }
+    .masonry-item{ break-inside: avoid; margin-bottom: 14px; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .reveal{ transition:none; }
+      .btn{ transition:none; }
+    }
+  </style>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsOrganization",
+    "name": "Astana Jas Football Academy",
+    "areaServed": "Astana, KZ",
+    "sport": "Football",
+    "url": "",
+    "logo": "images/logo.png",
+    "sameAs": ["https://wa.me/77019744464"]
+  }
+  </script>
+</head>
+
+<body class="font-body antialiased relative">
+  <div id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div id="navShell" class="bg-black/35 backdrop-blur-xl border-b border-white/10">
+      <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-3">
+          <img src="images/logo.png" alt="Astana Jas" class="w-10 h-10 object-contain"
+               onerror="this.style.display='none'">
+          <div class="leading-none">
+            <div class="font-header uppercase tracking-[0.18em] font-bold text-white text-lg">Astana Jas</div>
+            <div class="text-[10px] uppercase tracking-[0.38em] text-white/60 font-bold">Elite Football Academy</div>
+          </div>
+        </a>
+
+        <div class="hidden lg:flex items-center gap-8 font-header uppercase tracking-wider text-sm text-white/80">
+          <a href="#about" class="hover:text-gold-400 transition">О клубе</a>
+          <a href="#programs" class="hover:text-gold-400 transition">Программы</a>
+          <a href="#team" class="hover:text-gold-400 transition">Тренеры</a>
+          <a href="#gallery" class="hover:text-gold-400 transition">Галерея</a>
+          <a href="#locations" class="hover:text-gold-400 transition">Контакты</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="openModal('quiz')" class="hidden md:inline-flex btn px-5 py-2 rounded-2xl border border-white/12 bg-white/5 text-white font-header uppercase tracking-wider">
+            Подбор
+          </button>
+          <a href="https://wa.me/77019744464" class="hidden md:inline-flex btn px-5 py-2 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider">
+            WhatsApp
+          </a>
+
+          <button class="lg:hidden w-11 h-11 rounded-2xl border border-white/12 bg-white/5 text-white"
+                  onclick="toggleMenu()" aria-label="Открыть меню">
+            <i class="fas fa-bars" id="menuIcon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black/92 backdrop-blur-xl translate-x-full transition-transform duration-500 lg:hidden z-40">
+      <div class="h-full flex flex-col pt-24 px-8 overflow-y-auto">
+        <div class="flex items-center justify-between pb-6 border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="Astana Jas" class="w-9 h-9 object-contain" onerror="this.style.display='none'">
+            <div>
+              <div class="font-header uppercase tracking-[0.18em] font-bold text-white text-xl">Astana Jas</div>
+              <div class="text-[10px] uppercase tracking-[0.38em] text-white/60 font-bold">Menu</div>
+            </div>
+          </div>
+          <button class="w-11 h-11 rounded-2xl border border-white/12 bg-white/5 text-white"
+                  onclick="toggleMenu(true)" aria-label="Закрыть">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="mt-8 flex flex-col gap-6 font-header uppercase font-bold tracking-wider text-3xl text-white">
+          <a href="#about" onclick="toggleMenu(true)" class="hover:text-gold-400 transition">О клубе</a>
+          <a href="#programs" onclick="toggleMenu(true)" class="hover:text-gold-400 transition">Программы</a>
+          <a href="#team" onclick="toggleMenu(true)" class="hover:text-gold-400 transition">Тренеры</a>
+          <a href="#gallery" onclick="toggleMenu(true)" class="hover:text-gold-400 transition">Галерея</a>
+          <a href="#locations" onclick="toggleMenu(true)" class="hover:text-gold-400 transition">Контакты</a>
+        </div>
+
+        <div class="mt-auto pb-10 pt-8 space-y-3">
+          <button onclick="openModal('quiz'); toggleMenu(true)"
+                  class="btn w-full py-4 rounded-2xl bg-white/5 border border-white/12 text-white font-header uppercase tracking-wider">
+            Подбор программы
+          </button>
+          <a href="https://wa.me/77019744464"
+             class="btn w-full py-4 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-center block">
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO (ВИДЕО УДАЛЕНО) -->
+  <header class="relative min-h-screen flex items-center overflow-hidden noise">
+    <div class="absolute inset-0">
+      <img src="images/hero_poster.jpg" alt="Astana Jas"
+           class="absolute inset-0 w-full h-full object-cover object-top opacity-85"
+           loading="eager" decoding="async"
+           onerror="this.style.opacity='0.2'">
+
+      <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/35 to-black/90"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(60% 55% at 50% 18%, rgba(212,175,55,0.20), transparent 62%);"></div>
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10 pt-32 pb-20">
+      <div class="grid lg:grid-cols-12 gap-10 items-end">
+        <div class="lg:col-span-7">
+          <div class="reveal inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/12 bg-white/5 backdrop-blur-md">
+            <span class="w-2 h-2 rounded-full bg-gold-500"></span>
+            <span class="text-[10px] md:text-xs uppercase tracking-[0.35em] font-bold text-white/75">Season 2025/2026 • Astana</span>
+          </div>
+
+          <h1 class="reveal mt-6 font-header uppercase font-bold leading-[0.9] text-white text-6xl md:text-[7.2vw]">
+            Astana <span class="text-gold-400">Jas</span>
+          </h1>
+
+          <p class="reveal mt-6 text-white/80 text-lg md:text-2xl max-w-2xl">
+            Воспитываем характер. Создаём чемпионов.
+            <span class="block mt-2 text-white font-medium">История большого футбола начинается здесь.</span>
+          </p>
+
+          <div class="reveal mt-10 flex flex-col sm:flex-row gap-3">
+            <button onclick="openModal('quiz')" class="btn px-8 py-4 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg shadow-hard">
+              Подобрать программу
+            </button>
+            <a href="#programs" class="btn px-8 py-4 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg">
+              Смотреть программы
+            </a>
+          </div>
+
+          <div class="reveal mt-10 grid sm:grid-cols-3 gap-3 max-w-xl">
+            <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-4">
+              <div class="text-[10px] uppercase tracking-[0.35em] font-bold text-white/55">Возраст</div>
+              <div class="mt-1 font-header uppercase font-bold text-white text-2xl">5–14</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-4">
+              <div class="text-[10px] uppercase tracking-[0.35em] font-bold text-white/55">Локации</div>
+              <div class="mt-1 font-header uppercase font-bold text-white text-2xl">2 школы</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-4">
+              <div class="text-[10px] uppercase tracking-[0.35em] font-bold text-white/55">Формат</div>
+              <div class="mt-1 font-header uppercase font-bold text-white text-2xl">Pro Path</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="reveal rounded-[2rem] border border-white/12 bg-black/35 backdrop-blur-xl p-7 shadow-hard">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/60">Fast Entry</div>
+                <div class="mt-2 font-header uppercase font-bold text-white text-3xl leading-tight">Запись за 30 секунд</div>
+                <div class="mt-3 text-white/70 text-sm">
+                  Откроем WhatsApp с готовым сообщением — менеджер уточнит возраст, цель и ближайшую локацию.
+                </div>
+              </div>
+              <div class="w-12 h-12 rounded-2xl border border-gold-400/25 bg-gold-500/10 flex items-center justify-center">
+                <i class="fas fa-bolt text-gold-400"></i>
+              </div>
+            </div>
+
+            <div class="mt-6 space-y-3">
+              <button onclick="waPrefill('Здравствуйте! Хочу записать ребенка на пробную тренировку. Подскажите расписание и локации.')"
+                      class="btn w-full px-6 py-4 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg">
+                Пробная тренировка
+              </button>
+              <button onclick="waPrefill('Здравствуйте! Интересует программа и стоимость. Возраст ребенка: __ лет. Локация: __.')"
+                      class="btn w-full px-6 py-4 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg">
+                Узнать стоимость
+              </button>
+
+              <div class="grid grid-cols-2 gap-3 pt-2">
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Менеджер</div>
+                  <div class="mt-1 font-header uppercase font-bold text-white text-xl">Руслан</div>
+                </div>
+                <a href="tel:+77019744464" class="rounded-2xl border border-white/10 bg-white/5 p-4 hover:border-gold-400/40 transition">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Телефон</div>
+                  <div class="mt-1 font-header uppercase font-bold text-white text-xl">+7 701 974 44 64</div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal mt-5 flex items-center gap-3 text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">
+            <span class="w-12 h-[2px] bg-gold-500"></span>
+            Elite Standard • Discipline • Growth
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 inline-flex items-center gap-2 text-white/60 hover:text-gold-400 transition">
+      <span class="text-[10px] uppercase tracking-[0.45em] font-bold">Scroll</span>
+      <i class="fas fa-arrow-down"></i>
+    </a>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-20 bg-ink-950">
+    <div class="container mx-auto px-6">
+      <div class="grid lg:grid-cols-12 gap-10 items-center">
+        <div class="lg:col-span-6 reveal">
+          <div class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">
+            <span class="w-10 h-[2px] bg-gold-500"></span> О клубе
+          </div>
+          <h2 class="mt-4 font-header uppercase font-bold text-white text-4xl md:text-6xl leading-tight">
+            Больше чем <span class="text-gold-400">просто</span> игра
+          </h2>
+          <p class="mt-6 text-white/70 text-base md:text-lg leading-relaxed border-l-2 border-gold-500 pl-5">
+            Мы развиваем технику, дисциплину и тактическое мышление. Важно не только выигрывать,
+            но и расти как спортсмен и как личность.
+          </p>
+
+          <div class="mt-8 grid sm:grid-cols-2 gap-4">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Ценности</div>
+              <div class="mt-2 font-header uppercase font-bold text-white text-2xl">Честность • Семья</div>
+              <div class="mt-2 text-sm text-white/65">Уважение к партнёрам и честная конкуренция.</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Методика</div>
+              <div class="mt-2 font-header uppercase font-bold text-white text-2xl">Техника + Тактика</div>
+              <div class="mt-2 text-sm text-white/65">Понимание игры, скорость решений, командность.</div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <button onclick="openModal('quiz')" class="btn px-8 py-4 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg">
+              Подбор программы
+            </button>
+            <button onclick="openModal('schedule')" class="btn px-8 py-4 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg">
+              Смотреть расписание
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 reveal">
+          <div class="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-hard bg-white/5">
+            <img src="images/loc1.jpg" alt="Команда" class="w-full h-auto object-cover"
+                 loading="lazy" decoding="async"
+                 onerror="this.style.display='none'">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
+
+            <div class="absolute bottom-5 left-5 right-5">
+              <div class="rounded-2xl border border-white/12 bg-black/40 backdrop-blur-xl p-5">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Elite Metrics</div>
+                    <div class="mt-2 font-header uppercase font-bold text-white text-2xl">Структура прогресса</div>
+                    <div class="mt-2 text-sm text-white/70">Системная нагрузка и дисциплина → стабильный рост.</div>
+                  </div>
+                  <div class="w-12 h-12 rounded-2xl bg-gold-500/10 border border-gold-400/20 flex items-center justify-center">
+                    <i class="fas fa-chart-line text-gold-400"></i>
+                  </div>
+                </div>
+
+                <div class="mt-4 grid grid-cols-3 gap-3">
+                  <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                    <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Трен/мес</div>
+                    <div class="mt-1 font-header font-bold text-white text-2xl">8</div>
+                  </div>
+                  <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                    <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Групп</div>
+                    <div class="mt-1 font-header font-bold text-white text-2xl">6</div>
+                  </div>
+                  <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                    <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Локации</div>
+                    <div class="mt-1 font-header font-bold text-white text-2xl">2</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+          <div class="mt-4 text-[10px] uppercase tracking-[0.45em] font-bold text-white/45 reveal">
+            Минимализм • Дисциплина • Результат
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS -->
+  <section id="programs" class="py-20 bg-ink-900 border-t border-white/10">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Programs</div>
+        <h2 class="mt-3 font-header uppercase font-bold text-white text-4xl md:text-6xl">
+          Программы <span class="text-gold-400">обучения</span>
+        </h2>
+        <p class="mt-4 text-white/70 max-w-2xl mx-auto">
+          Выберите готовую программу или пройдите мини-квиз — и мы откроем WhatsApp с уже заполненным сообщением.
+        </p>
+        <div class="mt-7 flex flex-col sm:flex-row gap-3 justify-center">
+          <button onclick="openModal('quiz')" class="btn px-8 py-4 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg">
+            Квиз подбора
+          </button>
+          <button onclick="document.getElementById('comparison').scrollIntoView({behavior:'smooth'})"
+                  class="btn px-8 py-4 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg">
+            Сравнить
+          </button>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6 max-w-6xl mx-auto">
+        <!-- Baby -->
+        <div class="lg:col-span-6 reveal">
+          <div class="rounded-[2rem] overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-soft">
+            <div class="relative h-64 bg-black/30">
+              <img src="images/prog_baby.jpg" alt="Baby Start" class="w-full h-full object-cover"
+                   loading="lazy" decoding="async" onerror="this.style.display='none'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/65">5–7 лет</div>
+                  <div class="font-header uppercase font-bold text-white text-3xl">Baby Start</div>
+                </div>
+                <div class="rounded-2xl bg-gold-500 text-black font-header uppercase font-bold px-4 py-2">
+                  25.000 тг
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 md:p-8">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-white/10 bg-black/25 p-4">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Набор</div>
+                  <div class="mt-1 font-bold text-white">2017–2019 г.р.</div>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-black/25 p-4">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">График</div>
+                  <div class="mt-1 font-bold text-white">Сб–Вс • 11:00–12:00</div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button class="btn w-full py-4 px-6 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg"
+                        onclick="waProgram('Baby Start', '5–7 лет', 'Хочу записать ребенка на Baby Start. Подскажите свободные места и локацию.')">
+                  Записаться
+                </button>
+                <button class="btn w-full py-4 px-6 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg"
+                        onclick="waProgram('Baby Start', '5–7 лет', 'Нужна консультация по Baby Start: условия, экипировка, пробная тренировка.')">
+                  Консультация
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekend -->
+        <div class="lg:col-span-6 reveal">
+          <div class="rounded-[2rem] overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-soft">
+            <div class="relative h-64 bg-black/30">
+              <img src="images/prog_weekend.jpg" alt="Weekend" class="w-full h-full object-cover"
+                   loading="lazy" decoding="async" onerror="this.style.display='none'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/65">8–10 лет</div>
+                  <div class="font-header uppercase font-bold text-white text-3xl">Weekend</div>
+                </div>
+                <div class="rounded-2xl bg-gold-500 text-black font-header uppercase font-bold px-4 py-2">
+                  25.000 тг
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 md:p-8">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-white/10 bg-black/25 p-4">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Набор</div>
+                  <div class="mt-1 font-bold text-white">2013–2016 г.р.</div>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-black/25 p-4">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">График</div>
+                  <div class="mt-1 font-bold text-white">Сб–Вс • 10:00–11:00</div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button class="btn w-full py-4 px-6 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg"
+                        onclick="waProgram('Weekend', '8–10 лет', 'Хочу записать ребенка в Weekend-группу. Подскажите места и расписание.')">
+                  Записаться
+                </button>
+                <button class="btn w-full py-4 px-6 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg"
+                        onclick="waProgram('Weekend', '8–10 лет', 'Нужна консультация по Weekend-группам: уровень, требования, экипировка.')">
+                  Консультация
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spec -->
+        <div class="lg:col-span-7 reveal">
+          <div class="rounded-[2rem] overflow-hidden border border-white/10 bg-black/40 shadow-soft">
+            <div class="relative h-72 bg-black/30">
+              <img src="images/prog_spec.jpg" alt="Spec Group" class="w-full h-full object-cover"
+                   loading="lazy" decoding="async" onerror="this.style.display='none'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-gold-400">11–14 лет</div>
+                  <div class="font-header uppercase font-bold text-white text-4xl">Spec Group</div>
+                </div>
+                <div class="rounded-2xl bg-gold-500 text-black font-header uppercase font-bold px-4 py-2">
+                  30.000 тг
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 md:p-8">
+              <div class="grid md:grid-cols-3 gap-4">
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Набор</div>
+                  <div class="mt-1 font-bold text-white">2010–2016 г.р.</div>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Формат</div>
+                  <div class="mt-1 font-bold text-white">3 раза/нед + matchday</div>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Уровень</div>
+                  <div class="mt-1 font-bold text-white">Соревновательный</div>
+                </div>
+              </div>
+
+              <div class="mt-5 rounded-2xl border border-white/10 bg-black/35 p-5">
+                <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-gold-400">Что внутри</div>
+                <ul class="mt-3 text-sm text-white/75 space-y-2">
+                  <li><i class="fas fa-check text-gold-400 mr-2"></i>Техника + скорость решений</li>
+                  <li><i class="fas fa-check text-gold-400 mr-2"></i>Тактика, взаимодействия, игровые модели</li>
+                  <li><i class="fas fa-check text-gold-400 mr-2"></i>Турниры, матч-дни, рост устойчивости</li>
+                </ul>
+              </div>
+
+              <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button class="btn w-full py-4 px-6 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg"
+                        onclick="waProgram('Spec Group', '11–14 лет', 'Интересует Спецгруппа: условия отбора, расписание и локации.')">
+                  Узнать условия
+                </button>
+                <button class="btn w-full py-4 px-6 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg"
+                        onclick="waProgram('Spec Group', '11–14 лет', 'Хочу записаться на просмотр/отбор в Спецгруппу. Подскажите формат и время.')">
+                  Запись на просмотр
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Small -->
+        <div class="lg:col-span-5 reveal">
+          <div class="rounded-[2rem] overflow-hidden border border-white/10 bg-white/5 shadow-soft h-full flex flex-col">
+            <div class="relative h-72 bg-black/30">
+              <img src="images/prog_small.jpg" alt="Small Group" class="w-full h-full object-cover"
+                   loading="lazy" decoding="async" onerror="this.style.display='none'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/65">до 5 человек</div>
+                  <div class="font-header uppercase font-bold text-white text-3xl">Small Group</div>
+                </div>
+                <div class="rounded-2xl bg-gold-500 text-black font-header uppercase font-bold px-4 py-2">
+                  от 50.000 тг
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 md:p-8 flex-1 flex flex-col">
+              <ul class="text-sm text-white/75 space-y-2">
+                <li><i class="fas fa-check text-gold-400 mr-2"></i>Группа до 5 человек</li>
+                <li><i class="fas fa-check text-gold-400 mr-2"></i>Детали: техника, скорость, решения</li>
+                <li><i class="fas fa-check text-gold-400 mr-2"></i>8 тренировок в месяц</li>
+              </ul>
+
+              <div class="mt-auto pt-6 space-y-3">
+                <button class="btn w-full py-4 px-6 rounded-2xl bg-black/50 border border-white/12 text-white font-header uppercase tracking-wider text-lg hover:border-gold-400/40"
+                        onclick="waProgram('Small Group', 'до 5 человек', 'Интересуют тренировки в малых группах: расписание, цена и локации.')">
+                  Запрос в WhatsApp
+                </button>
+                <button class="btn w-full py-4 px-6 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg"
+                        onclick="openModal('schedule')">
+                  Расписание
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Individual -->
+        <div class="lg:col-span-12 reveal">
+          <div class="rounded-[2rem] overflow-hidden border border-white/10 bg-white/5 shadow-soft">
+            <div class="grid lg:grid-cols-12">
+              <div class="lg:col-span-5 relative min-h-[280px] bg-black/30">
+                <img src="images/prog_indiv.jpg" alt="Individual" class="w-full h-full object-cover"
+                     loading="lazy" decoding="async" onerror="this.style.display='none'">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"></div>
+                <div class="absolute bottom-5 left-5 right-5">
+                  <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/65">1x1</div>
+                  <div class="font-header uppercase font-bold text-white text-4xl">Individual</div>
+                </div>
+              </div>
+
+              <div class="lg:col-span-7 p-6 md:p-10">
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
+                  <div>
+                    <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Premium Focus</div>
+                    <h3 class="mt-2 font-header uppercase font-bold text-white text-3xl md:text-4xl">
+                      Индивидуальная работа с тренером
+                    </h3>
+                    <p class="mt-3 text-white/70">
+                      Работа над ошибками, современный инвентарь, комфортные условия (раздевалки, душевые),
+                      видеосъёмка тренировок.
+                    </p>
+                  </div>
+                  <div class="shrink-0 rounded-2xl bg-gold-500 text-black font-header uppercase font-bold px-5 py-3">
+                    от 80.000 тг
+                  </div>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-4">
+                  <div class="rounded-2xl border border-white/10 bg-black/25 p-5">
+                    <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Расписание</div>
+                    <div class="mt-2 text-sm font-bold text-white">Пн—Пт: окна 11:30–12:30 и 15:30–16:30</div>
+                    <div class="mt-2 text-xs text-white/60">*точное время уточняйте у менеджера</div>
+                  </div>
+
+                  <div class="rounded-2xl border border-white/10 bg-black/35 p-5">
+                    <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-gold-400">Идеально если</div>
+                    <ul class="mt-3 text-sm text-white/75 space-y-2">
+                      <li><i class="fas fa-check text-gold-400 mr-2"></i>нужно быстро поднять технику</li>
+                      <li><i class="fas fa-check text-gold-400 mr-2"></i>важна персональная коррекция</li>
+                      <li><i class="fas fa-check text-gold-400 mr-2"></i>есть цель на позицию/роль</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                  <button class="btn w-full py-4 px-6 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg"
+                          onclick="waProgram('Individual 1x1', 'Premium', 'Хочу записаться на индивидуальную тренировку 1x1. Возраст ребенка: __. Удобное время: __.')">
+                    Записаться 1x1
+                  </button>
+                  <button class="btn w-full py-4 px-6 rounded-2xl border border-white/14 bg-white/5 text-white font-header uppercase tracking-wider text-lg"
+                          onclick="waProgram('Individual 1x1', 'Premium', 'Нужна консультация по 1x1: цели, формат и стоимость.')">
+                    Консультация
+                  </button>
+                </div>
+
+                <div class="mt-4 text-xs text-white/55">Расписание может корректироваться — уточняйте у менеджера.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison -->
+      <div id="comparison" class="mt-16 reveal max-w-6xl mx-auto">
+        <div class="rounded-[2rem] border border-white/10 bg-black/25 p-6 md:p-10">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+              <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Comparison</div>
+              <div class="mt-2 font-header uppercase font-bold text-white text-3xl md:text-4xl">Сравнение программ</div>
+              <div class="mt-2 text-white/70">Быстро понять разницу и выбрать лучший путь.</div>
+            </div>
+            <button onclick="openModal('quiz')" class="btn px-8 py-4 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg">
+              Подбор за 30 секунд
+            </button>
+          </div>
+
+          <div class="mt-6 overflow-x-auto">
+            <table class="w-full text-left border-separate" style="border-spacing: 0 10px;">
+              <thead>
+                <tr class="text-[10px] uppercase tracking-[0.35em] font-bold text-white/55">
+                  <th class="px-4">Программа</th>
+                  <th class="px-4">Возраст</th>
+                  <th class="px-4">Частота</th>
+                  <th class="px-4">Фокус</th>
+                  <th class="px-4">Цена</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm">
+                <tr class="bg-white/5 border border-white/10">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-white">Baby Start</td>
+                  <td class="px-4 py-4 text-white/75">5–7</td>
+                  <td class="px-4 py-4 text-white/75">2 раза/нед</td>
+                  <td class="px-4 py-4 text-white/75">База, координация</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold text-white">25.000 тг</td>
+                </tr>
+                <tr class="bg-white/5 border border-white/10">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-white">Weekend</td>
+                  <td class="px-4 py-4 text-white/75">8–10</td>
+                  <td class="px-4 py-4 text-white/75">2 раза/нед</td>
+                  <td class="px-4 py-4 text-white/75">Техника, тактика</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold text-white">25.000 тг</td>
+                </tr>
+                <tr class="bg-white/5 border border-white/10">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-white">Spec Group</td>
+                  <td class="px-4 py-4 text-white/75">11–14</td>
+                  <td class="px-4 py-4 text-white/75">3 раза/нед + matchday</td>
+                  <td class="px-4 py-4 text-white/75">Соревнования</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold text-white">30.000 тг</td>
+                </tr>
+                <tr class="bg-white/5 border border-white/10">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-white">Small Group</td>
+                  <td class="px-4 py-4 text-white/75">Любой</td>
+                  <td class="px-4 py-4 text-white/75">8/мес</td>
+                  <td class="px-4 py-4 text-white/75">Детали, техника</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold text-white">от 50.000 тг</td>
+                </tr>
+                <tr class="bg-white/5 border border-white/10">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-white">Individual 1x1</td>
+                  <td class="px-4 py-4 text-white/75">Любой</td>
+                  <td class="px-4 py-4 text-white/75">По запросу</td>
+                  <td class="px-4 py-4 text-white/75">Персональная коррекция</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold text-white">от 80.000 тг</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-4 text-xs text-white/55">
+            Примечание: расписание и места уточняйте у менеджера.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="py-20 bg-ink-950 border-t border-white/10">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-gold-400">Trust</div>
+        <h2 class="mt-3 font-header uppercase font-bold text-white text-4xl md:text-6xl">
+          Отзывы <span class="text-gold-400">родителей</span>
+        </h2>
+      </div>
+
+      <div class="reveal rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl shadow-soft overflow-hidden">
+        <div class="p-6 md:p-10">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Slider</div>
+              <div class="mt-2 font-header uppercase font-bold text-white text-2xl md:text-3xl">Что говорят о нас</div>
+            </div>
+            <div class="flex gap-2">
+              <button class="w-11 h-11 rounded-2xl bg-white/5 border border-white/12 hover:border-gold-400/35 transition"
+                      onclick="slideTestimonial(-1)" aria-label="Назад">
+                <i class="fas fa-arrow-left text-gold-400"></i>
+              </button>
+              <button class="w-11 h-11 rounded-2xl bg-white/5 border border-white/12 hover:border-gold-400/35 transition"
+                      onclick="slideTestimonial(1)" aria-label="Вперед">
+                <i class="fas fa-arrow-right text-gold-400"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-8 grid lg:grid-cols-12 gap-6 items-start">
+            <div class="lg:col-span-8">
+              <div class="rounded-[1.6rem] bg-black/30 border border-white/10 p-6 md:p-8">
+                <div class="flex items-center gap-2 text-gold-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p id="tText" class="mt-4 text-lg md:text-xl text-white/85 leading-relaxed">—</p>
+                <div class="mt-6 flex items-center justify-between">
+                  <div>
+                    <p id="tName" class="font-header uppercase text-2xl font-bold text-white">—</p>
+                    <p id="tMeta" class="text-[10px] uppercase tracking-[0.45em] text-white/55 font-bold">—</p>
+                  </div>
+                  <button onclick="waPrefill('Здравствуйте! Хочу узнать подробности и записаться.')"
+                          class="btn bg-gold-500 text-black px-6 py-3 rounded-2xl font-header uppercase tracking-wider">
+                    Записаться
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-4">
+              <div class="rounded-[1.6rem] bg-black/30 border border-white/10 p-6">
+                <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Highlights</div>
+                <ul class="mt-4 text-sm text-white/75 space-y-3">
+                  <li><i class="fas fa-check text-gold-400 mr-2"></i>Системная методика</li>
+                  <li><i class="fas fa-check text-gold-400 mr-2"></i>Дисциплина и уверенность</li>
+                  <li><i class="fas fa-check text-gold-400 mr-2"></i>Командное мышление</li>
+                  <li><i class="fas fa-check text-gold-400 mr-2"></i>Матч-дни и практика</li>
+                </ul>
+                <button onclick="openModal('quiz')" class="mt-6 btn w-full bg-white/5 border border-white/12 text-white py-4 rounded-2xl font-header uppercase tracking-wider hover:border-gold-400/35 transition">
+                  Подбор программы
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KIT -->
+  <section id="kit" class="py-20 bg-ink-900 border-t border-white/10">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Elite Gear</div>
+        <h2 class="mt-3 font-header uppercase font-bold text-white text-4xl md:text-6xl">
+          Клубная <span class="text-gold-400">форма</span>
+        </h2>
+      </div>
+
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-7 reveal">
+          <div class="rounded-[2rem] border border-white/10 bg-black/25 p-4 md:p-8 cursor-pointer group relative overflow-hidden shadow-soft"
+               onclick="openLightbox('images/kit.jpg?v=4')">
+            <img src="images/kit.jpg?v=4" alt="Форма" class="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+                 loading="lazy" decoding="async"
+                 onerror="this.style.display='none'">
+            <div class="absolute bottom-6 right-6 bg-white/10 backdrop-blur-md p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border border-white/12">
+              <i class="fas fa-expand-alt text-white"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 space-y-4 reveal">
+          <div class="rounded-[1.6rem] bg-black/30 text-white p-7 border border-white/10">
+            <div class="flex items-center gap-4 mb-3">
+              <i class="fas fa-medal text-gold-400 text-xl"></i>
+              <h4 class="font-header uppercase font-bold tracking-wide text-xl">Дизайн</h4>
+            </div>
+            <p class="text-white/70 text-sm leading-relaxed">Эксклюзивный паттерн с использованием национального казахского орнамента.</p>
+          </div>
+
+          <div class="rounded-[1.6rem] bg-black/30 text-white p-7 border border-white/10">
+            <div class="flex items-center gap-4 mb-3">
+              <i class="fas fa-bolt text-gold-400 text-xl"></i>
+              <h4 class="font-header uppercase font-bold tracking-wide text-xl">Материал</h4>
+            </div>
+            <p class="text-white/70 text-sm leading-relaxed">Полиэстер PRO-Fit: дышит и быстро отводит влагу.</p>
+          </div>
+
+          <button onclick="waPrefill('Здравствуйте! Интересует клубная форма: размеры, стоимость и как заказать.')"
+                  class="btn w-full bg-gold-500 text-black py-4 rounded-2xl font-header uppercase tracking-wider">
+            Узнать про форму
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team" class="py-20 bg-ink-950 border-t border-white/10">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-10 reveal">
+        <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-gold-400">Coaching</div>
+        <h2 class="mt-3 font-header uppercase font-bold text-white text-4xl md:text-6xl">
+          Тренерский <span class="text-gold-400">штаб</span>
+        </h2>
+        <p class="mt-4 text-white/70 max-w-2xl mx-auto">
+          Профессиональный подход, дисциплина и системная работа с прогрессом.
+        </p>
+      </div>
+
+      <div class="reveal relative rounded-[2rem] overflow-hidden shadow-hard border border-white/10">
+        <img src="images/team_full.jpg" alt="Тренерский штаб" class="w-full h-auto object-cover"
+             loading="lazy" decoding="async"
+             onerror="this.style.display='none'">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10 pointer-events-none"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="py-20 bg-ink-900 border-t border-white/10">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Gallery</div>
+        <h2 class="mt-3 font-header uppercase font-bold text-white text-4xl md:text-6xl">
+          Галерея <span class="text-gold-400">тренировок</span>
+        </h2>
+      </div>
+
+      <div class="reveal masonry max-w-6xl mx-auto">
+        <!-- Названия оставлены как в исходнике -->
+        <div class="masonry-item">
+          <div class="rounded-[1.2rem] overflow-hidden border border-white/10 bg-black/25 cursor-pointer" onclick="openLightbox('images/gallery_1.jpg')">
+            <img src="images/gallery_1.jpg" class="w-full h-auto object-cover" alt="Gallery 1" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[1.2rem] overflow-hidden border border-white/10 bg-black/25 cursor-pointer" onclick="openLightbox('images/gallery_2.jpg')">
+            <img src="images/gallery_2.jpg" class="w-full h-auto object-cover" alt="Gallery 2" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[1.2rem] overflow-hidden border border-white/10 bg-black/25 cursor-pointer" onclick="openLightbox('images/gallery_3.jpg')">
+            <img src="images/gallery_3.jpg" class="w-full h-auto object-cover" alt="Gallery 3" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[1.2rem] overflow-hidden border border-white/10 bg-black/25 cursor-pointer" onclick="openLightbox('images/gallery_4.jpg')">
+            <img src="images/gallery_4.jpg" class="w-full h-auto object-cover" alt="Gallery 4" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[1.2rem] overflow-hidden border border-white/10 bg-black/25 cursor-pointer" onclick="openLightbox('images/gallery_5.jpg')">
+            <img src="images/gallery_5.jpg" class="w-full h-auto object-cover" alt="Gallery 5" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[1.2rem] overflow-hidden border border-white/10 bg-black/25 cursor-pointer" onclick="openLightbox('images/gallery_6.jpg')">
+            <img src="images/gallery_6.jpg" class="w-full h-auto object-cover" alt="Gallery 6" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-10 reveal">
+        <button onclick="waPrefill('Здравствуйте! Хочу записать ребенка на тренировку. Подскажите ближайшую локацию и расписание.')"
+                class="btn px-10 py-4 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg">
+          Записаться после просмотра
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATIONS -->
+  <section id="locations" class="py-20 bg-ink-950 border-t border-white/10">
+    <div class="container mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-10 items-start">
+        <div class="reveal">
+          <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-gold-400">Contacts</div>
+          <h2 class="mt-3 font-header uppercase font-bold text-white text-5xl">
+            Контакты <span class="text-gold-400">клуба</span>
+          </h2>
+
+          <div class="mt-8 rounded-[2rem] bg-white/5 backdrop-blur-md border border-white/10 p-5 md:p-6">
+            <div class="flex gap-2">
+              <button id="locTab1" onclick="selectLocation(0)" class="btn flex-1 rounded-2xl bg-gold-500 text-black py-3 font-header uppercase tracking-wider">
+                Школа №11
+              </button>
+              <button id="locTab2" onclick="selectLocation(1)" class="btn flex-1 rounded-2xl bg-white/5 text-white border border-white/12 py-3 font-header uppercase tracking-wider">
+                Школа №71
+              </button>
+            </div>
+
+            <div class="mt-5 space-y-3">
+              <div class="p-5 border border-white/10 rounded-2xl bg-black/25">
+                <div class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Адрес</div>
+                <div id="locAddress" class="mt-2 font-header uppercase font-bold text-white text-2xl">им. Өзбекәлі Жәнібекова</div>
+                <div id="locCity" class="mt-1 text-white/70 text-sm">Астана</div>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-3">
+                <button onclick="waPrefill(currentLocationWaText())"
+                        class="btn w-full py-4 rounded-2xl bg-gold-500 text-black font-header uppercase tracking-wider text-lg">
+                  Написать в WhatsApp
+                </button>
+                <a href="tel:+77019744464"
+                   class="btn w-full py-4 rounded-2xl bg-white/5 text-white text-center font-header uppercase tracking-wider text-lg border border-white/12">
+                  Позвонить
+                </a>
+              </div>
+
+              <div class="text-xs text-white/60">
+                Карта загрузится автоматически, когда вы доскроллите до блока.
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 rounded-[2rem] bg-white/5 backdrop-blur-md border border-white/10 p-6">
+            <div class="text-xs text-gold-400 uppercase tracking-widest font-bold mb-1">Менеджер Руслан</div>
+            <a href="tel:+77019744464" class="text-3xl font-header font-bold block hover:text-gold-400 transition">
+              +7 701 974 44 64
+            </a>
+          </div>
+        </div>
+
+        <div class="reveal h-[420px] bg-white rounded-[2rem] overflow-hidden relative shadow-hard border border-white/10">
+          <div id="map" class="w-full h-full z-10"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="relative bg-black text-white pt-16 pb-28 border-t border-white/10 overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-30">
+      <img src="images/footer_bg.jpg" alt="Footer" class="w-full h-full object-cover"
+           loading="lazy" decoding="async"
+           onerror="this.style.opacity='0.10'">
+      <div class="absolute inset-0 bg-gradient-to-b from-black/65 via-black/70 to-black/85"></div>
+    </div>
+
+    <div class="container mx-auto px-6 text-center relative z-10">
+      <div class="flex flex-col items-center gap-6 mb-10 reveal">
+        <div class="w-20 h-20 group cursor-pointer" onclick="openLightbox('images/logo.png')">
+          <img src="images/logo.png" class="w-full h-full object-contain" alt="Logo" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        </div>
+        <div class="flex flex-col gap-1">
+          <span class="font-header text-3xl md:text-4xl uppercase tracking-[0.2em] font-bold">Astana Jas</span>
+          <span class="text-[10px] uppercase tracking-[0.5em] text-gold-400 font-bold">Football Academy</span>
+        </div>
+      </div>
+
+      <p class="reveal text-[10px] text-white/45 font-bold uppercase tracking-widest border-t border-white/10 pt-8">
+        &copy; 2026 Astana Jas. Designed by
+        <a href="https://anukenn.vercel.app/" target="_blank" class="text-white hover:text-gold-400 transition duration-300">Anuken</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- STICKY CTA -->
+  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[min(980px,calc(100%-24px))]">
+    <div class="bg-black/55 backdrop-blur-xl border border-white/12 rounded-[1.6rem] shadow-hard px-4 py-3 flex items-center justify-between gap-4">
+      <div class="hidden sm:block">
+        <div class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Quick action</div>
+        <div class="font-header uppercase font-bold text-white text-xl leading-none">Запись в 1 клик</div>
+      </div>
+      <div class="flex-1 flex gap-2">
+        <button onclick="openModal('quiz')" class="btn flex-1 rounded-2xl bg-white/5 border border-white/12 text-white py-3 font-header uppercase tracking-wider hover:border-gold-400/35 transition">
+          Подбор
+        </button>
+        <a href="https://wa.me/77019744464" class="btn flex-1 rounded-2xl bg-gold-500 text-black py-3 font-header uppercase tracking-wider text-center">
+          WhatsApp
+        </a>
+      </div>
+      <button onclick="window.scrollTo({top:0, behavior:'smooth'})"
+              class="hidden md:inline-flex w-11 h-11 items-center justify-center rounded-2xl bg-white/5 border border-white/12 text-white hover:border-gold-400/35 transition"
+              aria-label="Наверх">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" aria-hidden="true">
+    <button type="button" onclick="closeLightbox()" aria-label="Закрыть"><i class="fas fa-times"></i></button>
+    <img id="lightboxImg" src="" alt="Preview">
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal" aria-hidden="true" onclick="modalOutsideClose(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between p-5 md:p-6 border-b border-white/10">
+        <div>
+          <p id="modalEyebrow" class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Modal</p>
+          <h3 id="modalTitle" class="font-header text-2xl md:text-3xl uppercase font-bold text-white">—</h3>
+        </div>
+        <button onclick="closeModal()" class="w-11 h-11 rounded-2xl bg-white/5 border border-white/12 text-white hover:border-gold-400/35 transition" aria-label="Закрыть">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="modalBody" class="p-5 md:p-6"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const WA_NUMBER = "77019744464";
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Programs (оставил из исходника)
+    const PROGRAMS = [
+      { id:'baby',   title:'Baby Start',      age:'5–7',   price:'25.000 тг', freq:'2 раза/нед',           focus:'База, координация',       schedule:'Сб–Вс 11:00–12:00' },
+      { id:'weekend',title:'Weekend',         age:'8–10',  price:'25.000 тг', freq:'2 раза/нед',           focus:'Техника, тактика',        schedule:'Сб–Вс 10:00–11:00' },
+      { id:'spec',   title:'Spec Group',      age:'11–14', price:'30.000 тг', freq:'3 раза/нед + matchday',focus:'Соревнования',            schedule:'3 раза/нед + matchday' },
+      { id:'small',  title:'Small Group',     age:'Любой', price:'от 50.000 тг', freq:'8/мес',            focus:'Детали, техника',         schedule:'По согласованию' },
+      { id:'indiv',  title:'Individual 1x1',  age:'Любой', price:'от 80.000 тг', freq:'По запросу',       focus:'Персональная коррекция',  schedule:'Пн–Пт (окна по расписанию)' }
+    ];
+
+    // Locations (оставил из исходника)
+    const LOCATIONS = [
+      { name:'Школа №11', address:'им. Өзбекәлі Жәнібекова', city:'Астана', lat:51.152230, lng:71.404335, popup:'<b>Школа №11</b>' },
+      { name:'Школа №71', address:'ул. Е-10',               city:'Астана', lat:51.104512, lng:71.402919, popup:'<b>Школа №71</b>' }
+    ];
+    let currentLocIndex = 0;
+
+    // Testimonials (оставил из исходника)
+    const TESTIMONIALS = [
+      { text:'Ребенок стал увереннее, дисциплина выросла, на поле быстрее принимает решения. Очень сильная структура тренировок.', name:'Айгерим', meta:'Родитель • 9 лет' },
+      { text:'Нравится подход: не просто бегают, а реально учат думать, держать позицию и играть в команде.', name:'Данияр', meta:'Родитель • 11 лет' },
+      { text:'Тренер объясняет понятно, прогресс заметен уже через несколько недель. Ребенок сам просится на тренировки.', name:'Жанна', meta:'Родитель • 7 лет' }
+    ];
+    let tIndex = 0;
+
+    function setTestimonial(i){
+      tIndex = (i + TESTIMONIALS.length) % TESTIMONIALS.length;
+      const t = TESTIMONIALS[tIndex];
+      const tText = document.getElementById('tText');
+      const tName = document.getElementById('tName');
+      const tMeta = document.getElementById('tMeta');
+      if (tText) tText.textContent = t.text;
+      if (tName) tName.textContent = t.name;
+      if (tMeta) tMeta.textContent = t.meta;
+    }
+    function slideTestimonial(dir){ setTestimonial(tIndex + dir); }
+
+    // WhatsApp helpers
+    function waPrefill(message) {
+      const text = encodeURIComponent(message || "");
+      window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, "_blank");
+    }
+    function waProgram(programName, meta, message) {
+      const payload =
+`Здравствуйте!
+Интересует: ${programName}
+${meta ? ("Возраст/детали: " + meta) : ""}
+Сообщение: ${message || ""}
+
+Пожалуйста, подскажите: свободные места, расписание и локацию.`;
+      waPrefill(payload);
+    }
+
+    // Mobile menu
+    function toggleMenu(forceClose = null) {
+      const menu = document.getElementById('mobileMenu');
+      const icon = document.getElementById('menuIcon');
+      if (!menu) return;
+
+      const isOpen = !menu.classList.contains('translate-x-full');
+      const nextOpen = (forceClose === null) ? !isOpen : !forceClose;
+
+      if (nextOpen) {
+        menu.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+        if (icon) icon.className = 'fas fa-times';
+      } else {
+        menu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+        if (icon) icon.className = 'fas fa-bars';
+      }
+    }
+
+    // Lightbox
+    function openLightbox(src) {
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightboxImg');
+      if (!lb || !img) return;
+      img.src = src;
+      lb.classList.add('show');
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightboxImg');
+      if (!lb || !img) return;
+      lb.classList.remove('show');
+      lb.setAttribute('aria-hidden', 'true');
+      img.src = '';
+      document.body.style.overflow = '';
+    }
+    document.getElementById('lightbox')?.addEventListener('click', (e) => {
+      if (e.target && e.target.id === 'lightbox') closeLightbox();
+    });
+
+    // Modal
+    function openModal(type){
+      const modal = document.getElementById('modal');
+      const eyebrow = document.getElementById('modalEyebrow');
+      const title = document.getElementById('modalTitle');
+      const body = document.getElementById('modalBody');
+      if (!modal || !eyebrow || !title || !body) return;
+
+      if (type === 'quiz') {
+        eyebrow.textContent = 'Program Quiz';
+        title.textContent = 'Подбор программы';
+        body.innerHTML = quizTemplate();
+      } else if (type === 'schedule') {
+        eyebrow.textContent = 'Schedule';
+        title.textContent = 'Расписание';
+        body.innerHTML = scheduleTemplate();
+      } else {
+        eyebrow.textContent = 'Modal';
+        title.textContent = 'Окно';
+        body.innerHTML = '<p class="text-white/70">—</p>';
+      }
+
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      const modal = document.getElementById('modal');
+      const body = document.getElementById('modalBody');
+      if (!modal) return;
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+      if (body) body.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+    function modalOutsideClose(e){
+      if (e.target && e.target.id === 'modal') closeModal();
+    }
+
+    // ESC closes
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        toggleMenu(true);
+        closeLightbox();
+        closeModal();
+      }
+    });
+
+    // Reveal
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    if ('IntersectionObserver' in window && !reduceMotion) {
+      const ro = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            ro.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14 });
+      revealEls.forEach(el => ro.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('is-visible'));
+    }
+
+    // Navbar tint + Scroll progress
+    const navShell = document.getElementById('navShell');
+    window.addEventListener('scroll', () => {
+      const sc = window.scrollY || 0;
+      if (navShell) {
+        if (sc > 18) navShell.classList.add('bg-black/55');
+        else navShell.classList.remove('bg-black/55');
+      }
+      const doc = document.documentElement;
+      const h = (doc.scrollHeight - doc.clientHeight) || 1;
+      const p = Math.min(100, Math.max(0, (sc / h) * 100));
+      const bar = document.getElementById('scrollProgress');
+      if (bar) bar.style.width = p.toFixed(2) + '%';
+    }, { passive:true });
+
+    // Quiz
+    const QUIZ_STATE = { age:null, goal:null, days:null };
+
+    function quizTemplate(){
+      return `
+        <div class="grid lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7">
+            <div class="rounded-[1.6rem] bg-white/5 border border-white/10 p-6">
+              <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">3 шага</p>
+              <p class="mt-2 font-header text-2xl uppercase font-bold text-white">Подберём формат</p>
+              <p class="mt-2 text-white/70 text-sm">
+                Выберите возраст, цель и удобные дни — получим рекомендацию и откроем WhatsApp с готовым текстом.
+              </p>
+
+              <div class="mt-5 space-y-4">
+                <div>
+                  <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Возраст</p>
+                  <div class="mt-2 grid sm:grid-cols-3 gap-2">
+                    <button class="btn rounded-2xl bg-black/35 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('age','5-7', this)">5–7</button>
+                    <button class="btn rounded-2xl bg-black/35 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('age','8-10', this)">8–10</button>
+                    <button class="btn rounded-2xl bg-black/35 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('age','11-14', this)">11–14</button>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Цель</p>
+                  <div class="mt-2 grid sm:grid-cols-2 gap-2">
+                    <button class="btn rounded-2xl bg-white/5 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('goal','техника', this)">Техника</button>
+                    <button class="btn rounded-2xl bg-white/5 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('goal','соревнования', this)">Соревнования</button>
+                    <button class="btn rounded-2xl bg-white/5 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('goal','дисциплина', this)">Дисциплина</button>
+                    <button class="btn rounded-2xl bg-white/5 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('goal','индивидуально', this)">Индивидуально</button>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Удобные дни</p>
+                  <div class="mt-2 grid sm:grid-cols-3 gap-2">
+                    <button class="btn rounded-2xl bg-white/5 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('days','будни', this)">Будни</button>
+                    <button class="btn rounded-2xl bg-white/5 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('days','выходные', this)">Выходные</button>
+                    <button class="btn rounded-2xl bg-white/5 border border-white/12 text-white py-3 font-header uppercase tracking-wider"
+                            onclick="quizSet('days','любой', this)">Любой</button>
+                  </div>
+                </div>
+
+                <div class="pt-3 flex flex-col sm:flex-row gap-3">
+                  <button class="btn rounded-2xl bg-gold-500 text-black py-4 px-6 font-header uppercase tracking-wider"
+                          onclick="quizSubmit(true)">
+                    Открыть WhatsApp
+                  </button>
+                  <button class="btn rounded-2xl bg-white/5 border border-white/12 text-white py-4 px-6 font-header uppercase tracking-wider"
+                          onclick="quizReset()">
+                    Сбросить
+                  </button>
+                </div>
+
+                <p class="text-xs text-white/55">Если не выбрано — менеджер уточнит детали.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="rounded-[1.6rem] bg-black/45 border border-white/10 p-6">
+              <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-gold-400">Recommendation</p>
+              <p class="mt-2 font-header text-2xl uppercase font-bold text-white">Результат</p>
+              <div class="mt-3 text-sm text-white/80" id="quizResult">
+                Выберите параметры — рекомендация появится автоматически.
+              </div>
+
+              <div class="mt-6 rounded-2xl bg-white/5 border border-white/10 p-5">
+                <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Управление</p>
+                <button class="mt-3 btn w-full rounded-2xl bg-gold-500 text-black py-4 font-header uppercase tracking-wider"
+                        onclick="quizSubmit(true)">
+                  Открыть WhatsApp
+                </button>
+                <button class="mt-3 btn w-full rounded-2xl bg-white/5 border border-white/12 text-white py-4 font-header uppercase tracking-wider"
+                        onclick="closeModal()">
+                  Закрыть
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function scheduleTemplate(){
+      return `
+        <div class="grid lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7">
+            <div class="rounded-[1.6rem] bg-white/5 border border-white/10 p-6">
+              <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Overview</p>
+              <p class="mt-2 font-header text-2xl uppercase font-bold text-white">Пример расписания</p>
+              <p class="mt-2 text-white/70 text-sm">Макет: можно заменить на актуальное расписание.</p>
+
+              <div class="mt-5 space-y-3">
+                <div class="rounded-2xl bg-black/25 border border-white/10 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Выходные</p>
+                  <p class="mt-2 font-bold text-white">Weekend: Сб–Вс • 10:00–11:00</p>
+                  <p class="mt-1 font-bold text-white">Baby Start: Сб–Вс • 11:00–12:00</p>
+                </div>
+
+                <div class="rounded-2xl bg-black/25 border border-white/10 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Будни</p>
+                  <p class="mt-2 font-bold text-white">Individual 1x1: Пн–Пт • окна 11:30–12:30 и 15:30–16:30</p>
+                  <p class="mt-1 text-sm text-white/70">Spec Group: 3 раза/нед + matchday (по согласованию)</p>
+                </div>
+
+                <p class="text-xs text-white/55">Расписание уточняйте у менеджера.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="rounded-[1.6rem] bg-black/45 border border-white/10 p-6">
+              <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-gold-400">Action</p>
+              <p class="mt-2 font-header text-2xl uppercase font-bold text-white">Запись</p>
+              <p class="mt-3 text-sm text-white/70">
+                Напишите менеджеру — подберём удобную группу и локацию.
+              </p>
+
+              <div class="mt-6 space-y-3">
+                <button onclick="waPrefill('Здравствуйте! Подскажите, пожалуйста, актуальное расписание и свободные места. Возраст ребенка: __. Удобные дни: __.')"
+                        class="btn w-full rounded-2xl bg-gold-500 text-black py-4 font-header uppercase tracking-wider">
+                  Написать в WhatsApp
+                </button>
+                <button onclick="openModal('quiz')"
+                        class="btn w-full rounded-2xl bg-white/5 border border-white/12 text-white py-4 font-header uppercase tracking-wider">
+                  Подбор программы
+                </button>
+                <button onclick="closeModal()"
+                        class="btn w-full rounded-2xl bg-white/5 border border-white/12 text-white py-4 font-header uppercase tracking-wider">
+                  Закрыть
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function quizSet(key, val, el){
+      QUIZ_STATE[key] = val;
+
+      // clear siblings highlight
+      const parent = el?.parentElement;
+      if (parent) {
+        Array.from(parent.children).forEach(btn => {
+          btn.classList.remove('bg-gold-500','text-black');
+          btn.classList.add('text-white');
+        });
+      }
+      // highlight current
+      el.classList.add('bg-gold-500','text-black');
+      el.classList.remove('text-white');
+
+      updateQuizResultText();
+    }
+
+    function pickProgram(){
+      const { age, goal } = QUIZ_STATE;
+      if (goal === 'индивидуально') return PROGRAMS.find(p => p.id==='indiv');
+
+      if (age === '5-7') return PROGRAMS.find(p => p.id==='baby');
+      if (age === '8-10') return PROGRAMS.find(p => p.id==='weekend');
+      if (age === '11-14') return PROGRAMS.find(p => p.id==='spec');
+
+      if (goal === 'соревнования') return PROGRAMS.find(p => p.id==='spec');
+      if (goal === 'техника' || goal === 'дисциплина') return PROGRAMS.find(p => p.id==='weekend');
+      return PROGRAMS.find(p => p.id==='weekend');
+    }
+
+    function updateQuizResultText(){
+      const el = document.getElementById('quizResult');
+      if (!el) return;
+
+      const p = pickProgram();
+      const age = QUIZ_STATE.age ? QUIZ_STATE.age.replace('-', '–') : 'не указан';
+      const goal = QUIZ_STATE.goal || 'не указана';
+      const days = QUIZ_STATE.days || 'не указаны';
+
+      el.innerHTML = `
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+          <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-white/55">Вводные</p>
+          <p class="mt-2 text-sm text-white/75">Возраст: <b class="text-white">${age}</b></p>
+          <p class="mt-1 text-sm text-white/75">Цель: <b class="text-white">${goal}</b></p>
+          <p class="mt-1 text-sm text-white/75">Дни: <b class="text-white">${days}</b></p>
+        </div>
+
+        <div class="mt-4 rounded-2xl bg-black/35 border border-white/10 p-4">
+          <p class="text-[10px] uppercase tracking-[0.55em] font-bold text-gold-400">Рекомендация</p>
+          <p class="mt-2 font-header uppercase text-2xl font-bold text-white">${p.title}</p>
+          <p class="mt-1 text-sm text-white/75">Возраст: <b class="text-white">${p.age}</b> • Частота: <b class="text-white">${p.freq}</b></p>
+          <p class="mt-1 text-sm text-white/75">Фокус: <b class="text-white">${p.focus}</b></p>
+          <p class="mt-2 text-sm text-white/75">Ориентир по цене: <b class="text-white">${p.price}</b></p>
+        </div>
+      `;
+    }
+
+    function quizMessage(program){
+      const age = QUIZ_STATE.age ? QUIZ_STATE.age.replace('-', '–') : '__';
+      const goal = QUIZ_STATE.goal || '__';
+      const days = QUIZ_STATE.days || '__';
+      return `Здравствуйте!
+Подбор программы (квиз):
+Возраст: ${age}
+Цель: ${goal}
+Удобные дни: ${days}
+
+Рекомендация: ${program.title}
+Хочу записаться. Подскажите свободные места, расписание и ближайшую локацию.`;
+    }
+
+    function quizSubmit(openWa = true){
+      const program = pickProgram();
+      updateQuizResultText();
+      if (openWa) waPrefill(quizMessage(program));
+    }
+
+    function quizReset(){
+      QUIZ_STATE.age = null; QUIZ_STATE.goal = null; QUIZ_STATE.days = null;
+      const res = document.getElementById('quizResult');
+      if (res) res.textContent = 'Выберите параметры — рекомендация появится автоматически.';
+
+      const body = document.getElementById('modalBody');
+      if (!body) return;
+      body.querySelectorAll('button').forEach(b=>{
+        b.classList.remove('bg-gold-500','text-black');
+        b.classList.add('text-white');
+      });
+    }
+
+    // Map: lazy init
+    let mapInited = false;
+    let mapObj = null;
+    let markers = [];
+
+    function initMap() {
+      if (mapInited) return;
+      if (typeof L === 'undefined') return;
+      mapInited = true;
+
+      mapObj = L.map('map', { scrollWheelZoom: false }).setView([51.13, 71.41], 12);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; CARTO', maxZoom: 20
+      }).addTo(mapObj);
+
+      const ballIcon = L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/53/53283.png',
+        iconSize: [40, 40], iconAnchor: [20, 20], popupAnchor: [0, -20]
+      });
+
+      markers = LOCATIONS.map((loc) => {
+        return L.marker([loc.lat, loc.lng], {icon: ballIcon}).addTo(mapObj).bindPopup(loc.popup);
+      });
+
+      setTimeout(() => selectLocation(0, true), 0);
+    }
+
+    function selectLocation(idx, silent=false){
+      currentLocIndex = idx;
+
+      const tab1 = document.getElementById('locTab1');
+      const tab2 = document.getElementById('locTab2');
+      const addr = document.getElementById('locAddress');
+      const city = document.getElementById('locCity');
+
+      const loc = LOCATIONS[idx];
+      if (addr) addr.textContent = loc.address;
+      if (city) city.textContent = loc.city;
+
+      if (tab1 && tab2) {
+        if (idx === 0) {
+          tab1.classList.add('bg-gold-500','text-black');
+          tab1.classList.remove('bg-white/5','text-white');
+          tab2.classList.add('bg-white/5','text-white');
+          tab2.classList.remove('bg-gold-500','text-black');
+        } else {
+          tab2.classList.add('bg-gold-500','text-black');
+          tab2.classList.remove('bg-white/5','text-white');
+          tab1.classList.add('bg-white/5','text-white');
+          tab1.classList.remove('bg-gold-500','text-black');
+        }
+      }
+
+      if (!silent && mapObj) {
+        mapObj.flyTo([loc.lat, loc.lng], 14, { animate: !reduceMotion, duration: reduceMotion ? 0 : 0.9 });
+        try { markers[idx]?.openPopup(); } catch(e) {}
+      }
+    }
+
+    function currentLocationWaText(){
+      const loc = LOCATIONS[currentLocIndex];
+      return `Здравствуйте! Интересует запись в ${loc.name}. Адрес: ${loc.address}. Возраст ребенка: __. Удобные дни: __.`;
+    }
+
+    const mapEl = document.getElementById('map');
+    if (mapEl) {
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              initMap();
+              obs.disconnect();
+            }
+          });
+        }, { threshold: 0.2 });
+        obs.observe(mapEl);
+      } else {
+        initMap();
+      }
+    }
+
+    // Init
+    window.addEventListener('load', () => {
+      setTestimonial(0);
+      updateQuizResultText();
+    });
+
+    // Auto rotate testimonials
+    if (!reduceMotion) {
+      setInterval(() => {
+        const modal = document.getElementById('modal');
+        if (modal && modal.classList.contains('show')) return;
+        slideTestimonial(1);
+      }, 6500);
+    }
+  </script>
+
+  <noscript>
+    <div style="padding:12px; background:#111; color:#fff; text-align:center;">
+      Для корректной работы интерактивов включите JavaScript.
+    </div>
+  </noscript>
+</body>
+</html>
