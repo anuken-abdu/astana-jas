@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>MAVERICK | Football Academy Almaty</title>
-  <meta name="description" content="Футбольная академия в Алматы. Тренировки для детей и подростков, сборы, турниры, экипировка. MAVERICK — дисциплина, характер, результат." />
+  <title>MAVERICK | Football Academy Astana</title>
+  <meta name="description" content="Футбольная академия в Астане. Тренировки для детей и подростков, сборы, турниры, экипировка. MAVERICK — дисциплина, характер, результат." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,6 +82,11 @@
       opacity: 1;
       pointer-events: auto;
     }
+
+    /* Чуть аккуратнее на очень маленьких экранах */
+    @media (max-width: 360px){
+      .hero-title { font-size: 3rem !important; }
+    }
   </style>
 </head>
 
@@ -90,14 +95,14 @@
 
   <!-- NAV -->
   <nav class="fixed w-full z-40 bg-[#121212]/90 backdrop-blur border-b border-white/5">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="#top" class="flex items-center gap-3">
-        <img src="images/logo.png" alt="Maverick logo" class="h-10 w-auto select-none">
-        <div class="hidden sm:block">
-          <div class="font-head text-2xl font-bold tracking-widest text-white uppercase italic leading-none">
+    <div class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+      <a href="#top" class="flex items-center gap-3 min-w-0">
+        <img src="images/logo.png" alt="Maverick logo" class="h-10 w-auto select-none shrink-0">
+        <div class="hidden sm:block min-w-0">
+          <div class="font-head text-2xl font-bold tracking-widest text-white uppercase italic leading-none truncate">
             Maverick<span class="text-brand-orange text-3xl">.</span>
           </div>
-          <div class="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] -mt-0.5">
+          <div class="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] -mt-0.5 truncate">
             Football Academy
           </div>
         </div>
@@ -111,7 +116,7 @@
         <a href="#contact" class="hover:text-white transition">Контакты</a>
       </div>
 
-      <a href="https://wa.me/77074534518" class="hidden md:block bg-white text-black font-head font-bold text-sm uppercase px-6 py-2 hover:bg-brand-orange hover:text-white transition duration-300 transform -skew-x-12">
+      <a href="https://wa.me/77019744464" class="hidden md:block bg-white text-black font-head font-bold text-sm uppercase px-6 py-2 hover:bg-brand-orange hover:text-white transition duration-300 transform -skew-x-12">
         <span class="block skew-x-12">Записаться</span>
       </a>
 
@@ -122,14 +127,14 @@
 
     <!-- Mobile menu -->
     <div id="mobileMenu" class="menu-panel md:hidden border-t border-white/5 bg-[#121212]/95 backdrop-blur">
-      <div class="container mx-auto px-6 py-4 flex flex-col gap-4 font-mono text-xs text-gray-300 uppercase tracking-widest">
+      <div class="container mx-auto px-4 sm:px-6 py-4 flex flex-col gap-4 font-mono text-xs text-gray-300 uppercase tracking-widest">
         <a href="#about" class="hover:text-white transition">Академия</a>
         <a href="#programs" class="hover:text-white transition">Программы</a>
         <a href="#coaches" class="hover:text-white transition">Тренеры</a>
         <a href="#partners" class="hover:text-white transition">Партнёры</a>
         <a href="#contact" class="hover:text-white transition">Контакты</a>
 
-        <a href="https://wa.me/77074534518" class="mt-2 inline-flex items-center justify-center bg-white text-black font-head font-bold text-sm uppercase px-6 py-3 hover:bg-brand-orange hover:text-white transition duration-300 transform -skew-x-12">
+        <a href="https://wa.me/77019744464" class="mt-2 inline-flex items-center justify-center bg-white text-black font-head font-bold text-sm uppercase px-6 py-3 hover:bg-brand-orange hover:text-white transition duration-300 transform -skew-x-12">
           <span class="block skew-x-12">Записаться</span>
         </a>
       </div>
@@ -137,51 +142,57 @@
   </nav>
 
   <!-- HERO -->
-  <header id="top" class="relative h-screen flex items-center justify-center overflow-hidden">
+  <header id="top" class="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0">
       <img src="images/hero_poster.jpg"
-           class="w-full h-full object-cover opacity-50 grayscale contrast-125"
+           class="w-full h-full object-cover opacity-100"
            alt="Футбол — постер">
       <div class="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-[#121212]/50"></div>
     </div>
 
-    <div class="container mx-auto px-6 relative z-10">
-      <div class="border-l-4 border-brand-orange pl-6 md:pl-10" data-aos="fade-right">
-        <p class="font-mono text-brand-orange text-sm md:text-base mb-2 tracking-[0.2em]">EST. 2025 • ALMATY</p>
-        <h1 class="font-head text-6xl md:text-9xl text-white font-bold uppercase leading-[0.9] mb-6 glitch-hover cursor-default">
+    <div class="container mx-auto px-4 sm:px-6 relative z-10 pt-24 md:pt-0">
+      <div class="border-l-4 border-brand-orange pl-5 sm:pl-6 md:pl-10" data-aos="fade-right">
+        <p class="font-mono text-brand-orange text-xs sm:text-sm md:text-base mb-2 tracking-[0.2em]">EST. 2025 • ASTANA</p>
+        <h1 class="hero-title font-head text-5xl sm:text-6xl md:text-9xl text-white font-bold uppercase leading-[0.9] mb-6 glitch-hover cursor-default">
           Play <br> Like a <br> Legend
         </h1>
-        <p class="text-gray-300 font-mono text-sm md:text-lg max-w-md mb-10 leading-relaxed">
+        <p class="text-gray-200 font-mono text-sm sm:text-base md:text-lg max-w-md mb-10 leading-relaxed">
           Футбол — это характер. Тренировки, дисциплина и результат. Без лишних слов — только работа.
         </p>
-        <a href="#programs" class="inline-block bg-brand-orange text-white font-head font-bold text-lg uppercase px-10 py-4 clip-btn">
-          Смотреть программы
-        </a>
+
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <a href="#programs" class="inline-block bg-brand-orange text-white font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center">
+            Смотреть программы
+          </a>
+          <a href="tel:+77019744464" class="inline-flex items-center justify-center border border-white/15 text-white font-head font-bold text-lg uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition text-center">
+            Позвонить
+          </a>
+        </div>
       </div>
     </div>
   </header>
 
   <!-- ABOUT -->
-  <section id="about" class="py-24 bg-[#121212]">
-    <div class="container mx-auto px-6">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
+  <section id="about" class="py-20 sm:py-24 bg-[#121212]">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
         <div class="grid grid-cols-2 gap-4" data-aos="fade-up">
-          <img src="images/kit.jpg" alt="Футбольная форма MAVERICK"
-               class="w-full h-64 object-cover grayscale hover:grayscale-0 transition duration-500 rounded-sm">
-          <img src="images/team_full.jpg" alt="Тренеры и команда"
-               class="w-full h-64 object-cover grayscale hover:grayscale-0 transition duration-500 rounded-sm mt-8">
+          <img src="images/kit.jpg" alt="Футбольная форма"
+               class="w-full h-44 sm:h-56 md:h-64 object-cover transition duration-500 rounded-sm">
+          <img src="images/team_full.jpg" alt="Тренерский состав"
+               class="w-full h-44 sm:h-56 md:h-64 object-cover transition duration-500 rounded-sm mt-6 sm:mt-8">
         </div>
 
         <div data-aos="fade-left">
-          <h2 class="font-head text-4xl md:text-6xl text-white uppercase mb-6">
+          <h2 class="font-head text-4xl sm:text-5xl md:text-6xl text-white uppercase mb-6">
             Не просто <span class="text-brand-orange">футбол</span>
           </h2>
-          <p class="font-mono text-gray-400 text-sm leading-relaxed mb-6">
-            MAVERICK — футбольная академия, где ставят базу: техника, скорость мышления, физика и дисциплина.
-            Мы строим игроков системно — шаг за шагом, от навыков до игры в команде.
+          <p class="font-mono text-gray-300 text-sm leading-relaxed mb-6">
+            MAVERICK — футбольная академия в Астане. Ставим базу: техника, физика, дисциплина и мышление игрока.
+            Цель — уверенная игра и прогресс в каждом цикле тренировок.
           </p>
 
-          <ul class="space-y-4 font-head text-xl text-white">
+          <ul class="space-y-4 font-head text-lg sm:text-xl text-white">
             <li class="flex items-center gap-4">
               <i class="fas fa-futbol text-brand-orange"></i>
               Группы по возрастам и уровню
@@ -200,68 +211,68 @@
     </div>
   </section>
 
-  <!-- PROGRAMS / PRICE -->
-  <section id="programs" class="py-24 bg-[#181818] relative">
+  <!-- PROGRAMS -->
+  <section id="programs" class="py-20 sm:py-24 bg-[#181818] relative">
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-white/5 hidden md:block"></div>
 
-    <div class="container mx-auto px-6 relative z-10">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <h2 class="font-head text-5xl text-white uppercase">Программы</h2>
+    <div class="container mx-auto px-4 sm:px-6 relative z-10">
+      <div class="text-center mb-14 sm:mb-16" data-aos="fade-up">
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Программы</h2>
         <p class="font-mono text-brand-orange mt-2">Тренируйся — побеждай</p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-x-20 gap-y-8 max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-x-16 lg:gap-x-20 gap-y-8 max-w-4xl mx-auto">
         <div class="flex justify-between items-end border-b border-dashed border-gray-700 pb-2 group cursor-pointer" data-aos="fade-up" data-aos-delay="0">
-          <div>
-            <h4 class="font-head text-2xl text-white group-hover:text-brand-orange transition">Групповая тренировка</h4>
-            <p class="font-mono text-xs text-gray-500">Техника, координация, игра (60–90 мин)</p>
+          <div class="pr-4">
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Групповая тренировка</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Техника, координация, игра (60–90 мин)</p>
           </div>
-          <span class="font-head text-2xl text-white">5 000 ₸</span>
+          <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">5 000 ₸</span>
         </div>
 
         <div class="flex justify-between items-end border-b border-dashed border-gray-700 pb-2 group cursor-pointer" data-aos="fade-up" data-aos-delay="100">
-          <div>
-            <h4 class="font-head text-2xl text-white group-hover:text-brand-orange transition">Индивидуальная тренировка</h4>
-            <p class="font-mono text-xs text-gray-500">Персональная программа (60 мин)</p>
+          <div class="pr-4">
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Индивидуальная тренировка</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Персональная программа (60 мин)</p>
           </div>
-          <span class="font-head text-2xl text-white">12 000 ₸</span>
+          <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">12 000 ₸</span>
         </div>
 
         <div class="flex justify-between items-end border-b border-dashed border-gray-700 pb-2 group cursor-pointer" data-aos="fade-up" data-aos-delay="200">
-          <div>
-            <h4 class="font-head text-2xl text-white group-hover:text-brand-orange transition">Абонемент 8 занятий</h4>
-            <p class="font-mono text-xs text-gray-500">Экономия + стабильный прогресс</p>
+          <div class="pr-4">
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Абонемент 8 занятий</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Экономия + стабильный прогресс</p>
           </div>
-          <span class="font-head text-2xl text-white">32 000 ₸</span>
+          <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">32 000 ₸</span>
         </div>
 
         <div class="flex justify-between items-end border-b border-dashed border-gray-700 pb-2 group cursor-pointer" data-aos="fade-up" data-aos-delay="300">
-          <div>
-            <h4 class="font-head text-2xl text-white group-hover:text-brand-orange transition">Абонемент 12 занятий</h4>
-            <p class="font-mono text-xs text-gray-500">Оптимальный режим (месяц+)</p>
+          <div class="pr-4">
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Абонемент 12 занятий</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Оптимальный режим (месяц+)</p>
           </div>
-          <span class="font-head text-2xl text-white">45 000 ₸</span>
+          <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">45 000 ₸</span>
         </div>
 
         <div class="flex justify-between items-end border-b border-dashed border-gray-700 pb-2 group cursor-pointer" data-aos="fade-up" data-aos-delay="400">
-          <div>
-            <h4 class="font-head text-2xl text-white group-hover:text-brand-orange transition">Интенсив / сборы</h4>
-            <p class="font-mono text-xs text-gray-500">Техника + тактика + физика</p>
+          <div class="pr-4">
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Интенсив / сборы</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Техника + тактика + физика</p>
           </div>
-          <span class="font-head text-2xl text-white">от 25 000 ₸</span>
+          <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">от 25 000 ₸</span>
         </div>
 
         <div class="flex justify-between items-end border-b border-dashed border-gray-700 pb-2 group cursor-pointer" data-aos="fade-up" data-aos-delay="500">
-          <div>
-            <h4 class="font-head text-2xl text-white group-hover:text-brand-orange transition">Форма клуба</h4>
-            <p class="font-mono text-xs text-gray-500">Игровой комплект MAVERICK</p>
+          <div class="pr-4">
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Форма клуба</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Игровой комплект MAVERICK</p>
           </div>
-          <span class="font-head text-2xl text-white">19 000 ₸</span>
+          <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">19 000 ₸</span>
         </div>
       </div>
 
-      <div class="text-center mt-16">
-        <a href="https://wa.me/77074534518" class="inline-block bg-white hover:bg-brand-orange text-black hover:text-white font-head font-bold uppercase px-8 py-3 transition duration-300">
+      <div class="text-center mt-12 sm:mt-16">
+        <a href="https://wa.me/77019744464" class="inline-block bg-white hover:bg-brand-orange text-black hover:text-white font-head font-bold uppercase px-8 py-3 transition duration-300">
           Записаться онлайн
         </a>
       </div>
@@ -269,18 +280,18 @@
   </section>
 
   <!-- COACHES -->
-  <section id="coaches" class="py-24 bg-[#121212]">
-    <div class="container mx-auto px-6">
-      <h2 class="font-head text-4xl text-white uppercase mb-12 border-l-4 border-brand-orange pl-4">Тренерский штаб</h2>
+  <section id="coaches" class="py-20 sm:py-24 bg-[#121212]">
+    <div class="container mx-auto px-4 sm:px-6">
+      <h2 class="font-head text-4xl text-white uppercase mb-10 sm:mb-12 border-l-4 border-brand-orange pl-4">Тренерский штаб</h2>
 
       <div class="grid lg:grid-cols-2 gap-10 items-center">
         <div class="group relative overflow-hidden bg-gray-800" data-aos="flip-left">
           <img src="images/team_full.jpg"
-               alt="Тренеры MAVERICK"
-               class="w-full h-[520px] object-cover opacity-80 group-hover:opacity-100 transition duration-500 grayscale group-hover:grayscale-0">
-          <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent p-6">
-            <h3 class="font-head text-3xl text-white uppercase">Maverick Coaches</h3>
-            <p class="font-mono text-brand-orange text-xs tracking-[0.2em] uppercase">Методика • дисциплина • результат</p>
+               alt="Тренеры"
+               class="w-full h-[380px] sm:h-[520px] object-cover opacity-100 transition duration-500">
+          <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6">
+            <h3 class="font-head text-3xl text-white uppercase">Руслан</h3>
+            <p class="font-mono text-brand-orange text-xs tracking-[0.2em] uppercase">Главный тренер</p>
           </div>
         </div>
 
@@ -288,7 +299,7 @@
           <h3 class="font-head text-3xl md:text-5xl text-white uppercase mb-6">
             Игрока делает <span class="text-brand-orange">система</span>
           </h3>
-          <p class="font-mono text-gray-400 text-sm leading-relaxed mb-8">
+          <p class="font-mono text-gray-300 text-sm leading-relaxed mb-8">
             Мы строим фундамент: техника владения мячом, принятие решений, координация, скорость и командная тактика.
             Тренировки — строгие, но понятные. Прогресс — измеримый.
           </p>
@@ -296,21 +307,24 @@
           <div class="space-y-4">
             <div class="flex items-start gap-4">
               <i class="fas fa-check text-brand-orange mt-1"></i>
-              <p class="font-mono text-gray-300 text-sm">Разминка и физическая подготовка (без перегруза по возрасту)</p>
-            </div>
-            <div class="flex items-start gap-4">
-              <i class="fas fa-check text-brand-orange mt-1"></i>
               <p class="font-mono text-gray-300 text-sm">Техника: пас, приём, ведение, удар, координация</p>
             </div>
             <div class="flex items-start gap-4">
               <i class="fas fa-check text-brand-orange mt-1"></i>
-              <p class="font-mono text-gray-300 text-sm">Тактика: позиционирование, взаимодействия, мини-матчи</p>
+              <p class="font-mono text-gray-300 text-sm">Тактика: позиционирование, взаимодействия, игровые ситуации</p>
+            </div>
+            <div class="flex items-start gap-4">
+              <i class="fas fa-check text-brand-orange mt-1"></i>
+              <p class="font-mono text-gray-300 text-sm">Физика: скорость, выносливость, профилактика травм</p>
             </div>
           </div>
 
-          <div class="mt-10">
-            <a href="#contact" class="inline-block bg-brand-orange text-white font-head font-bold text-lg uppercase px-10 py-4 clip-btn">
+          <div class="mt-10 flex flex-col sm:flex-row gap-3">
+            <a href="#contact" class="inline-block bg-brand-orange text-white font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center">
               Узнать расписание
+            </a>
+            <a href="https://wa.me/77019744464" class="inline-flex items-center justify-center border border-white/15 text-white font-head font-bold text-lg uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition text-center">
+              Написать в WhatsApp
             </a>
           </div>
         </div>
@@ -319,38 +333,47 @@
   </section>
 
   <!-- PARTNERS -->
-  <section id="partners" class="py-24 bg-[#181818]">
-    <div class="container mx-auto px-6">
-      <div class="text-center mb-14" data-aos="fade-up">
-        <h2 class="font-head text-5xl text-white uppercase">Партнёры</h2>
+  <section id="partners" class="py-20 sm:py-24 bg-[#181818]">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Партнёры</h2>
         <p class="font-mono text-brand-orange mt-2">Надёжная поддержка</p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        <div class="bg-[#121212] border border-white/5 p-10 flex items-center justify-center" data-aos="fade-up" data-aos-delay="0">
-          <img src="images/tehpro.png" alt="Tehpro" class="max-h-20 w-auto opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition duration-500">
+      <div class="grid md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
+        <div class="bg-[#121212] border border-white/5 p-8 sm:p-10 flex items-center justify-center" data-aos="fade-up" data-aos-delay="0">
+          <img src="images/tehpro.png" alt="Tehpro" class="max-h-20 w-auto opacity-100 transition duration-500">
         </div>
-        <div class="bg-[#121212] border border-white/5 p-10 flex items-center justify-center" data-aos="fade-up" data-aos-delay="120">
-          <img src="images/zhenis.png" alt="Zhenis" class="max-h-20 w-auto opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition duration-500">
+        <div class="bg-[#121212] border border-white/5 p-8 sm:p-10 flex items-center justify-center" data-aos="fade-up" data-aos-delay="120">
+          <img src="images/zhenis.png" alt="Zhenis" class="max-h-20 w-auto opacity-100 transition duration-500">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER / CONTACT -->
-  <footer id="contact" class="bg-[#050505] border-t border-white/5 pt-20 pb-10">
-    <div class="container mx-auto px-6">
-      <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+  <!-- CONTACT -->
+  <footer id="contact" class="bg-[#050505] border-t border-white/5 pt-16 sm:pt-20 pb-10">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-2 gap-10 sm:gap-12 items-start md:items-center mb-14 sm:mb-16">
         <div>
-          <h2 class="font-head text-5xl md:text-7xl text-white uppercase leading-none mb-6">
-            Ждём тебя <br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">на поле</span>
+          <h2 class="font-head text-4xl sm:text-5xl md:text-7xl text-white uppercase leading-none mb-6">
+            Запись <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-600">на тренировки</span>
           </h2>
 
-          <div class="font-mono text-gray-400 space-y-4">
-            <p class="flex items-center gap-4"><i class="fas fa-map-marker-alt text-brand-orange"></i> г. Алматы, ул. Достык 45</p>
-            <p class="flex items-center gap-4"><i class="fas fa-phone text-brand-orange"></i> +7 707 453 4518</p>
-            <p class="flex items-center gap-4"><i class="fas fa-clock text-brand-orange"></i> Ежедневно: 10:00 - 22:00</p>
+          <div class="font-mono text-gray-300 space-y-4">
+            <p class="flex items-start gap-4">
+              <i class="fas fa-user text-brand-orange mt-1"></i>
+              <span><b class="text-white">Контакт:</b> Руслан — <a class="hover:text-white underline decoration-white/20" href="tel:+77019744464">+7 701 974 4464</a></span>
+            </p>
+            <p class="flex items-start gap-4">
+              <i class="fas fa-school text-brand-orange mt-1"></i>
+              <span><b class="text-white">Локация 1:</b> Школа №11 им. Өзбекәлі Жәнібекова</span>
+            </p>
+            <p class="flex items-start gap-4">
+              <i class="fas fa-school text-brand-orange mt-1"></i>
+              <span><b class="text-white">Локация 2:</b> Школа №71, Астана, ул. Е-10</span>
+            </p>
           </div>
 
           <div class="mt-10 flex items-center gap-4">
@@ -364,9 +387,12 @@
           </div>
         </div>
 
-        <div class="md:text-right">
-          <a href="https://wa.me/77074534518" class="inline-flex items-center justify-center w-20 h-20 bg-brand-orange rounded-full text-white text-3xl animate-bounce hover:bg-white hover:text-brand-orange transition" aria-label="WhatsApp">
+        <div class="md:text-right flex md:justify-end gap-3 sm:gap-4">
+          <a href="https://wa.me/77019744464" class="inline-flex items-center justify-center w-20 h-20 bg-brand-orange rounded-full text-white text-3xl animate-bounce hover:bg-white hover:text-brand-orange transition" aria-label="WhatsApp">
             <i class="fab fa-whatsapp"></i>
+          </a>
+          <a href="tel:+77019744464" class="inline-flex items-center justify-center w-20 h-20 border border-white/15 rounded-full text-white text-2xl hover:border-brand-orange hover:text-brand-orange transition" aria-label="Позвонить">
+            <i class="fas fa-phone"></i>
           </a>
         </div>
       </div>
