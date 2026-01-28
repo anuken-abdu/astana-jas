@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" class="no-js">
+<html lang="ru" class="scroll-smooth overflow-x-hidden">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!--
-    ✅ ДЕЙСТВИЕ: оставил SEO/OG-структуру, но дизайн полностью переработан под минимализм Maverick.
-    ✅ ДЕЙСТВИЕ: видео из hero УДАЛЕНО — используем только poster-изображение.
-  -->
   <title>ASTANA JAS | Elite Football Academy</title>
   <meta name="description" content="Профессиональная футбольная школа в Астане. Тренировки для детей 5–14 лет. Программы по возрастам, индивидуальные занятия, экипировка и локации." />
 
@@ -19,666 +15,242 @@
   <meta property="og:image" content="images/og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!--
-    ✅ ДЕЙСТВИЕ: типографика “как у Maverick” — жирный дисплей + нейтральный читабельный текст.
-    (Можно заменить на другие шрифты, но эти хорошо держат атмосферу.)
-  -->
+  <!-- Performance: preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Fonts (оставляем как было) -->
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500;700&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+
+  <!-- Icons & Leaflet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    /* CHANGE (минимализм): сужаем палитру и визуальный шум.
+       Акцент (gold) оставляем, но используем меньше. */
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            header: ['"Oswald"', 'sans-serif'],
+            body: ['"Roboto"', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              gold: '#FFD700',
+              black: '#0b0b0f',
+              gray: '#f6f7f9'
+            }
+          },
+          boxShadow: {
+            soft: '0 12px 40px rgba(0,0,0,0.10)'
+          },
+          animation: {
+            'fade-up': 'fadeUp .7s ease both',
+            'float-soft': 'floatSoft 7s ease-in-out infinite'
+          },
+          keyframes: {
+            fadeUp: { '0%': { opacity: 0, transform: 'translateY(14px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+            floatSoft: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-8px)' } }
+          }
+        }
+      }
+    }
+  </script>
 
   <style>
-    /*
-      ==========================================================
-      ✅ ДЕЙСТВИЕ: НОВЫЙ дизайн-сет (Maverick mood)
-      - темный фон
-      - крупные заголовки
-      - тонкие линии
-      - один теплый акцент
-      ==========================================================
-    */
+    /* =========================================================
+      CHANGE SUMMARY (по твоему списку):
+      1) Team: оставляем ОДНУ рамку с team_full.jpg (в коде теперь только один блок).
+      2) Mobile: добавлены конкретные фиксы (шрифты, отступы, safe-area, sticky dock, map height).
+      3) Убраны ВСЕ "подсказки/плейсхолдеры" на странице (img-box и визуальные подсказки).
+         Комментарии внутри кода оставлены.
+      4) Убрали "рамки в рамке": минимум бордеров/теней, единый стиль карточек.
+      5) Лёгкие анимации: reveal + fade-up, мягкие hover.
+      6) CTA: оставили только 3 горячие кнопки (Записаться/WhatsApp/Позвонить) в нижнем доке.
+         Внутри секций лишние кнопки убраны.
+    ========================================================= */
+
     :root{
-      --bg: #0a0a0a;
-      --bg2:#0f0f0f;
-      --fg: #f4f4f4;
-      --muted:#b7b7b7;
-      --muted2:#8b8b8b;
-      --line: rgba(255,255,255,.14);
-      --line2: rgba(255,255,255,.08);
-      --accent:#d6b46a; /* теплый “премиум” акцент */
-      --accent2:#f0d28b;
-      --shadow: 0 30px 90px rgba(0,0,0,.55);
-      --radius: 18px;
-      --radius2: 26px;
-      --max: 1100px;
-      --pad: clamp(18px, 4vw, 42px);
+      --gold:#FFD700;
+      --black:#0b0b0f;
+      --ink:#111827;
+      --muted: rgba(17,24,39,.62);
+      --line: rgba(17,24,39,.10);
+      --lineW: rgba(255,255,255,.12);
+      --radius: 20px;
     }
 
-    html{ scroll-behavior: smooth; }
-    *{ box-sizing: border-box; }
-    body{
-      margin:0;
-      background: radial-gradient(1200px 700px at 50% -10%, rgba(214,180,106,.12), transparent 60%),
-                  radial-gradient(900px 500px at 80% 30%, rgba(255,255,255,.05), transparent 55%),
-                  var(--bg);
-      color: var(--fg);
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-      overflow-x:hidden;
-    }
+    html, body { max-width: 100%; overflow-x: hidden; }
+    body { background:#fff; color: var(--ink); }
 
-    a{ color:inherit; text-decoration:none; }
-    img{ max-width:100%; display:block; }
-    .container{
-      width: min(var(--max), calc(100% - var(--pad)*2));
-      margin-inline:auto;
-    }
+    /* Scrollbar (минимально) */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #fff; }
+    ::-webkit-scrollbar-thumb { background: rgba(17,24,39,.25); border-radius: 999px; }
 
-    /* ✅ ДЕЙСТВИЕ: “зерно” для премиум-атмосферы (очень мягкое, как у Maverick) */
-    .grain::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:0;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
-      opacity:.22;
-      mix-blend-mode: overlay;
-    }
-
-    /* ✅ ДЕЙСТВИЕ: базовая типографика “как у Maverick”: большой display и верхние подписи */
-    .eyebrow{
-      font-size: 11px;
-      letter-spacing: .34em;
-      text-transform: uppercase;
-      color: var(--muted);
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-    .eyebrow::before{
-      content:"";
-      width:44px;
-      height:1px;
-      background: var(--accent);
-      opacity:.9;
-    }
-
-    h1,h2,h3{
-      font-family: "Bebas Neue", Impact, sans-serif;
-      letter-spacing: .02em;
-      margin:0;
-      font-weight:400;
-    }
-    .h1{
-      font-size: clamp(56px, 10vw, 108px);
-      line-height: .92;
-      text-transform: uppercase;
-    }
-    .h2{
-      font-size: clamp(42px, 6vw, 72px);
-      line-height: .95;
-      text-transform: uppercase;
-    }
-    .lead{
-      color: var(--muted);
-      font-size: clamp(16px, 2vw, 20px);
-      line-height: 1.55;
-      max-width: 60ch;
-      margin-top: 14px;
-    }
-
-    /* ✅ ДЕЙСТВИЕ: кнопки в минимализме (без сложной геометрии) */
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding: 14px 18px;
-      border-radius: 999px;
+    /* Минималистичные карточки */
+    .card{
       border: 1px solid var(--line);
-      background: transparent;
-      color: var(--fg);
-      font-weight:600;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      font-size: 12px;
-      transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease, opacity .2s ease;
-      will-change: transform;
+      border-radius: var(--radius);
+      background: #fff;
     }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(214,180,106,.55); }
-    .btn.primary{
-      background: var(--fg);
-      color: #0b0b0b;
-      border-color: transparent;
-    }
-    .btn.primary:hover{ background: var(--accent2); }
-    .btn.ghost{
-      background: rgba(255,255,255,.06);
-      border-color: rgba(255,255,255,.14);
-    }
-
-    /* ✅ ДЕЙСТВИЕ: тонкие разделители как у Maverick */
-    .divider{
-      height:1px;
-      background: linear-gradient(90deg, transparent, var(--line), transparent);
-      margin: 18px 0;
-    }
-
-    /* ==========================================================
-       ✅ NAV — минимальный, фиксированный, как у Maverick
-       ========================================================== */
-    .nav{
-      position:fixed;
-      top:0; left:0; right:0;
-      z-index:50;
-      background: rgba(10,10,10,.62);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .nav-inner{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 14px 0;
-      gap:14px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width: 180px;
-    }
-    .brand img{
-      width:34px; height:34px;
-      object-fit: contain;
-      filter: drop-shadow(0 10px 30px rgba(0,0,0,.45));
-    }
-    .brand .name{
-      display:flex;
-      flex-direction:column;
-      line-height:1.05;
-    }
-    .brand .name strong{
-      font-family:"Bebas Neue", Impact, sans-serif;
-      font-size: 26px;
-      text-transform: uppercase;
-      letter-spacing:.06em;
-    }
-    .brand .name span{
-      font-size: 10px;
-      letter-spacing:.32em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      margin-top:2px;
-    }
-
-    .nav-links{
-      display:flex;
-      align-items:center;
-      gap: 18px;
-      font-size: 11px;
-      letter-spacing:.26em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .nav-links a{
-      opacity:.9;
-      transition: opacity .2s ease, color .2s ease;
-    }
-    .nav-links a:hover{ opacity:1; color: var(--fg); }
-
-    .nav-cta{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    /* ✅ ДЕЙСТВИЕ: мобильное меню — минимальное оверлей-окно */
-    .burger{
-      display:none;
-      width:44px; height:44px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--fg);
-    }
-    .burger:active{ transform: translateY(1px); }
-
-    .mobile{
-      position:fixed;
-      inset:0;
-      z-index:60;
-      background: rgba(0,0,0,.72);
-      display:none;
-      align-items:flex-start;
-      justify-content:center;
-      padding: 86px 18px 18px;
-    }
-    .mobile.show{ display:flex; }
-    .mobile-card{
-      width: min(520px, 100%);
-      background: rgba(15,15,15,.92);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      padding: 16px;
-    }
-    .mobile-card header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding: 6px 6px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      margin-bottom: 10px;
-    }
-    .close{
-      width:44px; height:44px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--fg);
-    }
-    .mobile-links{
-      display:grid;
-      gap: 10px;
-      padding: 10px 6px 6px;
-    }
-    .mobile-links a{
-      padding: 14px 14px;
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      font-size: 12px;
-      letter-spacing:.24em;
-      text-transform: uppercase;
-      color: var(--fg);
-    }
-
-    /* ==========================================================
-       ✅ HERO — видео удалено, вместо него poster-изображение
-       ========================================================== */
-    .hero{
-      position:relative;
-      min-height: 100svh;
-      display:flex;
-      align-items:flex-end;
-      padding-top: 88px; /* под фикс-нав */
-      overflow:hidden;
-      z-index:1;
-    }
-    .hero-bg{
-      position:absolute; inset:0;
-      z-index:-1;
-    }
-    .hero-bg img{
-      width:100%; height:100%;
-      object-fit: cover;
-      object-position: top;
-      opacity:.75;
-      transform: scale(1.03);
-      filter: contrast(1.03) saturate(0.92);
-    }
-    .hero-bg::after{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(70% 55% at 50% 18%, rgba(214,180,106,.16), transparent 65%),
-        linear-gradient(180deg, rgba(0,0,0,.74), rgba(0,0,0,.35), rgba(0,0,0,.82));
-    }
-
-    .hero-content{
-      padding: clamp(38px, 7vw, 90px) 0;
-    }
-    .hero-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
-      margin-bottom: 18px;
-    }
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing:.32em;
-      text-transform: uppercase;
+    .card-dark{
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.05);
       backdrop-filter: blur(10px);
     }
-    .dot{
-      width:8px; height:8px;
-      border-radius: 99px;
-      background: var(--accent);
-      box-shadow: 0 0 0 5px rgba(214,180,106,.12);
-    }
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1.3fr .7fr;
-      gap: 26px;
-      align-items:end;
-      margin-top: 10px;
-    }
-    .hero-card{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      border-radius: var(--radius2);
-      padding: 18px;
-      backdrop-filter: blur(12px);
-    }
-    .hero-card small{
-      display:block;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing:.32em;
-      font-size: 10px;
-      margin-bottom: 10px;
-    }
-    .hero-card .row{
-      display:flex;
-      gap: 12px;
-      flex-wrap:wrap;
-    }
-    .pill{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
+
+    /* Минималистичные кнопки (одинаковое поведение) */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
+      padding: .95rem 1.1rem;
       border-radius: 999px;
-      padding: 10px 12px;
-      font-size: 11px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      color: var(--muted);
+      border: 1px solid var(--line);
+      transition: transform .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
+      will-change: transform;
+      user-select:none;
     }
+    .btn:active{ transform: translateY(1px); }
+    .btn:hover{ transform: translateY(-1px); }
 
-    /* ==========================================================
-       ✅ SECTIONS — минимальные блоки с линиями, как у Maverick
-       ========================================================== */
-    section{
-      padding: clamp(56px, 6vw, 88px) 0;
-      position:relative;
-      z-index:1;
+    .btn-primary{
+      background: var(--black);
+      color:#fff;
+      border-color: rgba(255,255,255,.10);
     }
-    .section-head{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 18px;
-      margin-bottom: 26px;
-    }
+    .btn-primary:hover{ background: #111827; }
 
-    .panel{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: var(--radius2);
-      padding: 18px;
+    .btn-ghost{
+      background: transparent;
+      color: var(--ink);
     }
+    .btn-ghost:hover{ background: rgba(17,24,39,.04); }
 
-    /* ✅ ДЕЙСТВИЕ: список “плюсов” в стиле Maverick (простые буллеты) */
-    .bullets{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 18px;
+    .btn-gold{
+      background: var(--gold);
+      color: #111;
+      border-color: rgba(0,0,0,.08);
     }
-    .bullets div{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
-      border-radius: 16px;
-      padding: 14px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.35;
-    }
-    .bullets b{ color: var(--fg); font-weight: 600; }
+    .btn-gold:hover{ background: #ffe44d; }
 
-    /* ==========================================================
-       ✅ “Прайс-лист” (Programs) — как у Maverick: строки + цена
-       ========================================================== */
-    .price-list{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius2);
-      overflow:hidden;
-      background: rgba(0,0,0,.22);
-    }
-    .price-item{
-      display:grid;
-      grid-template-columns: 1.2fr .9fr auto;
-      gap: 14px;
-      padding: 18px;
-      border-top:1px solid rgba(255,255,255,.08);
-      align-items:center;
-    }
-    .price-item:first-child{ border-top:none; }
-    .price-item h3{
-      font-size: 28px;
-      text-transform: uppercase;
-    }
-    .price-item p{
-      margin:0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .price{
-      font-family:"Bebas Neue", Impact, sans-serif;
-      font-size: 28px;
-      letter-spacing:.06em;
-      color: var(--accent2);
-      white-space:nowrap;
-    }
-    .meta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:8px;
-    }
-    .chip{
-      font-size: 10px;
-      letter-spacing:.26em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      padding: 8px 10px;
-      border-radius: 999px;
-    }
-
-    /* ==========================================================
-       ✅ Team — минимальные карточки
-       ========================================================== */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-    .card{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: var(--radius2);
-      overflow:hidden;
-      transition: transform .25s ease, border-color .25s ease;
-    }
-    .card:hover{ transform: translateY(-2px); border-color: rgba(214,180,106,.35); }
-    .card .img{
-      height: 220px;
-      background: rgba(255,255,255,.05);
-    }
-    .card .img img{
-      width:100%; height:100%;
-      object-fit: cover;
-      object-position: center;
-      filter: contrast(1.02) saturate(0.92);
-    }
-    .card .body{
-      padding: 16px;
-    }
-    .card .role{
-      font-size: 10px;
-      letter-spacing:.30em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      margin-top: 6px;
-    }
-
-    /* ==========================================================
-       ✅ Gallery — простая сетка (кликабельно + lightbox)
-       ========================================================== */
-    .gallery{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .shot{
-      border-radius: 18px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      cursor:pointer;
-      transition: transform .25s ease, border-color .25s ease;
-    }
-    .shot:hover{ transform: translateY(-2px); border-color: rgba(214,180,106,.35); }
-    .shot img{
-      width:100%;
-      height: 240px;
-      object-fit: cover;
-      display:block;
-      filter: contrast(1.02) saturate(0.92);
-    }
-
-    /* ==========================================================
-       ✅ Contacts — лаконичные карточки
-       ========================================================== */
-    .contacts{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 14px;
-      align-items:start;
-    }
-    .contact-card{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: var(--radius2);
-      padding: 18px;
-    }
-    .contact-card h3{ font-size: 34px; text-transform: uppercase; }
-    .kv{
-      margin-top: 14px;
-      display:grid;
-      gap: 10px;
-    }
-    .kv div{
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.18);
-      border-radius: 16px;
-      padding: 12px 14px;
-    }
-    .k{
-      font-size: 10px;
-      letter-spacing:.32em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      margin-bottom: 6px;
-    }
-    .v{ color: var(--fg); font-weight: 600; line-height:1.35; }
-    .muted{ color: var(--muted); }
-
-    /* ==========================================================
-       ✅ Footer — минимализм
-       ========================================================== */
-    footer{
-      padding: 44px 0 92px;
-      border-top:1px solid rgba(255,255,255,.08);
-      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
-    }
-    .footer-inner{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 18px;
-      flex-wrap:wrap;
-    }
-    .copy{
-      color: var(--muted2);
-      font-size: 11px;
-      letter-spacing:.20em;
-      text-transform: uppercase;
-      margin-top: 10px;
-    }
-
-    /* ==========================================================
-       ✅ Reveal animation (очень мягко, чтобы не “кричало”)
-       ========================================================== */
+    /* Reveal (мягко) */
     .reveal{
       opacity:0;
       transform: translateY(14px);
       transition: opacity .7s ease, transform .7s ease;
       will-change: opacity, transform;
     }
-    .reveal.show{ opacity:1; transform: translateY(0); }
+    .reveal.is-visible{ opacity:1; transform: translateY(0); }
 
-    /* ==========================================================
-       ✅ Lightbox — минимальный
-       ========================================================== */
-    .lightbox{
-      position:fixed;
-      inset:0;
-      background: rgba(0,0,0,.86);
+    /* Hero: лёгкий шум/зерно (оставляем, но слабее) */
+    .noise:before{
+      content:"";
+      position:absolute; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      opacity:.30;
+      pointer-events:none;
+    }
+
+    /* Scroll progress (тонко) */
+    #scrollProgress{
+      position:fixed; top:0; left:0;
+      height:2px;
+      width:0%;
+      background: var(--gold);
+      z-index:99999;
+    }
+
+    /* Lightbox */
+    #lightbox{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.86);
       display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:80;
-      padding: 22px;
+      align-items:center; justify-content:center;
+      z-index:99999;
+      padding:22px;
     }
-    .lightbox.show{ display:flex; }
-    .lightbox img{
+    #lightbox.show{ display:flex; }
+    #lightbox img{
       max-width:min(1200px, 100%);
-      max-height: 90svh;
+      max-height:90vh;
+      object-fit:contain;
       border-radius: 18px;
-      box-shadow: 0 35px 140px rgba(0,0,0,.75);
-      object-fit: contain;
-      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 30px 120px rgba(0,0,0,0.7);
     }
-    .lightbox button{
-      position:absolute;
-      top:16px; right:16px;
-      width:46px; height:46px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--fg);
-      font-size: 18px;
+    #lightbox button{
+      position:absolute; top:18px; right:18px;
+      width:44px; height:44px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.12);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      font-size:18px;
+    }
+    #lightbox button:hover{ background: rgba(255,255,255,0.18); }
+
+    /* Modal (оставляем, но без лишней графики; может понадобиться позже) */
+    #modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.70);
+      display:none;
+      align-items:center; justify-content:center;
+      z-index:99998;
+      padding:16px;
+    }
+    #modal.show{ display:flex; }
+    .modal-card{
+      width:min(860px, 100%);
+      border-radius: 18px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 22px 80px rgba(0,0,0,0.30);
+      max-height: calc(100vh - 32px);
+      display:flex;
+      flex-direction:column;
+    }
+    #modalBody{
+      overflow-y:auto;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* ==========================================================
-       ✅ Responsive
-       ========================================================== */
-    @media (max-width: 980px){
-      .hero-grid{ grid-template-columns: 1fr; }
-      .bullets{ grid-template-columns: 1fr; }
-      .contacts{ grid-template-columns: 1fr; }
-      .grid{ grid-template-columns: 1fr; }
-      .gallery{ grid-template-columns: 1fr; }
-      .shot img{ height: 220px; }
-      .nav-links{ display:none; }
-      .burger{ display:inline-flex; align-items:center; justify-content:center; }
+    /* Masonry (как было, но аккуратнее по gap) */
+    .masonry{ column-count: 3; column-gap: 14px; }
+    @media (max-width: 1024px){ .masonry{ column-count: 2; } }
+    @media (max-width: 640px){ .masonry{ column-count: 1; } }
+    .masonry-item{ break-inside: avoid; margin-bottom: 14px; }
+
+    /* Mobile fixes */
+    @media (max-width: 640px){
+      .hero-h1{ font-size: 44px !important; line-height: .95 !important; }
+      .hero-sub{ font-size: 16px !important; }
     }
 
-    /* ✅ ДЕЙСТВИЕ: поддержка reduced motion */
+    /* Safe area for bottom dock */
+    .dock-safe{
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+    .page-safe{
+      padding-bottom: calc(92px + env(safe-area-inset-bottom)); /* чтобы док не перекрывал контент */
+    }
+
+    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       .reveal{ transition:none; }
       .btn{ transition:none; }
-      .card, .shot{ transition:none; }
     }
   </style>
 
-  <!-- JSON-LD -->
+  <!-- JSON-LD (шаблон оставляем) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -693,608 +265,1240 @@
   </script>
 </head>
 
-<body class="grain">
-  <!-- ✅ ДЕЙСТВИЕ: добавил fallback на случай отсутствия JS -->
-  <script>document.documentElement.classList.remove('no-js');</script>
+<body class="font-body antialiased relative page-safe">
+  <div id="scrollProgress" aria-hidden="true"></div>
 
-  <!-- =========================
-       ✅ NAV (Maverick-style)
-       ========================= -->
-  <nav class="nav" aria-label="Навигация">
-    <div class="container nav-inner">
-      <a class="brand" href="#top" aria-label="ASTANA JAS">
-        <img src="images/logo.png" alt="Logo" onerror="this.style.display='none'">
-        <div class="name">
-          <strong>Astana Jas</strong>
-          <span>Elite Football Academy</span>
+  <!-- Preloader (упрощён: меньше визуального шума + быстрее исчезает) -->
+  <div id="preloader" class="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center transition-opacity duration-500">
+    <div class="w-10 h-10 rounded-full border border-black/10 border-t-black animate-spin mb-4"></div>
+    <p class="text-xs uppercase tracking-[0.35em] text-black/60 font-bold">Loading</p>
+  </div>
+
+  <!-- Navbar (минимализм: без верхней панели и без лишних CTA) -->
+  <nav id="navbar" class="fixed top-0 w-full z-50">
+    <div id="navShell" class="bg-white/80 backdrop-blur-xl border-b border-black/5">
+      <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" class="flex items-center gap-3">
+          <div class="w-10 h-10 relative shrink-0">
+            <img src="images/logo.png" class="w-full h-full object-contain" alt="Logo"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="flex flex-col">
+            <span class="font-header text-xl md:text-2xl font-bold uppercase tracking-tight leading-none text-black">Astana Jas</span>
+            <span class="text-[10px] font-bold uppercase tracking-[0.28em] text-black/45">Football School</span>
+          </div>
+        </a>
+
+        <div class="hidden lg:flex items-center gap-8 font-header text-base font-medium uppercase tracking-wide text-black/70">
+          <a href="#about" class="hover:text-black transition">О клубе</a>
+          <a href="#process" class="hover:text-black transition">Путь</a>
+          <a href="#programs" class="hover:text-black transition">Программы</a>
+          <a href="#kit" class="hover:text-black transition">Форма</a>
+          <a href="#team" class="hover:text-black transition">Тренеры</a>
+          <a href="#gallery" class="hover:text-black transition">Галерея</a>
+          <a href="#faq" class="hover:text-black transition">FAQ</a>
+          <a href="#locations" class="hover:text-black transition">Контакты</a>
         </div>
-      </a>
 
-      <div class="nav-links" aria-label="Разделы">
-        <a href="#about">Атмосфера</a>
-        <a href="#programs">Прайс</a>
-        <a href="#team">Тренеры</a>
-        <a href="#gallery">Галерея</a>
-        <a href="#contacts">Контакты</a>
-      </div>
-
-      <div class="nav-cta">
-        <a class="btn primary" href="#" id="ctaTop">Записаться</a>
-
-        <!-- ✅ ДЕЙСТВИЕ: бургер для мобилки -->
-        <button class="burger" id="burger" type="button" aria-label="Открыть меню">≡</button>
+        <button onclick="toggleMenu()" class="lg:hidden text-2xl text-black p-2" aria-label="Открыть меню">
+          <i class="fas fa-bars" id="menu-icon"></i>
+        </button>
       </div>
     </div>
   </nav>
 
-  <!-- ✅ Mobile menu overlay -->
-  <div class="mobile" id="mobile" aria-hidden="true">
-    <div class="mobile-card" role="dialog" aria-label="Меню">
-      <header>
-        <div class="eyebrow" style="margin:0;">Menu</div>
-        <button class="close" id="closeMobile" type="button" aria-label="Закрыть">×</button>
-      </header>
-      <div class="mobile-links">
-        <a href="#about" data-close>Атмосфера</a>
-        <a href="#programs" data-close>Прайс</a>
-        <a href="#team" data-close>Тренеры</a>
-        <a href="#gallery" data-close>Галерея</a>
-        <a href="#contacts" data-close>Контакты</a>
-        <a href="#" id="ctaMobile" data-close>Записаться в WhatsApp</a>
+  <!-- Mobile Menu (адаптация: крупные кликабельные пункты, без CTA кнопок) -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 bg-white translate-x-full transition-transform duration-500 flex flex-col pt-24 px-8 overflow-y-auto">
+    <div class="flex items-center justify-between pb-6 border-b border-black/5">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9">
+          <img src="images/logo.png" class="w-full h-full object-contain" alt="Logo"
+               onerror="this.style.display='none'">
+        </div>
+        <div class="flex flex-col">
+          <span class="font-header text-2xl uppercase font-bold text-black leading-none">Astana Jas</span>
+          <span class="text-[10px] uppercase tracking-[0.35em] text-black/45 font-bold">Menu</span>
+        </div>
       </div>
+      <button onclick="toggleMenu(true)" class="w-11 h-11 rounded-full border border-black/10 text-black/70 hover:text-black hover:border-black/25 transition" aria-label="Закрыть меню">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="mt-7 flex flex-col gap-5 font-header text-3xl uppercase font-bold text-black">
+      <a href="#about" onclick="toggleMenu(true)">О клубе</a>
+      <a href="#process" onclick="toggleMenu(true)">Путь</a>
+      <a href="#programs" onclick="toggleMenu(true)">Программы</a>
+      <a href="#kit" onclick="toggleMenu(true)">Форма</a>
+      <a href="#team" onclick="toggleMenu(true)">Тренеры</a>
+      <a href="#gallery" onclick="toggleMenu(true)">Галерея</a>
+      <a href="#faq" onclick="toggleMenu(true)">FAQ</a>
+      <a href="#locations" onclick="toggleMenu(true)">Контакты</a>
+    </div>
+
+    <div class="mt-auto py-8 text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+      Быстрые действия — внизу сайта (Записаться / WhatsApp / Позвонить)
     </div>
   </div>
 
-  <!-- =========================
-       ✅ HERO (без видео)
-       ========================= -->
-  <header id="top" class="hero">
-    <div class="hero-bg" aria-hidden="true">
-      <!-- ✅ ДЕЙСТВИЕ: hero использует images/hero_poster.jpg -->
-      <img src="images/hero_poster.jpg" alt="" onerror="this.style.opacity='0.25'">
+  <!-- Hero (CHANGE: видео убрано, оставлен постер; меньше "рамок в рамке") -->
+  <header class="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-black noise">
+    <div class="absolute inset-0 z-0">
+      <img src="images/hero_poster.jpg"
+           class="absolute w-full h-full object-cover object-top"
+           alt="Hero" loading="eager" decoding="async"
+           onerror="this.style.opacity='0'">
+      <div class="absolute inset-0 bg-gradient-to-b from-black/75 via-black/35 to-black/85"></div>
     </div>
 
-    <div class="container hero-content">
-      <div class="hero-top reveal">
-        <div class="tag"><span class="dot"></span> Season 2025/2026 • Astana</div>
-        <div class="tag" style="border-color:rgba(214,180,106,.35); color:var(--accent2);">
-          5–14 лет • Pro Path
-        </div>
-      </div>
+    <div class="container mx-auto px-6 relative z-10 pt-28 pb-16">
+      <div class="grid lg:grid-cols-12 gap-10 items-start">
+        <div class="lg:col-span-7">
+          <div class="reveal inline-flex items-center gap-3 py-2 px-4 border border-white/15 text-white/80 text-xs font-bold uppercase tracking-[0.25em] mb-6 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-brand-gold animate-pulse"></span>
+            Season 2025/2026
+          </div>
 
-      <div class="hero-grid">
-        <div class="reveal">
-          <h1 class="h1">Be a<br>Champion</h1>
-          <p class="lead">
-            Футбол — это характер. Мы строим технику, мышление и дисциплину.
-            Без лишнего шума — только работа и результат.
+          <h1 class="reveal font-header font-bold uppercase text-white mb-5 hero-h1"
+              style="font-size: clamp(44px, 6vw, 86px); line-height: .92;">
+            Astana <span class="text-brand-gold">Jas</span>
+          </h1>
+
+          <p class="reveal text-lg md:text-xl text-white/85 font-light max-w-2xl mb-8 hero-sub">
+            Воспитываем характер. Создаем чемпионов.
+            <br><span class="font-medium text-white">История большого футбола начинается здесь.</span>
           </p>
 
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 18px;">
-            <a class="btn primary" href="#" id="ctaHero">Записаться</a>
-            <a class="btn ghost" href="#programs">Смотреть прайс</a>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="bullets reveal">
-            <div><b>Система прогресса</b><br><span class="muted">Техника → тактика → матч-дни</span></div>
-            <div><b>Две локации</b><br><span class="muted">Удобно по району</span></div>
-            <div><b>Без воды</b><br><span class="muted">Тренировки по делу</span></div>
+          <!-- CTA убраны из hero (по твоей просьбе): оставили только информацию -->
+          <div class="reveal grid sm:grid-cols-3 gap-3 max-w-2xl">
+            <div class="card-dark p-4">
+              <p class="text-[10px] uppercase tracking-[0.3em] text-white/60 font-bold">Возраст</p>
+              <p class="mt-1 font-header text-2xl uppercase text-white font-bold">5–14</p>
+            </div>
+            <div class="card-dark p-4">
+              <p class="text-[10px] uppercase tracking-[0.3em] text-white/60 font-bold">Локации</p>
+              <p class="mt-1 font-header text-2xl uppercase text-white font-bold">2 школы</p>
+            </div>
+            <div class="card-dark p-4">
+              <p class="text-[10px] uppercase tracking-[0.3em] text-white/60 font-bold">Формат</p>
+              <p class="mt-1 font-header text-2xl uppercase text-white font-bold">Pro Path</p>
+            </div>
           </div>
         </div>
 
-        <aside class="hero-card reveal">
-          <small>Fast entry</small>
-          <div class="row">
-            <span class="pill">Пробное занятие</span>
-            <span class="pill">WhatsApp</span>
-            <span class="pill">Менеджер: Руслан</span>
+        <!-- Правая колонка: оставили смысл, убрали лишние кнопки -->
+        <div class="lg:col-span-5">
+          <div class="reveal card-dark p-6 md:p-7">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.35em] text-white/60 font-bold">Fast Entry</p>
+                <h3 class="font-header text-3xl uppercase font-bold text-white">Запись</h3>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                <i class="fas fa-bolt text-brand-gold"></i>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-white/85">
+              <div class="flex items-center justify-between gap-4 border-t border-white/10 pt-4">
+                <p class="text-xs uppercase tracking-[0.35em] text-white/55 font-bold">Менеджер</p>
+                <p class="font-header uppercase text-lg font-bold text-white">Руслан</p>
+              </div>
+              <div class="flex items-center justify-between gap-4 border-t border-white/10 pt-4">
+                <p class="text-xs uppercase tracking-[0.35em] text-white/55 font-bold">Телефон</p>
+                <a href="tel:+77019744464" class="font-header uppercase text-lg font-bold text-white hover:text-brand-gold transition">
+                  +7 701 974 44 64
+                </a>
+              </div>
+              <p class="text-xs text-white/55 pt-3 leading-relaxed">
+                Быстрые кнопки действий — внизу сайта.
+              </p>
+            </div>
           </div>
-          <div class="divider"></div>
-          <p style="margin:0; color:var(--muted); font-size:13px; line-height:1.55;">
-            Нажми “Записаться” — откроется WhatsApp с готовым сообщением.
-          </p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px;">
-            <a class="btn primary" href="#" id="ctaSide">Записаться</a>
-            <a class="btn" href="tel:+77019744464">Позвонить</a>
+
+          <div class="reveal mt-6 flex items-center gap-3 text-white/55 text-xs uppercase tracking-[0.35em] font-bold">
+            <span class="w-10 h-[1px] bg-white/20"></span>
+            Elite Standard • Discipline • Growth
           </div>
-        </aside>
+        </div>
       </div>
+    </div>
+
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/55 text-xs uppercase tracking-[0.35em] font-bold">
+      <a href="#about" class="inline-flex items-center gap-2 hover:text-white transition">
+        <span>Scroll</span>
+        <i class="fas fa-arrow-down"></i>
+      </a>
     </div>
   </header>
 
-  <!-- =========================
-       ✅ ABOUT (атмосфера/позиционирование)
-       ========================= -->
-  <section id="about">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow reveal">Атмосфера</div>
-          <h2 class="h2 reveal" style="margin-top:10px;">Не просто<br>тренировки</h2>
-          <p class="lead reveal">
-            ASTANA JAS — строгая школа футбола: дисциплина, техника и игровое мышление.
-            Мы не “развлекаем” — мы растим спортсменов.
+  <!-- About (CHANGE: меньше рамок, единый card) -->
+  <section id="about" class="relative py-20 bg-white">
+    <div class="container mx-auto px-6 relative">
+      <div class="grid lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-6 reveal">
+          <div class="inline-flex items-center gap-3 text-xs uppercase tracking-[0.35em] font-bold text-black/45">
+            <span class="w-10 h-[1px] bg-black/15"></span> О клубе
+          </div>
+          <h2 class="mt-3 font-header text-4xl md:text-6xl font-bold uppercase text-black leading-tight">
+            Больше чем <span class="text-brand-gold">просто</span> игра
+          </h2>
+          <p class="mt-6 text-black/60 text-base md:text-lg leading-relaxed">
+            Мы развиваем технику, дисциплину и тактическое мышление. Важно не только выигрывать,
+            но и расти как спортсмен и как личность.
           </p>
-        </div>
-        <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn" href="#contacts">Где находимся</a>
-          <a class="btn primary" href="#" id="ctaAbout">Записаться</a>
-        </div>
-      </div>
 
-      <div class="panel reveal">
-        <div class="eyebrow" style="margin-bottom:10px;">What you get</div>
-        <div class="bullets" style="margin-top:0;">
-          <div><b>Техника</b><br><span class="muted">Дриблинг, пас, удар, координация</span></div>
-          <div><b>Тактика</b><br><span class="muted">Позиции, взаимодействия, решения</span></div>
-          <div><b>Матч-дни</b><br><span class="muted">Игровая практика и турниры</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================
-       ✅ PROGRAMS = “Прайс-лист” в стиле Maverick
-       ========================= -->
-  <section id="programs">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow reveal">Прайс</div>
-          <h2 class="h2 reveal" style="margin-top:10px;">Качество без<br>компромиссов</h2>
-          <p class="lead reveal">
-            Программы по возрасту и формату. Уточнение расписания и мест — в WhatsApp.
-          </p>
-        </div>
-        <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="#" id="ctaPrice">Записаться</a>
-        </div>
-      </div>
-
-      <div class="price-list reveal">
-        <!-- ✅ ДЕЙСТВИЕ: оформил как строки Maverick — название / описание / цена -->
-        <div class="price-item">
-          <div>
-            <h3>Baby Start</h3>
-            <p>Возраст 5–7 • База, координация, любовь к игре.</p>
-            <div class="meta">
-              <span class="chip">2 раза/нед</span>
-              <span class="chip">Сб–Вс 11:00–12:00</span>
+          <div class="mt-8 grid sm:grid-cols-2 gap-4">
+            <div class="card p-5">
+              <p class="text-[10px] uppercase tracking-[0.35em] font-bold text-black/40">Ценности</p>
+              <p class="mt-2 font-header text-2xl uppercase font-bold text-black">Честность • Семья</p>
+              <p class="mt-2 text-sm text-black/55">Уважение к партнёрам и честная конкуренция.</p>
             </div>
-          </div>
-          <div>
-            <p class="muted">Набор: 2017–2019 г.р.</p>
-            <p class="muted">Фокус: дриблинг, координация</p>
-          </div>
-          <div class="price">25.000 ₸</div>
-        </div>
-
-        <div class="price-item">
-          <div>
-            <h3>Weekend</h3>
-            <p>Возраст 8–10 • Техника, тактика, командность.</p>
-            <div class="meta">
-              <span class="chip">2 раза/нед</span>
-              <span class="chip">Сб–Вс 10:00–11:00</span>
-            </div>
-          </div>
-          <div>
-            <p class="muted">Набор: 2013–2016 г.р.</p>
-            <p class="muted">Фокус: техника + тактика</p>
-          </div>
-          <div class="price">25.000 ₸</div>
-        </div>
-
-        <div class="price-item">
-          <div>
-            <h3>Spec Group</h3>
-            <p>Возраст 11–14 • Соревновательный формат, matchday.</p>
-            <div class="meta">
-              <span class="chip">3 раза/нед</span>
-              <span class="chip">+ matchday</span>
-            </div>
-          </div>
-          <div>
-            <p class="muted">Отбор/просмотр — по записи</p>
-            <p class="muted">Фокус: результат и дисциплина</p>
-          </div>
-          <div class="price">30.000 ₸</div>
-        </div>
-
-        <div class="price-item">
-          <div>
-            <h3>Small Group</h3>
-            <p>До 5 человек • Детали, техника, скорость решений.</p>
-            <div class="meta">
-              <span class="chip">8 / месяц</span>
-              <span class="chip">по согласованию</span>
-            </div>
-          </div>
-          <div>
-            <p class="muted">Фокус: индивидуальная коррекция</p>
-            <p class="muted">Комфортный темп</p>
-          </div>
-          <div class="price">от 50.000 ₸</div>
-        </div>
-
-        <div class="price-item">
-          <div>
-            <h3>Individual 1x1</h3>
-            <p>Персональная работа с тренером • Видео, детали, цель.</p>
-            <div class="meta">
-              <span class="chip">по запросу</span>
-              <span class="chip">окна по расписанию</span>
-            </div>
-          </div>
-          <div>
-            <p class="muted">Фокус: быстрый рост</p>
-            <p class="muted">Цель/позиция/роль</p>
-          </div>
-          <div class="price">от 80.000 ₸</div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="btn primary" href="#" id="ctaPriceBottom">Записаться онлайн</a>
-        <a class="btn" href="#gallery">Посмотреть галерею</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================
-       ✅ TEAM — минимальные карточки
-       (Если будут отдельные фото тренеров — просто замени src)
-       ========================= -->
-  <section id="team">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow reveal">Команда</div>
-          <h2 class="h2 reveal" style="margin-top:10px;">Тренерский<br>штаб</h2>
-          <p class="lead reveal">
-            Профессиональный подход, дисциплина и системная работа с прогрессом.
-          </p>
-        </div>
-        <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="#" id="ctaTeam">Записаться</a>
-        </div>
-      </div>
-
-      <div class="grid reveal">
-        <!-- ✅ ДЕЙСТВИЕ: использую существующий файл images/team_full.jpg (повторно) — чтобы не ломать сборку -->
-        <article class="card">
-          <div class="img">
-            <img src="images/team_full.jpg" alt="Тренер 1" loading="lazy" onerror="this.style.opacity='.25'">
-          </div>
-          <div class="body">
-            <h3 style="font-size:30px;">Руслан</h3>
-            <div class="role">Менеджер / Запись</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="img">
-            <img src="images/team_full.jpg" alt="Тренер 2" loading="lazy" onerror="this.style.opacity='.25'">
-          </div>
-          <div class="body">
-            <h3 style="font-size:30px;">Тренер</h3>
-            <div class="role">Senior Coach</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="img">
-            <img src="images/team_full.jpg" alt="Тренер 3" loading="lazy" onerror="this.style.opacity='.25'">
-          </div>
-          <div class="body">
-            <h3 style="font-size:30px;">Тренер</h3>
-            <div class="role">Coach</div>
-          </div>
-        </article>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- ✅ ДЕЙСТВИЕ: “Форма” оставил отдельным минимальным блоком -->
-      <div class="panel reveal" style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; align-items:center;">
-        <div>
-          <div class="eyebrow">Форма</div>
-          <h3 style="font-size:44px; margin-top:10px; text-transform:uppercase;">Клубная экипировка</h3>
-          <p class="lead" style="margin-top:10px;">
-            Эксклюзивный дизайн и комфортный материал. Узнай размеры и наличие.
-          </p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px;">
-            <a class="btn primary" href="#" id="ctaKit">Узнать про форму</a>
-            <button class="btn" type="button" data-lightbox="images/kit.jpg?v=4">Посмотреть фото</button>
-          </div>
-        </div>
-
-        <div class="shot" style="margin:0; border-radius: var(--radius2);" data-lightbox="images/kit.jpg?v=4">
-          <img src="images/kit.jpg?v=4" alt="Форма" loading="lazy"
-               onerror="this.style.opacity='.25'; this.style.height='220px'">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================
-       ✅ GALLERY — сетка + lightbox
-       ========================= -->
-  <section id="gallery">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow reveal">Галерея</div>
-          <h2 class="h2 reveal" style="margin-top:10px;">Тренировки<br>в кадре</h2>
-          <p class="lead reveal">Нажми на фото — откроется просмотр.</p>
-        </div>
-        <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="#" id="ctaGallery">Записаться</a>
-        </div>
-      </div>
-
-      <div class="gallery reveal">
-        <!-- ✅ ДЕЙСТВИЕ: оставил названия файлов как в исходнике -->
-        <div class="shot" data-lightbox="images/gallery_1.jpg"><img src="images/gallery_1.jpg" alt="Gallery 1" loading="lazy" onerror="this.style.opacity='.25'"></div>
-        <div class="shot" data-lightbox="images/gallery_2.jpg"><img src="images/gallery_2.jpg" alt="Gallery 2" loading="lazy" onerror="this.style.opacity='.25'"></div>
-        <div class="shot" data-lightbox="images/gallery_3.jpg"><img src="images/gallery_3.jpg" alt="Gallery 3" loading="lazy" onerror="this.style.opacity='.25'"></div>
-        <div class="shot" data-lightbox="images/gallery_4.jpg"><img src="images/gallery_4.jpg" alt="Gallery 4" loading="lazy" onerror="this.style.opacity='.25'"></div>
-        <div class="shot" data-lightbox="images/gallery_5.jpg"><img src="images/gallery_5.jpg" alt="Gallery 5" loading="lazy" onerror="this.style.opacity='.25'"></div>
-        <div class="shot" data-lightbox="images/gallery_6.jpg"><img src="images/gallery_6.jpg" alt="Gallery 6" loading="lazy" onerror="this.style.opacity='.25'"></div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="btn primary" href="#" id="ctaAfterGallery">Записаться после просмотра</a>
-        <a class="btn" href="#contacts">Контакты</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================
-       ✅ CONTACTS — лаконично, две локации (без карты/Leaflet)
-       ========================= -->
-  <section id="contacts">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow reveal">Контакты</div>
-          <h2 class="h2 reveal" style="margin-top:10px;">Ждём вас<br>в Astana Jas</h2>
-          <p class="lead reveal">
-            Напиши в WhatsApp — быстро подберём группу и ближайшую локацию.
-          </p>
-        </div>
-        <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="#" id="ctaContacts">WhatsApp</a>
-          <a class="btn" href="tel:+77019744464">Позвонить</a>
-        </div>
-      </div>
-
-      <div class="contacts reveal">
-        <div class="contact-card">
-          <div class="eyebrow">Manager</div>
-          <h3 style="margin-top:10px;">Руслан</h3>
-
-          <div class="kv">
-            <div>
-              <div class="k">Телефон</div>
-              <div class="v"><a href="tel:+77019744464">+7 701 974 44 64</a></div>
-            </div>
-            <div>
-              <div class="k">График</div>
-              <div class="v">Ежедневно: 09:00 — 21:00</div>
+            <div class="card p-5">
+              <p class="text-[10px] uppercase tracking-[0.35em] font-bold text-black/40">Методика</p>
+              <p class="mt-2 font-header text-2xl uppercase font-bold text-black">Техника + Тактика</p>
+              <p class="mt-2 text-sm text-black/55">Понимание игры, скорость решений, командность.</p>
             </div>
           </div>
 
-          <div class="divider"></div>
-
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <a class="btn primary" href="#" id="ctaContacts2">Написать в WhatsApp</a>
-            <a class="btn" href="#programs">Прайс</a>
-          </div>
-
-          <p class="muted" style="margin:14px 0 0; font-size:13px; line-height:1.55;">
-            Подскажем свободные места, расписание и ближайшую локацию.
+          <!-- CTA убрали (по твоей просьбе) -->
+          <p class="mt-8 text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+            Для записи используйте кнопки внизу сайта.
           </p>
         </div>
 
-        <div class="contact-card">
-          <div class="eyebrow">Locations</div>
-          <h3 style="margin-top:10px;">2 школы</h3>
+        <div class="lg:col-span-6 reveal">
+          <div class="card overflow-hidden">
+            <img src="./images/loc1.jpg" loading="lazy" decoding="async"
+                 onerror="if(!this.dataset.try){ this.dataset.try='1'; this.src='./images/loc1.JPG'; return; } this.style.opacity='0';"
+                 class="w-full h-auto object-cover" alt="Команда">
+            <div class="p-5 border-t border-black/5">
+              <p class="text-[10px] uppercase tracking-[0.35em] font-bold text-black/45">Elite Metrics</p>
+              <p class="mt-1 font-header text-2xl uppercase font-bold text-black">Структура прогресса</p>
+              <p class="mt-2 text-sm text-black/55">Системная нагрузка и дисциплина → стабильный рост.</p>
 
-          <div class="kv">
-            <div>
-              <div class="k">Локация 1</div>
-              <div class="v">Школа №11<br><span class="muted">им. Өзбекәлі Жәнібекова</span></div>
-              <div style="margin-top:10px;">
-                <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps?q=51.152230,71.404335">Открыть карту</a>
-              </div>
-            </div>
-
-            <div>
-              <div class="k">Локация 2</div>
-              <div class="v">Школа №71<br><span class="muted">ул. Е-10</span></div>
-              <div style="margin-top:10px;">
-                <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps?q=51.104512,71.402919">Открыть карту</a>
+              <div class="mt-4 grid grid-cols-3 gap-3">
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-3 text-center">
+                  <p class="text-[10px] uppercase tracking-[0.35em] font-bold text-black/40">Трен/мес</p>
+                  <p class="mt-1 font-header text-2xl font-bold text-black"><span class="counter" data-target="8">0</span></p>
+                </div>
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-3 text-center">
+                  <p class="text-[10px] uppercase tracking-[0.35em] font-bold text-black/40">Групп</p>
+                  <p class="mt-1 font-header text-2xl font-bold text-black"><span class="counter" data-target="6">0</span></p>
+                </div>
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-3 text-center">
+                  <p class="text-[10px] uppercase tracking-[0.35em] font-bold text-black/40">Локации</p>
+                  <p class="mt-1 font-header text-2xl font-bold text-black"><span class="counter" data-target="2">0</span></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process" class="py-24 bg-brand-gray relative overflow-hidden border-t border-black/5">
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-14 reveal">
+        <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Road to Pro</p>
+        <h2 class="mt-2 font-header text-4xl md:text-6xl font-bold uppercase text-black">
+          Путь <span class="text-brand-gold">чемпиона</span>
+        </h2>
+        <p class="mt-4 text-black/55 max-w-2xl mx-auto">
+          Пошаговая модель развития: техника → мышление → командность → соревнования → индивидуальная шлифовка.
+        </p>
       </div>
 
-      <!-- ✅ ДЕЙСТВИЕ: партнёров оставил сверх-минимально (если нужно — можно убрать) -->
-      <div class="divider"></div>
-
-      <div class="panel reveal" style="display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;">
-        <div>
-          <div class="eyebrow">Partners</div>
-          <p class="muted" style="margin:10px 0 0; font-size:13px;">Логотипы — из твоих файлов: <b>images/tehpro.png</b> и <b>images/zhenis.png</b></p>
+      <div class="grid lg:grid-cols-5 gap-4">
+        <div class="reveal card p-6">
+          <div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center">
+            <i class="fas fa-child text-black/35"></i>
+          </div>
+          <p class="mt-4 text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">5–7</p>
+          <h3 class="font-header text-2xl uppercase font-bold text-black mt-2">Start</h3>
+          <p class="text-sm text-black/55 mt-2">Координация, базовая техника и любовь к игре.</p>
         </div>
-        <div style="display:flex; gap:14px; align-items:center;">
-          <img src="images/tehpro.png" alt="Tehpro" style="height:34px; width:auto; opacity:.9;" onerror="this.style.display='none'">
-          <img src="images/zhenis.png" alt="Zhenis" style="height:34px; width:auto; opacity:.9;" onerror="this.style.display='none'">
+
+        <div class="reveal card p-6">
+          <div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center">
+            <i class="fas fa-futbol text-black/35"></i>
+          </div>
+          <p class="mt-4 text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">8–10</p>
+          <h3 class="font-header text-2xl uppercase font-bold text-black mt-2">Progress</h3>
+          <p class="text-sm text-black/55 mt-2">Техника, тактика, игровые ситуации и понимание роли.</p>
+        </div>
+
+        <div class="reveal rounded-[20px] bg-brand-black text-white p-6 border border-white/10">
+          <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+            <i class="fas fa-brain text-brand-gold"></i>
+          </div>
+          <p class="mt-4 text-[10px] uppercase tracking-[0.45em] font-bold text-brand-gold">11–14</p>
+          <h3 class="font-header text-2xl uppercase font-bold mt-2">Team IQ</h3>
+          <p class="text-sm text-white/70 mt-2">Командное мышление, скорость решений, дисциплина.</p>
+        </div>
+
+        <div class="reveal card p-6">
+          <div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center">
+            <i class="fas fa-trophy text-black/35"></i>
+          </div>
+          <p class="mt-4 text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Matchday</p>
+          <h3 class="font-header text-2xl uppercase font-bold text-black mt-2">Competition</h3>
+          <p class="text-sm text-black/55 mt-2">Турниры, устойчивость, опыт и игровая практика.</p>
+        </div>
+
+        <div class="reveal card p-6">
+          <div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center">
+            <i class="fas fa-user-ninja text-black/35"></i>
+          </div>
+          <p class="mt-4 text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">1x1</p>
+          <h3 class="font-header text-2xl uppercase font-bold text-black mt-2">Individual</h3>
+          <p class="text-sm text-black/55 mt-2">Индивидуальная коррекция: ошибки, техника, позиция.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-12 reveal">
+        <p class="text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+          Запись — через кнопки внизу сайта.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs (CHANGE: убрали кнопки внутри карточек; меньше обводок) -->
+  <section id="programs" class="py-20 bg-white border-t border-black/5">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Programs</p>
+        <h2 class="mt-2 font-header text-4xl md:text-6xl font-bold uppercase text-black">
+          Программы <span class="text-brand-gold">обучения</span>
+        </h2>
+        <p class="mt-4 text-black/55 max-w-2xl mx-auto">
+          Выберите направление — для записи используйте быстрые кнопки внизу сайта.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6 max-w-6xl mx-auto">
+
+        <div class="lg:col-span-6 reveal">
+          <div class="card overflow-hidden">
+            <div class="relative h-60 bg-black/5">
+              <img src="images/prog_baby.jpg" loading="lazy" decoding="async"
+                   onerror="this.style.opacity='0'"
+                   class="w-full h-full object-cover" alt="Программа Baby Start">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/70">5–7 лет</p>
+                  <h3 class="font-header text-3xl uppercase font-bold text-white">Baby Start</h3>
+                </div>
+                <div class="rounded-full bg-white/10 border border-white/10 text-white font-bold px-4 py-2">
+                  25.000 тг
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/40">Набор</p>
+                  <p class="mt-1 font-bold text-black">2017–2019 г.р.</p>
+                </div>
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/40">График</p>
+                  <p class="mt-1 font-bold text-black">Сб–Вс • 11:00–12:00</p>
+                </div>
+              </div>
+
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="text-xs font-bold px-3 py-2 rounded-full bg-black text-white uppercase tracking-widest">Координация</span>
+                <span class="text-xs font-bold px-3 py-2 rounded-full bg-black/5 text-black/70 uppercase tracking-widest">Дриблинг</span>
+                <span class="text-xs font-bold px-3 py-2 rounded-full bg-black/5 text-black/70 uppercase tracking-widest">База</span>
+              </div>
+
+              <p class="mt-5 text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+                Запись — через нижние кнопки сайта.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 reveal">
+          <div class="card overflow-hidden">
+            <div class="relative h-60 bg-black/5">
+              <img src="images/prog_weekend.jpg" loading="lazy" decoding="async"
+                   onerror="this.style.opacity='0'"
+                   class="w-full h-full object-cover" alt="Weekend группы">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/70">8–10 лет</p>
+                  <h3 class="font-header text-3xl uppercase font-bold text-white">Weekend</h3>
+                </div>
+                <div class="rounded-full bg-white/10 border border-white/10 text-white font-bold px-4 py-2">
+                  25.000 тг
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/40">Набор</p>
+                  <p class="mt-1 font-bold text-black">2013–2016 г.р.</p>
+                </div>
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/40">График</p>
+                  <p class="mt-1 font-bold text-black">Сб–Вс • 10:00–11:00</p>
+                </div>
+              </div>
+
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="text-xs font-bold px-3 py-2 rounded-full bg-black text-white uppercase tracking-widest">Техника</span>
+                <span class="text-xs font-bold px-3 py-2 rounded-full bg-black/5 text-black/70 uppercase tracking-widest">Тактика</span>
+                <span class="text-xs font-bold px-3 py-2 rounded-full bg-black/5 text-black/70 uppercase tracking-widest">Команда</span>
+              </div>
+
+              <p class="mt-5 text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+                Запись — через нижние кнопки сайта.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 reveal">
+          <div class="card overflow-hidden">
+            <div class="relative h-72 bg-black/5">
+              <img src="images/prog_spec.jpg" loading="lazy" decoding="async"
+                   onerror="this.style.opacity='0'"
+                   class="w-full h-full object-cover" alt="Спецгруппа">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/0 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/70">11–14 лет</p>
+                  <h3 class="font-header text-4xl uppercase font-bold text-white">Spec Group</h3>
+                </div>
+                <div class="rounded-full bg-white/10 border border-white/10 text-white font-bold px-4 py-2">
+                  30.000 тг
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6">
+              <div class="grid md:grid-cols-3 gap-4">
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/40">Набор</p>
+                  <p class="mt-1 font-bold text-black">2010–2016 г.р.</p>
+                </div>
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/40">Формат</p>
+                  <p class="mt-1 font-bold text-black">3 раза/нед + matchday</p>
+                </div>
+                <div class="rounded-2xl bg-brand-gray border border-black/5 p-4">
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/40">Уровень</p>
+                  <p class="mt-1 font-bold text-black">Соревновательный</p>
+                </div>
+              </div>
+
+              <div class="mt-5 rounded-2xl bg-brand-black text-white p-5 border border-white/10">
+                <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-brand-gold">Что внутри</p>
+                <ul class="mt-3 text-sm text-white/75 space-y-2">
+                  <li><i class="fas fa-check text-brand-gold mr-2"></i>Техника + скорость принятия решений</li>
+                  <li><i class="fas fa-check text-brand-gold mr-2"></i>Тактика, взаимодействия, игровые модели</li>
+                  <li><i class="fas fa-check text-brand-gold mr-2"></i>Турниры, матч-дни, рост устойчивости</li>
+                </ul>
+              </div>
+
+              <p class="mt-5 text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+                Запись — через нижние кнопки сайта.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 reveal">
+          <div class="card overflow-hidden h-full flex flex-col">
+            <div class="relative h-72 bg-black/5">
+              <img src="images/prog_small.jpg" loading="lazy" decoding="async"
+                   onerror="this.style.opacity='0'"
+                   class="w-full h-full object-cover" alt="Малые группы">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/70">до 5 человек</p>
+                  <h3 class="font-header text-3xl uppercase font-bold text-white">Small Group</h3>
+                </div>
+                <div class="rounded-full bg-white/10 border border-white/10 text-white font-bold px-4 py-2">
+                  от 50.000 тг
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 flex flex-col flex-1">
+              <ul class="text-sm text-black/55 space-y-2">
+                <li><i class="fas fa-check text-brand-gold mr-2"></i>Группа до 5 человек</li>
+                <li><i class="fas fa-check text-brand-gold mr-2"></i>Техника, скорость, работа над деталями</li>
+                <li><i class="fas fa-check text-brand-gold mr-2"></i>8 тренировок в месяц</li>
+              </ul>
+
+              <div class="mt-auto pt-6">
+                <p class="text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+                  Запись — через нижние кнопки сайта.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-12 reveal">
+          <div class="card overflow-hidden">
+            <div class="grid lg:grid-cols-12">
+              <div class="lg:col-span-5 relative bg-black/5 min-h-[280px]">
+                <img src="images/prog_indiv.jpg" loading="lazy" decoding="async"
+                     onerror="this.style.opacity='0'"
+                     class="w-full h-full object-cover" alt="Индивидуально 1x1">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/0 to-transparent"></div>
+                <div class="absolute bottom-5 left-5 right-5">
+                  <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/70">1x1</p>
+                  <h3 class="font-header text-4xl uppercase font-bold text-white">Individual</h3>
+                </div>
+              </div>
+
+              <div class="lg:col-span-7 p-6 md:p-10">
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
+                  <div>
+                    <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Premium Focus</p>
+                    <h3 class="mt-2 font-header text-3xl md:text-4xl uppercase font-bold text-black">
+                      Индивидуальная работа с тренером
+                    </h3>
+                    <p class="mt-3 text-black/55">
+                      Работа над ошибками, современный инвентарь, комфортные условия (раздевалки, душевые),
+                      видеосъемка тренировок.
+                    </p>
+                  </div>
+                  <div class="shrink-0 rounded-full bg-brand-gray border border-black/5 text-black font-header uppercase font-bold px-5 py-3">
+                    от 80.000 тг
+                  </div>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-4">
+                  <div class="rounded-2xl bg-brand-gray border border-black/5 p-5">
+                    <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/40">Расписание</p>
+                    <p class="mt-2 text-sm font-bold text-black">Пн—Чт: 11:30–12:30 и 15:30–16:30</p>
+                    <p class="mt-1 text-sm font-bold text-black">Вт—Чт: 11:30–12:30 и 15:30–16:30</p>
+                    <p class="mt-1 text-sm font-bold text-black">Ср—Пт: 11:30–12:30 и 15:30–16:30</p>
+                  </div>
+
+                  <div class="rounded-2xl bg-brand-black text-white border border-white/10 p-5">
+                    <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-brand-gold">Идеально если</p>
+                    <ul class="mt-3 text-sm text-white/75 space-y-2">
+                      <li><i class="fas fa-check text-brand-gold mr-2"></i>нужно быстро поднять технику</li>
+                      <li><i class="fas fa-check text-brand-gold mr-2"></i>важна персональная коррекция</li>
+                      <li><i class="fas fa-check text-brand-gold mr-2"></i>есть цель на позицию/роль</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <p class="mt-6 text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+                  Запись — через нижние кнопки сайта.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Comparison (таблица оставлена, но без CTA кнопок) -->
+      <div id="comparison" class="mt-16 reveal max-w-6xl mx-auto">
+        <div class="card p-6 md:p-10 bg-brand-gray">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+              <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Comparison</p>
+              <h3 class="mt-2 font-header text-3xl md:text-4xl uppercase font-bold text-black">
+                Сравнение программ
+              </h3>
+              <p class="mt-2 text-black/55">Быстро понять разницу и выбрать лучший путь.</p>
+            </div>
+          </div>
+
+          <div class="mt-6 overflow-x-auto">
+            <table class="w-full text-left border-separate" style="border-spacing: 0 10px;">
+              <thead>
+                <tr class="text-[10px] uppercase tracking-[0.35em] font-bold text-black/45">
+                  <th class="px-4">Программа</th>
+                  <th class="px-4">Возраст</th>
+                  <th class="px-4">Частота</th>
+                  <th class="px-4">Фокус</th>
+                  <th class="px-4">Цена</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm">
+                <tr class="bg-white border border-black/5">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-black">Baby Start</td>
+                  <td class="px-4 py-4">5–7</td>
+                  <td class="px-4 py-4">2 раза/нед</td>
+                  <td class="px-4 py-4">База, координация</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold">25.000 тг</td>
+                </tr>
+                <tr class="bg-white border border-black/5">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-black">Weekend</td>
+                  <td class="px-4 py-4">8–10</td>
+                  <td class="px-4 py-4">2 раза/нед</td>
+                  <td class="px-4 py-4">Техника, тактика</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold">25.000 тг</td>
+                </tr>
+                <tr class="bg-white border border-black/5">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-black">Spec Group</td>
+                  <td class="px-4 py-4">11–14</td>
+                  <td class="px-4 py-4">3 раза/нед + matchday</td>
+                  <td class="px-4 py-4">Соревнования</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold">30.000 тг</td>
+                </tr>
+                <tr class="bg-white border border-black/5">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-black">Small Group</td>
+                  <td class="px-4 py-4">Любой</td>
+                  <td class="px-4 py-4">8/мес</td>
+                  <td class="px-4 py-4">Детали, техника</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold">от 50.000 тг</td>
+                </tr>
+                <tr class="bg-white border border-black/5">
+                  <td class="px-4 py-4 rounded-l-2xl font-bold text-black">Individual 1x1</td>
+                  <td class="px-4 py-4">Любой</td>
+                  <td class="px-4 py-4">По запросу</td>
+                  <td class="px-4 py-4">Персональная коррекция</td>
+                  <td class="px-4 py-4 rounded-r-2xl font-bold">от 80.000 тг</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="mt-4 text-xs text-black/45">
+            Примечание: расписание и места уточняйте у менеджера.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- =========================
-       ✅ FOOTER — как у Maverick: коротко, строго
-       ========================= -->
-  <footer>
-    <div class="container footer-inner">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <img src="images/logo.png" alt="Logo" style="width:44px; height:44px; object-fit:contain;" onerror="this.style.display='none'">
-        <div>
-          <div style="font-family:'Bebas Neue',Impact,sans-serif; font-size:34px; letter-spacing:.08em; text-transform:uppercase;">Astana Jas</div>
-          <div class="copy">Elite Football Academy</div>
+  <!-- Testimonials (CHANGE: убрали CTA кнопку внутри) -->
+  <section id="testimonials" class="py-20 bg-brand-black text-white border-t border-white/10">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-10 reveal">
+        <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-brand-gold">Trust</p>
+        <h2 class="mt-2 font-header text-4xl md:text-6xl font-bold uppercase">
+          Отзывы <span class="text-brand-gold">родителей</span>
+        </h2>
+      </div>
+
+      <div class="reveal rounded-[20px] border border-white/10 bg-white/5 backdrop-blur-xl overflow-hidden">
+        <div class="p-6 md:p-10">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/60">Slider</p>
+              <p class="mt-2 font-header text-2xl md:text-3xl uppercase font-bold">Что говорят о нас</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:border-white/25 transition"
+                      onclick="slideTestimonial(-1)" aria-label="Назад">
+                <i class="fas fa-arrow-left text-brand-gold"></i>
+              </button>
+              <button class="w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:border-white/25 transition"
+                      onclick="slideTestimonial(1)" aria-label="Вперед">
+                <i class="fas fa-arrow-right text-brand-gold"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-7 grid lg:grid-cols-12 gap-6 items-start">
+            <div class="lg:col-span-8">
+              <div class="rounded-[18px] bg-black/35 border border-white/10 p-6 md:p-8">
+                <div class="flex items-center gap-2 text-brand-gold">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p id="tText" class="mt-4 text-lg md:text-xl text-white/85 leading-relaxed">—</p>
+                <div class="mt-6">
+                  <p id="tName" class="font-header uppercase text-2xl font-bold">—</p>
+                  <p id="tMeta" class="text-xs uppercase tracking-[0.35em] text-white/50 font-bold">—</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-4">
+              <div class="rounded-[18px] bg-white/5 border border-white/10 p-6">
+                <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/60">Highlights</p>
+                <ul class="mt-4 text-sm text-white/75 space-y-3">
+                  <li><i class="fas fa-check text-brand-gold mr-2"></i>Системная методика</li>
+                  <li><i class="fas fa-check text-brand-gold mr-2"></i>Дисциплина и рост уверенности</li>
+                  <li><i class="fas fa-check text-brand-gold mr-2"></i>Командное мышление</li>
+                  <li><i class="fas fa-check text-brand-gold mr-2"></i>Матч-дни и практика</li>
+                </ul>
+                <p class="mt-6 text-xs text-white/55 uppercase tracking-[0.3em] font-bold">
+                  Запись — через нижние кнопки сайта.
+                </p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <div style="max-width: 420px;">
-        <div class="copy">© 2026 ASTANA JAS. Designed by
-          <a href="https://anukenn.vercel.app/" target="_blank" rel="noopener" style="color:var(--fg); text-decoration:underline; text-underline-offset: 4px;">
-            Anuken
-          </a>
+    </div>
+  </section>
+
+  <!-- Kit (CHANGE: кнопки убраны; картинка открывается по клику) -->
+  <section id="kit" class="py-20 bg-white border-t border-black/5">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Elite Gear</p>
+        <h2 class="mt-2 font-header text-4xl md:text-6xl font-bold uppercase text-black">
+          Клубная <span class="text-brand-gold">форма</span>
+        </h2>
+      </div>
+
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-7 reveal">
+          <div class="card p-4 md:p-6 cursor-pointer group overflow-hidden"
+               onclick="openLightbox('images/kit.jpg?v=4')">
+            <img src="images/kit.jpg?v=4"
+                 onerror="this.style.opacity='0'"
+                 class="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-[1.03]"
+                 alt="Jersey Design" loading="lazy" decoding="async">
+            <p class="mt-4 text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+              Нажмите, чтобы увеличить.
+            </p>
+          </div>
         </div>
+
+        <div class="lg:col-span-5 space-y-4 reveal">
+          <div class="card p-7">
+            <div class="flex items-center gap-3 mb-3">
+              <i class="fas fa-medal text-brand-gold"></i>
+              <h4 class="font-header text-xl uppercase font-bold tracking-wide text-black">Дизайн</h4>
+            </div>
+            <p class="text-black/55 text-sm leading-relaxed">Эксклюзивный паттерн с использованием национального казахского орнамента.</p>
+          </div>
+
+          <div class="card p-7">
+            <div class="flex items-center gap-3 mb-3">
+              <i class="fas fa-bolt text-brand-gold"></i>
+              <h4 class="font-header text-xl uppercase font-bold tracking-wide text-black">Материал</h4>
+            </div>
+            <p class="text-black/55 text-sm leading-relaxed">Полиэстер PRO-Fit: дышит и быстро отводит влагу.</p>
+          </div>
+
+          <p class="text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+            Запрос по форме — через WhatsApp внизу сайта.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team (CHANGE: ОДНА рамка + одно фото team_full.jpg) -->
+  <section id="team" class="py-20 bg-brand-black text-white border-t border-white/10">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-10 reveal">
+        <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-brand-gold">Coaching</p>
+        <h2 class="mt-2 font-header text-4xl md:text-6xl font-bold uppercase">
+          Тренерский <span class="text-brand-gold">штаб</span>
+        </h2>
+        <p class="mt-4 text-white/70 max-w-2xl mx-auto">
+          Профессиональный подход, дисциплина и системная работа с прогрессом.
+        </p>
+      </div>
+
+      <div class="reveal rounded-[20px] overflow-hidden border border-white/10">
+        <img src="images/team_full.jpg" loading="lazy" decoding="async"
+             onerror="this.src='team_full.jpg'; this.onerror=function(){this.style.opacity='0'}"
+             class="w-full h-auto object-cover" alt="Тренерский штаб">
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" class="py-20 bg-white border-t border-black/5">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Gallery</p>
+        <h2 class="mt-2 font-header text-4xl md:text-6xl font-bold uppercase text-black">
+          Галерея <span class="text-brand-gold">тренировок</span>
+        </h2>
+      </div>
+
+      <div class="reveal masonry max-w-6xl mx-auto">
+        <div class="masonry-item">
+          <div class="rounded-[18px] overflow-hidden border border-black/5 bg-brand-gray cursor-pointer"
+               onclick="openLightbox('images/gallery_1.jpg')">
+            <img src="images/gallery_1.jpg" loading="lazy" decoding="async"
+                 onerror="this.style.opacity='0'"
+                 class="w-full h-auto object-cover" alt="Gallery 1">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[18px] overflow-hidden border border-black/5 bg-brand-gray cursor-pointer"
+               onclick="openLightbox('images/gallery_2.jpg')">
+            <img src="images/gallery_2.jpg" loading="lazy" decoding="async"
+                 onerror="this.style.opacity='0'"
+                 class="w-full h-auto object-cover" alt="Gallery 2">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[18px] overflow-hidden border border-black/5 bg-brand-gray cursor-pointer"
+               onclick="openLightbox('images/gallery_3.jpg')">
+            <img src="images/gallery_3.jpg" loading="lazy" decoding="async"
+                 onerror="this.style.opacity='0'"
+                 class="w-full h-auto object-cover" alt="Gallery 3">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[18px] overflow-hidden border border-black/5 bg-brand-gray cursor-pointer"
+               onclick="openLightbox('images/gallery_4.jpg')">
+            <img src="images/gallery_4.jpg" loading="lazy" decoding="async"
+                 onerror="this.style.opacity='0'"
+                 class="w-full h-auto object-cover" alt="Gallery 4">
+          </div>
+        </div>
+        <div class="masonry-item">
+          <div class="rounded-[18px] overflow-hidden border border-black/5 bg-brand-gray cursor-pointer"
+               onclick="openLightbox('images/gallery_5.jpg')">
+            <img src="images/gallery_5.jpg" loading="lazy" decoding="async"
+                 onerror="this.style.opacity='0'"
+                 class="w-full h-auto object-cover" alt="Gallery 5">
+          </div>
+        </div>
+        </div><!-- /masonry-item (5) -->
+
+      </div><!-- /masonry -->
+
+      <div class="mt-10 text-center reveal">
+        <p class="text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+          Нажмите на фото, чтобы открыть в полном размере.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ (минимализм + лёгкая анимация) -->
+  <section id="faq" class="py-20 bg-brand-gray border-t border-black/5">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">FAQ</p>
+        <h2 class="mt-2 font-header text-4xl md:text-6xl font-bold uppercase text-black">
+          Частые <span class="text-brand-gold">вопросы</span>
+        </h2>
+      </div>
+
+      <div class="max-w-4xl mx-auto space-y-4">
+        <div class="card p-6 reveal">
+          <button class="w-full flex items-center justify-between gap-4 text-left" data-acc-btn>
+            <span class="font-header uppercase font-bold text-xl text-black">С какого возраста принимаете?</span>
+            <i class="fas fa-plus text-black/40 transition-transform duration-300" data-acc-ico></i>
+          </button>
+          <div class="mt-3 text-black/60 leading-relaxed hidden" data-acc-body>
+            Принимаем детей от 5 до 14 лет. Группы формируем по возрасту и уровню подготовки.
+          </div>
+        </div>
+
+        <div class="card p-6 reveal">
+          <button class="w-full flex items-center justify-between gap-4 text-left" data-acc-btn>
+            <span class="font-header uppercase font-bold text-xl text-black">Нужен ли опыт в футболе?</span>
+            <i class="fas fa-plus text-black/40 transition-transform duration-300" data-acc-ico></i>
+          </button>
+          <div class="mt-3 text-black/60 leading-relaxed hidden" data-acc-body>
+            Нет. Есть группы для начинающих и для более подготовленных игроков.
+          </div>
+        </div>
+
+        <div class="card p-6 reveal">
+          <button class="w-full flex items-center justify-between gap-4 text-left" data-acc-btn>
+            <span class="font-header uppercase font-bold text-xl text-black">Что входит в тренировки?</span>
+            <i class="fas fa-plus text-black/40 transition-transform duration-300" data-acc-ico></i>
+          </button>
+          <div class="mt-3 text-black/60 leading-relaxed hidden" data-acc-body>
+            Техника (дриблинг, пас, удар), координация, тактика, командные взаимодействия, игровая практика.
+          </div>
+        </div>
+
+        <div class="card p-6 reveal">
+          <button class="w-full flex items-center justify-between gap-4 text-left" data-acc-btn>
+            <span class="font-header uppercase font-bold text-xl text-black">Где проходят занятия?</span>
+            <i class="fas fa-plus text-black/40 transition-transform duration-300" data-acc-ico></i>
+          </button>
+          <div class="mt-3 text-black/60 leading-relaxed hidden" data-acc-body>
+            Две локации в Астане. Точные адреса и схему — смотрите ниже в разделе «Контакты».
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Locations / Contacts (адаптация: карта нормальной высоты на мобилке) -->
+  <section id="locations" class="py-20 bg-white border-t border-black/5">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Contacts</p>
+        <h2 class="mt-2 font-header text-4xl md:text-6xl font-bold uppercase text-black">
+          Контакты <span class="text-brand-gold">и локации</span>
+        </h2>
+      </div>
+
+      <div class="max-w-6xl mx-auto grid lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-5 space-y-4">
+          <div class="card p-6 reveal">
+            <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Менеджер</p>
+            <p class="mt-2 font-header uppercase text-3xl font-bold text-black">Руслан</p>
+
+            <div class="mt-4 space-y-2 text-black/65">
+              <div class="flex items-center gap-3">
+                <i class="fas fa-phone text-black/35"></i>
+                <a href="tel:+77019744464" class="font-bold text-black hover:text-black/70 transition">+7 701 974 44 64</a>
+              </div>
+              <div class="flex items-center gap-3">
+                <i class="fab fa-whatsapp text-black/35"></i>
+                <a href="https://wa.me/77019744464" target="_blank" rel="noopener" class="font-bold text-black hover:text-black/70 transition">
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-6 reveal">
+            <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Локация 1</p>
+            <p class="mt-2 font-header uppercase text-2xl font-bold text-black">Футбольный зал</p>
+            <p class="mt-2 text-black/60 text-sm leading-relaxed">
+              Укажите здесь точный адрес (если нужно — я вставлю в код, когда скажешь адрес).
+            </p>
+          </div>
+
+          <div class="card p-6 reveal">
+            <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-black/45">Локация 2</p>
+            <p class="mt-2 font-header uppercase text-2xl font-bold text-black">Манеж / поле</p>
+            <p class="mt-2 text-black/60 text-sm leading-relaxed">
+              Укажите здесь точный адрес (если нужно — я вставлю в код, когда скажешь адрес).
+            </p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 reveal">
+          <div class="card overflow-hidden">
+            <div id="map" class="w-full" style="height: min(520px, 65vh);"></div>
+          </div>
+          <p class="mt-3 text-xs text-black/45 uppercase tracking-[0.3em] font-bold">
+            Карта интерактивная — можно приблизить и проложить маршрут.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (минимально) -->
+  <footer class="bg-brand-black text-white border-t border-white/10">
+    <div class="container mx-auto px-6 py-12">
+      <div class="grid md:grid-cols-12 gap-8 items-start">
+        <div class="md:col-span-5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10">
+              <img src="images/logo.png" class="w-full h-full object-contain" alt="Logo" onerror="this.style.display='none'">
+            </div>
+            <div class="flex flex-col">
+              <span class="font-header text-2xl uppercase font-bold leading-none">Astana Jas</span>
+              <span class="text-[10px] uppercase tracking-[0.35em] text-white/55 font-bold">Football School</span>
+            </div>
+          </div>
+
+          <p class="mt-4 text-white/65 text-sm leading-relaxed max-w-md">
+            Дисциплина, техника, командное мышление. Системная работа с прогрессом ребёнка.
+          </p>
+        </div>
+
+        <div class="md:col-span-4">
+          <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Навигация</p>
+          <div class="mt-4 grid grid-cols-2 gap-3 text-sm text-white/70">
+            <a class="hover:text-white transition" href="#about">О клубе</a>
+            <a class="hover:text-white transition" href="#programs">Программы</a>
+            <a class="hover:text-white transition" href="#team">Тренеры</a>
+            <a class="hover:text-white transition" href="#gallery">Галерея</a>
+            <a class="hover:text-white transition" href="#faq">FAQ</a>
+            <a class="hover:text-white transition" href="#locations">Контакты</a>
+          </div>
+        </div>
+
+        <div class="md:col-span-3">
+          <p class="text-[10px] uppercase tracking-[0.45em] font-bold text-white/55">Связь</p>
+          <div class="mt-4 space-y-2 text-sm">
+            <a href="tel:+77019744464" class="inline-flex items-center gap-2 text-white/70 hover:text-white transition">
+              <i class="fas fa-phone text-brand-gold"></i> Позвонить
+            </a>
+            <a href="https://wa.me/77019744464" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 text-white/70 hover:text-white transition">
+              <i class="fab fa-whatsapp text-brand-gold"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 pt-6 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-white/55">
+        <span>© <span id="year"></span> Astana Jas. All rights reserved.</span>
+        <span class="uppercase tracking-[0.35em] font-bold">Elite standard</span>
       </div>
     </div>
   </footer>
 
-  <!-- =========================
-       ✅ LIGHTBOX overlay
-       ========================= -->
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-    <button type="button" id="lbClose" aria-label="Закрыть">×</button>
-    <img id="lbImg" src="" alt="Preview">
+  <!-- Bottom Dock (ТОЛЬКО 3 горячие кнопки) -->
+  <div class="fixed bottom-0 left-0 right-0 z-50">
+    <div class="dock-safe px-4">
+      <div class="mx-auto max-w-4xl card bg-white/85 backdrop-blur-xl border-black/10 shadow-soft rounded-[999px] px-3 py-3 mb-3">
+        <div class="grid grid-cols-3 gap-2">
+          <a class="btn btn-primary w-full" href="https://wa.me/77019744464?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%20%D1%80%D0%B5%D0%B1%D1%91%D0%BD%D0%BA%D0%B0%20%D0%B2%20Astana%20Jas." target="_blank" rel="noopener">
+            <i class="fas fa-pen"></i><span class="hidden sm:inline">Записаться</span><span class="sm:hidden">Запись</span>
+          </a>
+          <a class="btn btn-gold w-full" href="https://wa.me/77019744464" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+          </a>
+          <a class="btn btn-ghost w-full" href="tel:+77019744464">
+            <i class="fas fa-phone"></i><span>Позвонить</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- =========================
-       ✅ SCRIPTS — минимальные интерактивы
-       - WhatsApp prefill
-       - Mobile menu
-       - Reveal on scroll
-       - Lightbox
-       ========================= -->
+  <!-- Lightbox -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр изображения">
+    <button onclick="closeLightbox()" aria-label="Закрыть"><i class="fas fa-times"></i></button>
+    <img id="lightboxImg" src="" alt="Просмотр" />
+  </div>
+
+  <!-- Modal (оставлен, но не навязываем; может пригодиться) -->
+  <div id="modal" role="dialog" aria-modal="true" aria-label="Окно">
+    <div class="modal-card">
+      <div class="px-6 py-4 border-b border-black/5 flex items-center justify-between">
+        <p class="font-header uppercase font-bold text-xl text-black">Информация</p>
+        <button class="w-10 h-10 rounded-full border border-black/10 hover:border-black/25 transition" onclick="closeModal()" aria-label="Закрыть">
+          <i class="fas fa-times text-black/60"></i>
+        </button>
+      </div>
+      <div id="modalBody" class="p-6 text-black/70"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <script>
-    /*
-      ✅ ДЕЙСТВИЕ: вынес номер WhatsApp в одну константу (как раньше было, но проще).
-    */
-    const WA_NUMBER = "77019744464";
+    /* ====== Core UI ====== */
+    const preloader = document.getElementById('preloader');
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        preloader.style.opacity = '0';
+        setTimeout(() => preloader.remove(), 450);
+      }, 200);
+    });
 
-    /*
-      ✅ ДЕЙСТВИЕ: единый текст для WhatsApp (кнопки в hero/price/team/gallery/contacts используют его).
-    */
-    function waOpen(message){
-      const text = encodeURIComponent(message || "");
-      window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, "_blank");
-    }
-    function waDefault(){
-      waOpen("Здравствуйте! Хочу записать ребёнка в ASTANA JAS. Возраст: __. Удобные дни: __. Подскажите свободные места, расписание и ближайшую локацию.");
+    // Scroll progress
+    const sp = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const s = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      sp.style.width = (s || 0) + '%';
+    }, { passive: true });
+
+    // Mobile menu
+    function toggleMenu(forceClose = false){
+      const menu = document.getElementById('mobile-menu');
+      const icon = document.getElementById('menu-icon');
+      const isOpen = menu.classList.contains('translate-x-0');
+
+      if(forceClose || isOpen){
+        menu.classList.remove('translate-x-0');
+        menu.classList.add('translate-x-full');
+        if(icon) icon.className = 'fas fa-bars';
+        document.body.style.overflow = '';
+      }else{
+        menu.classList.remove('translate-x-full');
+        menu.classList.add('translate-x-0');
+        if(icon) icon.className = 'fas fa-times';
+        document.body.style.overflow = 'hidden';
+      }
     }
 
-    // ✅ Привязка CTA-кнопок
-    ["ctaTop","ctaHero","ctaSide","ctaAbout","ctaPrice","ctaPriceBottom","ctaTeam","ctaKit","ctaGallery","ctaAfterGallery","ctaContacts","ctaContacts2","ctaMobile"]
-      .forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.addEventListener("click", (e) => { e.preventDefault(); waDefault(); });
+    // Reveal animations
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if(e.isIntersecting){
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
       });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
 
-    /*
-      ✅ ДЕЙСТВИЕ: мобильное меню — открыть/закрыть + закрытие по клику на ссылку.
-    */
-    const mobile = document.getElementById("mobile");
-    const burger = document.getElementById("burger");
-    const closeMobile = document.getElementById("closeMobile");
+    // Counters (в about)
+    const counters = Array.from(document.querySelectorAll('.counter'));
+    const animateCounter = (el) => {
+      const target = parseInt(el.dataset.target || '0', 10);
+      const dur = 900;
+      const start = performance.now();
+      const from = 0;
 
-    function openMobile(){
-      if (!mobile) return;
-      mobile.classList.add("show");
-      mobile.setAttribute("aria-hidden","false");
-      document.body.style.overflow = "hidden";
+      const tick = (t) => {
+        const p = Math.min((t - start) / dur, 1);
+        el.textContent = Math.round(from + (target - from) * (p));
+        if(p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const counterIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if(e.isIntersecting){
+          animateCounter(e.target);
+          counterIO.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(el => counterIO.observe(el));
+
+    // Testimonials
+    const testimonials = [
+      {
+        text: "Сын стал увереннее и дисциплинированнее. Видно, что тренеры работают системно и внимательно.",
+        name: "Алия",
+        meta: "Родитель • 8 лет"
+      },
+      {
+        text: "Отличная организация и методика. Ребёнок ждёт каждую тренировку — прогресс заметен уже через месяц.",
+        name: "Ержан",
+        meta: "Родитель • 10 лет"
+      },
+      {
+        text: "Нравится подход: техника, тактика и командная игра. Много практики и понятные задачи.",
+        name: "Светлана",
+        meta: "Родитель • 12 лет"
+      }
+    ];
+
+    let tIndex = 0;
+    const tText = document.getElementById('tText');
+    const tName = document.getElementById('tName');
+    const tMeta = document.getElementById('tMeta');
+
+    function renderTestimonial(){
+      const t = testimonials[tIndex];
+      if(!tText || !tName || !tMeta) return;
+      tText.textContent = "“" + t.text + "”";
+      tName.textContent = t.name;
+      tMeta.textContent = t.meta.toUpperCase();
     }
-    function closeMobileMenu(){
-      if (!mobile) return;
-      mobile.classList.remove("show");
-      mobile.setAttribute("aria-hidden","true");
-      document.body.style.overflow = "";
-    }
-    burger?.addEventListener("click", openMobile);
-    closeMobile?.addEventListener("click", closeMobileMenu);
-    mobile?.addEventListener("click", (e) => {
-      if (e.target === mobile) closeMobileMenu();
-    });
-    mobile?.querySelectorAll("[data-close]")?.forEach(a => {
-      a.addEventListener("click", () => closeMobileMenu());
-    });
 
-    /*
-      ✅ ДЕЙСТВИЕ: Reveal-анимации (мягко, “дорого”, без агрессии).
-    */
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const reveals = Array.from(document.querySelectorAll(".reveal"));
-    if (!reduceMotion && "IntersectionObserver" in window){
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(en => {
-          if (en.isIntersecting){
-            en.target.classList.add("show");
-            io.unobserve(en.target);
-          }
+    function slideTestimonial(dir){
+      tIndex = (tIndex + dir + testimonials.length) % testimonials.length;
+      renderTestimonial();
+    }
+    renderTestimonial();
+
+    // Accordion (FAQ)
+    document.querySelectorAll('[data-acc-btn]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.card');
+        const body = card.querySelector('[data-acc-body]');
+        const ico = card.querySelector('[data-acc-ico]');
+        const isOpen = !body.classList.contains('hidden');
+
+        // close others (минимально)
+        document.querySelectorAll('[data-acc-body]').forEach(b => {
+          if(b !== body) b.classList.add('hidden');
         });
-      }, { threshold: 0.14 });
-      reveals.forEach(el => io.observe(el));
-    } else {
-      reveals.forEach(el => el.classList.add("show"));
-    }
+        document.querySelectorAll('[data-acc-ico]').forEach(i => {
+          if(i !== ico) i.style.transform = 'rotate(0deg)';
+        });
 
-    /*
-      ✅ ДЕЙСТВИЕ: Lightbox (клика по любому элементу с data-lightbox="path")
-    */
-    const lb = document.getElementById("lightbox");
-    const lbImg = document.getElementById("lbImg");
-    const lbClose = document.getElementById("lbClose");
+        if(isOpen){
+          body.classList.add('hidden');
+          ico.style.transform = 'rotate(0deg)';
+        }else{
+          body.classList.remove('hidden');
+          ico.style.transform = 'rotate(45deg)';
+        }
+      });
+    });
+
+    // Lightbox
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightboxImg');
 
     function openLightbox(src){
-      if (!lb || !lbImg) return;
+      if(!lb || !lbImg) return;
       lbImg.src = src;
-      lb.classList.add("show");
-      lb.setAttribute("aria-hidden","false");
-      document.body.style.overflow = "hidden";
-    }
-    function closeLightbox(){
-      if (!lb || !lbImg) return;
-      lb.classList.remove("show");
-      lb.setAttribute("aria-hidden","true");
-      lbImg.src = "";
-      document.body.style.overflow = "";
+      lb.classList.add('show');
+      document.body.style.overflow = 'hidden';
     }
 
-    document.querySelectorAll("[data-lightbox]").forEach(el => {
-      el.addEventListener("click", () => openLightbox(el.getAttribute("data-lightbox")));
+    function closeLightbox(){
+      if(!lb || !lbImg) return;
+      lb.classList.remove('show');
+      lbImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    lb?.addEventListener('click', (e) => {
+      if(e.target === lb) closeLightbox();
     });
 
-    lbClose?.addEventListener("click", closeLightbox);
-    lb?.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
+    // Modal (опционально)
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modalBody');
+    function openModal(html){
+      if(!modal || !modalBody) return;
+      modalBody.innerHTML = html || '';
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      modal?.classList.remove('show');
+      document.body.style.overflow = '';
+      if(modalBody) modalBody.innerHTML = '';
+    }
+    modal?.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
 
-    // ✅ ESC закрывает меню и лайтбокс
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape"){
-        closeMobileMenu();
-        closeLightbox();
+    // Esc to close overlays
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape'){
+        if(lb?.classList.contains('show')) closeLightbox();
+        if(modal?.classList.contains('show')) closeModal();
       }
     });
-  </script>
 
-  <noscript>
-    <div style="padding:12px; background:#111; color:#fff; text-align:center;">
-      Для корректной работы (анимации/просмотр фото) включите JavaScript.
-    </div>
-  </noscript>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ====== Leaflet Map ====== */
+    (function initMap(){
+      const el = document.getElementById('map');
+      if(!el || typeof L === 'undefined') return;
+
+      // CHANGE: координаты пока оставлены “по центру Астаны”.
+      // Когда дашь точные адреса/координаты 2 локаций — поставлю маркеры точно.
+      const center = [51.1282, 71.4304];
+      const map = L.map('map', { scrollWheelZoom: false }).setView(center, 12);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      const loc1 = [51.1282, 71.4304];
+      const loc2 = [51.1500, 71.4700];
+
+      L.marker(loc1).addTo(map).bindPopup('Локация 1');
+      L.marker(loc2).addTo(map).bindPopup('Локация 2');
+
+      // Mobile-friendly
+      setTimeout(() => map.invalidateSize(), 250);
+    })();
+  </script>
 </body>
 </html>
