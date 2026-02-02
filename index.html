@@ -153,7 +153,7 @@
         <a href="#partners" class="hover:text-white transition">Партнёры</a>
 
         <a href="https://wa.me/77019744464" class="mt-2 inline-flex items-center justify-center bg-white text-black font-head font-bold text-sm uppercase px-6 py-3 hover:bg-brand-orange hover:text-black transition duration-300 transform -skew-x-12">
-          <span class="block skew-x-12">Записаться</span>
+          <span class="block skew-x-12">Записаться на пробную тренировку</span>
         </a>
       </div>
     </div>
@@ -245,11 +245,7 @@
             class="w-full max-h-[560px] object-contain js-lightbox cursor-zoom-in"
             loading="lazy"
           >
-          <div class="mt-4">
-            <h3 class="font-head text-3xl text-white uppercase">Руслан</h3>
-            <p class="font-mono text-brand-orange text-xs tracking-[0.2em] uppercase">Главный тренер</p>
           </div>
-        </div>
 
         <div data-aos="fade-left">
           <h3 class="font-head text-3xl md:text-5xl text-white uppercase mb-6">
@@ -426,7 +422,7 @@
     <div class="container mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
         <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Галерея</h2>
-        <p class="font-mono text-brand-orange mt-2">Экипировка клуба + 6 фото</p>
+        <p class="font-mono text-brand-orange mt-2">6 фото</p>
       </div>
 
       <!-- Экипировка клуба (перенесено сюда) -->
@@ -553,7 +549,7 @@
         <div class="bg-white/5 border border-white/10 p-6 sm:p-8" data-aos="fade-up" data-aos-delay="120">
           <h3 class="font-head text-2xl text-white uppercase mb-5">PDF документ</h3>
           <p class="font-mono text-sm text-gray-300 leading-relaxed mb-6">
-            Добавь файл <b class="text-white">Правила.pdf</b> рядом с <b class="text-white">index.html</b> (в корень проекта), чтобы ссылка работала.
+            
           </p>
 
           <div class="flex flex-col sm:flex-row gap-3">
@@ -610,6 +606,16 @@
     </div>
   </footer>
 
+  <!-- Back to top -->
+  <button
+    id="toTop"
+    class="hidden fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-brand-orange text-black border border-black/40 shadow-lg hover:bg-white transition"
+    aria-label="Наверх"
+    type="button"
+  >
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
   <!-- Lightbox -->
   <div id="lightbox" class="lightbox" aria-hidden="true">
     <button class="lb-close" id="lbClose" aria-label="Закрыть"><i class="fas fa-xmark"></i></button>
@@ -643,6 +649,19 @@
       setExpanded(false);
       btn.innerHTML = '<i class="fas fa-bars"></i>';
     }));
+
+    // Back to top
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', () => {
+      if (!toTop) return;
+      if (window.scrollY > 420) toTop.classList.remove('hidden');
+      else toTop.classList.add('hidden');
+    });
+    if (toTop) {
+      toTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
 
     // Lightbox (открытие всех картинок по клику)
     const lb = document.getElementById('lightbox');
