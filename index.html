@@ -99,6 +99,26 @@
     @media (max-width: 360px){
       .hero-title { font-size: 3.15rem !important; }
     }
+
+    /* Квадратный просмотр карты */
+    .map-square{
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+    }
+    .map-square iframe{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Активная локация */
+    .loc-btn[aria-selected="true"]{
+      border-color: rgba(246,201,14,.75) !important;
+      background: rgba(246,201,14,.06) !important;
+    }
   </style>
 </head>
 
@@ -588,110 +608,189 @@
     <div class="container mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
         <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Локация</h2>
-        <p class="font-mono text-brand-orange mt-2">Две точки в Астане</p>
+        <p class="font-mono text-brand-orange mt-2">Список адресов + один просмотр карты</p>
       </div>
 
-      <div class="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        <div class="bg-white/5 border border-white/10 p-5 sm:p-6" data-aos="fade-up" data-aos-delay="0">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h3 class="font-head text-2xl text-white uppercase">Локация 1</h3>
-              <p class="font-mono text-sm text-gray-300 mt-2">Школа №11 им. Өзбекәлі Жәнібекова</p>
+      <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-8 items-start">
+        <!-- Список адресов -->
+        <div class="lg:col-span-2" data-aos="fade-up">
+          <div class="bg-white/5 border border-white/10 p-5 sm:p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-head text-2xl text-white uppercase">Все адреса</h3>
+                <p class="font-mono text-xs text-gray-500 mt-2 uppercase tracking-[0.2em]">нажмите — карта обновится</p>
+              </div>
+              <i class="fas fa-location-dot text-brand-orange text-2xl mt-1"></i>
             </div>
-            <i class="fas fa-location-dot text-brand-orange text-2xl mt-1"></i>
-          </div>
 
-          <div class="mt-5 overflow-hidden border border-white/10 bg-white/5" style="height: 320px;">
-            <iframe
-              title="Карта — Локация 1"
-              src="https://www.google.com/maps?q=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20%E2%84%9611%20%D0%B8%D0%BC.%20%D3%A8%D0%B7%D0%B1%D0%B5%D0%BA%D3%99%D0%BB%D1%96%20%D0%96%D3%99%D0%BD%D1%96%D0%B1%D0%B5%D0%BA%D0%BE%D0%B2%D0%B0%20%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0&output=embed"
-              width="100%" height="100%" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
+            <div class="mt-6 space-y-3" id="locationsList" role="listbox" aria-label="Список локаций">
+              <!-- Локация 1 -->
+              <button
+                type="button"
+                class="loc-btn w-full text-left group bg-white/5 border border-white/10 p-4 hover:border-brand-orange/60 transition"
+                data-title="Локация 1"
+                data-gmap-embed="https://www.google.com/maps?q=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20%E2%84%9611%20%D0%B8%D0%BC.%20%D3%A8%D0%B7%D0%B1%D0%B5%D0%BA%D3%99%D0%BB%D1%96%20%D0%96%D3%99%D0%BD%D1%96%D0%B1%D0%B5%D0%BA%D0%BE%D0%B2%D0%B0%20%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0&output=embed"
+                data-gmap-open="https://www.google.com/maps?q=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20%E2%84%9611%20%D0%B8%D0%BC.%20%D3%A8%D0%B7%D0%B1%D0%B5%D0%BA%D3%99%D0%BB%D1%96%20%D0%96%D3%99%D0%BD%D1%96%D0%B1%D0%B5%D0%BA%D0%BE%D0%B2%D0%B0%20%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0"
+                data-gis="https://2gis.kz/astana/geo/70000001110249530"
+                aria-selected="true"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Локация 1</div>
+                    <div class="font-mono text-xs text-gray-400 mt-1">Школа №11 им. Өзбекәлі Жәнібекова</div>
+                  </div>
+                  <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
+                </div>
+              </button>
 
-          <div class="mt-5">
-            <a
-              class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-gray-300 hover:text-white transition"
-              href="https://2gis.kz/astana/geo/70000001110249530"
-              target="_blank" rel="noopener noreferrer"
-            >
-              <i class="fas fa-arrow-up-right-from-square text-brand-orange"></i>
-              Открыть в 2GIS
-            </a>
+              <!-- Локация 2 -->
+              <button
+                type="button"
+                class="loc-btn w-full text-left group bg-white/5 border border-white/10 p-4 hover:border-brand-orange/60 transition"
+                data-title="Локация 2"
+                data-gmap-embed="https://www.google.com/maps?q=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20%E2%84%9671%20%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB.%20%D0%95-10&output=embed"
+                data-gmap-open="https://www.google.com/maps?q=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20%E2%84%9671%20%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB.%20%D0%95-10"
+                data-gis="https://2gis.kz/astana/geo/70000001105816895"
+                aria-selected="false"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Локация 2</div>
+                    <div class="font-mono text-xs text-gray-400 mt-1">Школа №71, Астана, ул. Е-10</div>
+                  </div>
+                  <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
+                </div>
+              </button>
+
+              <!-- Адрес 3 (2GIS) -->
+              <button
+                type="button"
+                class="loc-btn w-full text-left group bg-white/5 border border-white/10 p-4 hover:border-brand-orange/60 transition"
+                data-title="Адрес 3"
+                data-gmap-embed="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%95-321%2018&output=embed"
+                data-gmap-open="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%95-321%2018"
+                data-gis="https://2gis.kz/astana/geo/70000001110249530"
+                aria-selected="false"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Адрес 3</div>
+                    <div class="font-mono text-xs text-gray-400 mt-1">Открыть адрес в 2GIS</div>
+                  </div>
+                  <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
+                </div>
+              </button>
+
+              <!-- Адрес 4 (2GIS) -->
+              <button
+                type="button"
+                class="loc-btn w-full text-left group bg-white/5 border border-white/10 p-4 hover:border-brand-orange/60 transition"
+                data-title="Адрес 4"
+                data-gmap-embed="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82%20%D0%90%D0%B1%D0%B0%D1%8F%206&output=embed"
+                data-gmap-open="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82%20%D0%90%D0%B1%D0%B0%D1%8F%206"
+                data-gis="https://2gis.kz/astana/geo/70000001105816895"
+                aria-selected="false"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Адрес 4</div>
+                    <div class="font-mono text-xs text-gray-400 mt-1">Открыть адрес в 2GIS</div>
+                  </div>
+                  <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
+                </div>
+              </button>
+
+              <!-- Адрес 5 (2GIS) -->
+              <button
+                type="button"
+                class="loc-btn w-full text-left group bg-white/5 border border-white/10 p-4 hover:border-brand-orange/60 transition"
+                data-title="Адрес 5"
+                data-gmap-embed="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9A%D0%B0%D1%80%D0%B0%D1%81%D0%B0%D0%B9%20%D0%B1%D0%B0%D1%82%D1%8B%D1%80%D0%B0%2010&output=embed"
+                data-gmap-open="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9A%D0%B0%D1%80%D0%B0%D1%81%D0%B0%D0%B9%20%D0%B1%D0%B0%D1%82%D1%8B%D1%80%D0%B0%2010"
+                data-gis="https://2gis.kz/astana/geo/70000001109837488"
+                aria-selected="false"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Адрес 5</div>
+                    <div class="font-mono text-xs text-gray-400 mt-1">Открыть адрес в 2GIS</div>
+                  </div>
+                  <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
+                </div>
+              </button>
+
+              <!-- Адрес 6 (2GIS) -->
+              <button
+                type="button"
+                class="loc-btn w-full text-left group bg-white/5 border border-white/10 p-4 hover:border-brand-orange/60 transition"
+                data-title="Адрес 6"
+                data-gmap-embed="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9C%D0%B0%D1%81%D0%BA%D0%B5%D1%83%2041&output=embed"
+                data-gmap-open="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9C%D0%B0%D1%81%D0%BA%D0%B5%D1%83%2041"
+                data-gis="https://2gis.kz/astana/geo/70000001106073656"
+                aria-selected="false"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Адрес 6</div>
+                    <div class="font-mono text-xs text-gray-400 mt-1">Открыть адрес в 2GIS</div>
+                  </div>
+                  <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
+                </div>
+              </button>
+            </div>
+
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+              <a id="open2gisBtn"
+                 href="https://2gis.kz/astana/geo/70000001110249530"
+                 target="_blank" rel="noopener noreferrer"
+                 class="inline-flex items-center justify-center gap-2 bg-white hover:bg-brand-orange text-black font-head font-bold uppercase px-6 py-3 transition duration-300">
+                <i class="fas fa-arrow-up-right-from-square"></i> Открыть в 2GIS
+              </a>
+
+              <a id="openGmapsBtn"
+                 href="https://www.google.com/maps?q=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20%E2%84%9611%20%D0%B8%D0%BC.%20%D3%A8%D0%B7%D0%B1%D0%B5%D0%BA%D3%99%D0%BB%D1%96%20%D0%96%D3%99%D0%BD%D1%96%D0%B1%D0%B5%D0%BA%D0%BE%D0%B2%D0%B0%20%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0"
+                 target="_blank" rel="noopener noreferrer"
+                 class="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-head font-bold uppercase px-6 py-3 hover:border-brand-orange hover:text-brand-orange transition">
+                <i class="fas fa-map"></i> Открыть в Google Maps
+              </a>
+            </div>
+
+            <p class="mt-5 font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]">
+              Нажмите на адрес в списке — карта справа поменяется.
+            </p>
           </div>
         </div>
 
-        <div class="bg-white/5 border border-white/10 p-5 sm:p-6" data-aos="fade-up" data-aos-delay="120">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h3 class="font-head text-2xl text-white uppercase">Локация 2</h3>
-              <p class="font-mono text-sm text-gray-300 mt-2">Школа №71, Астана, ул. Е-10</p>
+        <!-- Карта (одна, квадратная) -->
+        <div class="lg:col-span-3" data-aos="fade-up" data-aos-delay="120">
+          <div class="bg-white/5 border border-white/10 p-5 sm:p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-head text-2xl text-white uppercase">Просмотр карты</h3>
+                <p class="font-mono text-xs text-gray-500 mt-2 uppercase tracking-[0.2em]" id="mapTitle">Локация 1</p>
+              </div>
+              <i class="fas fa-map-location-dot text-brand-orange text-2xl mt-1"></i>
             </div>
-            <i class="fas fa-location-dot text-brand-orange text-2xl mt-1"></i>
-          </div>
 
-          <div class="mt-5 overflow-hidden border border-white/10 bg-white/5" style="height: 320px;">
-            <iframe
-              title="Карта — Локация 2"
-              src="https://www.google.com/maps?q=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20%E2%84%9671%20%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB.%20%D0%95-10&output=embed"
-              width="100%" height="100%" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
+            <div class="mt-6 overflow-hidden border border-white/10 bg-white/5">
+              <div class="map-square">
+                <iframe
+                  id="gmapFrame"
+                  title="Карта — локация"
+                  src="https://www.google.com/maps?q=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20%E2%84%9611%20%D0%B8%D0%BC.%20%D3%A8%D0%B7%D0%B1%D0%B5%D0%BA%D3%99%D0%BB%D1%96%20%D0%96%D3%99%D0%BD%D1%96%D0%B1%D0%B5%D0%BA%D0%BE%D0%B2%D0%B0%20%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0&output=embed"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            </div>
 
-          <div class="mt-5">
-            <a
-              class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-gray-300 hover:text-white transition"
-              href="https://2gis.kz/astana/geo/70000001105816895"
-              target="_blank" rel="noopener noreferrer"
-            >
-              <i class="fas fa-arrow-up-right-from-square text-brand-orange"></i>
-              Открыть в 2GIS
-            </a>
+            <div class="mt-6 flex items-center gap-3 font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]">
+              <i class="fas fa-circle-info text-brand-orange"></i>
+              Карта меняется без перезагрузки страницы
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- Дополнительные адреса (4 точки) -->
-      <details class="bg-white/5 border border-white/10 p-5 sm:p-6 max-w-5xl mx-auto mt-10" data-aos="fade-up">
-        <summary class="cursor-pointer select-none font-head text-xl sm:text-2xl text-white uppercase flex items-center justify-between gap-4">
-          Дополнительные адреса
-          <span class="font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]">4 локации</span>
-        </summary>
-
-        <div class="mt-6 grid sm:grid-cols-2 gap-5">
-          <a href="https://2gis.kz/astana/geo/70000001110249530" target="_blank" rel="noopener noreferrer" class="group bg-white/5 border border-white/10 p-5 sm:p-6 flex items-start justify-between gap-4 hover:border-brand-orange/60 transition">
-            <div>
-              <div class="font-head text-xl text-white uppercase">Локация 3</div>
-              <div class="font-mono text-xs text-gray-500 mt-1">Открыть в 2GIS</div>
-            </div>
-            <i class="fas fa-arrow-up-right-from-square text-brand-orange text-xl mt-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition"></i>
-          </a>
-
-          <a href="https://2gis.kz/astana/geo/70000001105816895" target="_blank" rel="noopener noreferrer" class="group bg-white/5 border border-white/10 p-5 sm:p-6 flex items-start justify-between gap-4 hover:border-brand-orange/60 transition">
-            <div>
-              <div class="font-head text-xl text-white uppercase">Локация 4</div>
-              <div class="font-mono text-xs text-gray-500 mt-1">Открыть в 2GIS</div>
-            </div>
-            <i class="fas fa-arrow-up-right-from-square text-brand-orange text-xl mt-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition"></i>
-          </a>
-
-          <a href="https://2gis.kz/astana/geo/70000001109837488" target="_blank" rel="noopener noreferrer" class="group bg-white/5 border border-white/10 p-5 sm:p-6 flex items-start justify-between gap-4 hover:border-brand-orange/60 transition">
-            <div>
-              <div class="font-head text-xl text-white uppercase">Локация 5</div>
-              <div class="font-mono text-xs text-gray-500 mt-1">Открыть в 2GIS</div>
-            </div>
-            <i class="fas fa-arrow-up-right-from-square text-brand-orange text-xl mt-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition"></i>
-          </a>
-
-          <a href="https://2gis.kz/astana/geo/70000001106073656" target="_blank" rel="noopener noreferrer" class="group bg-white/5 border border-white/10 p-5 sm:p-6 flex items-start justify-between gap-4 hover:border-brand-orange/60 transition">
-            <div>
-              <div class="font-head text-xl text-white uppercase">Локация 6</div>
-              <div class="font-mono text-xs text-gray-500 mt-1">Открыть в 2GIS</div>
-            </div>
-            <i class="fas fa-arrow-up-right-from-square text-brand-orange text-xl mt-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition"></i>
-          </a>
-        </div>
-      </details>
     </div>
   </section>
 
@@ -826,6 +925,36 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox();
     });
+
+    // Локации: один квадратный просмотр карты + список
+    const locButtons = Array.from(document.querySelectorAll('.loc-btn'));
+    const gmapFrame = document.getElementById('gmapFrame');
+    const mapTitle = document.getElementById('mapTitle');
+    const open2gisBtn = document.getElementById('open2gisBtn');
+    const openGmapsBtn = document.getElementById('openGmapsBtn');
+
+    function selectLocation(button){
+      locButtons.forEach(b => b.setAttribute('aria-selected', 'false'));
+      button.setAttribute('aria-selected', 'true');
+
+      const title = button.dataset.title || 'Локация';
+      const embedSrc = button.dataset.gmapEmbed || '';
+      const gmapsOpen = button.dataset.gmapOpen || (embedSrc ? embedSrc.replace('&output=embed','') : '');
+      const gisLink = button.dataset.gis || '';
+
+      if (mapTitle) mapTitle.textContent = title;
+      if (gmapFrame && embedSrc) gmapFrame.src = embedSrc;
+
+      if (open2gisBtn) open2gisBtn.href = gisLink || 'https://2gis.kz/astana';
+      if (openGmapsBtn) openGmapsBtn.href = gmapsOpen || 'https://www.google.com/maps';
+    }
+
+    locButtons.forEach(btn => {
+      btn.addEventListener('click', () => selectLocation(btn));
+    });
+
+    // Инициализация по первой локации
+    if (locButtons[0]) selectLocation(locButtons[0]);
   </script>
 </body>
 </html>
