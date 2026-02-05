@@ -85,6 +85,16 @@
       object-fit: contain;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.03);
+      transition: transform .12s ease;
+      cursor: zoom-in;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .lightbox.zoomed img{
+      cursor: grab;
+    }
+    .lightbox.zoomed img:active{
+      cursor: grabbing;
     }
     .lightbox .lb-close {
       position: absolute; top: 14px; right: 14px;
@@ -94,6 +104,20 @@
       color: #fff;
       display: grid; place-items: center;
       cursor: pointer;
+    }
+    .lb-hint{
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Roboto Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .22em;
+      color: rgba(255,255,255,.55);
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 8px 10px;
     }
 
     @media (max-width: 360px){
@@ -119,6 +143,46 @@
       border-color: rgba(246,201,14,.75) !important;
       background: rgba(246,201,14,.06) !important;
     }
+
+    /* Language toggle */
+    .lang-pill{
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .lang-btn{
+      font-family: "Roboto Mono", monospace;
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      padding: 10px 12px;
+      color: rgba(255,255,255,.75);
+      background: rgba(255,255,255,.02);
+      transition: .2s ease;
+      line-height: 1;
+    }
+    .lang-btn:hover{ color: #fff; }
+    .lang-btn[aria-pressed="true"]{
+      background: rgba(246,201,14,.14);
+      color: #F6C90E;
+    }
+
+    /* Social icons near hamburger */
+    .nav-social{
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      color: rgba(255,255,255,.85);
+      transition: .2s ease;
+    }
+    .nav-social:hover{
+      border-color: rgba(246,201,14,.55);
+      color: #F6C90E;
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 
@@ -134,50 +198,75 @@
           <div class="font-head text-2xl font-bold tracking-widest text-white uppercase italic leading-none truncate">
             Astana Jas<span class="text-brand-orange text-3xl">.</span>
           </div>
-          <div class="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] -mt-0.5 truncate">
+          <div class="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] -mt-0.5 truncate" data-i18n="brand_sub">
             Football School
           </div>
         </div>
       </a>
 
       <div class="hidden md:flex gap-6 font-mono text-[10px] text-gray-400 uppercase tracking-widest">
-        <a href="#about" class="hover:text-white transition">О клубе</a>
-        <a href="#method" class="hover:text-white transition">О методике</a>
-        <a href="#rules" class="hover:text-white transition">Правила</a>
-        <a href="#mission" class="hover:text-white transition">Наша миссия</a>
-        <a href="#staff" class="hover:text-white transition">Тренерский состав</a>
-        <a href="#merch" class="hover:text-white transition">Мерч</a>
-        <a href="#price" class="hover:text-white transition">Прайс</a>
-        <a href="#contact" class="hover:text-white transition">Контакт</a>
-        <a href="#location" class="hover:text-white transition">Локация</a>
-        <a href="#partners" class="hover:text-white transition">Партнёры</a>
+        <a href="#about" class="hover:text-white transition" data-i18n="nav_about">О клубе</a>
+        <a href="#method" class="hover:text-white transition" data-i18n="nav_method">О методике</a>
+        <a href="#rules" class="hover:text-white transition" data-i18n="nav_rules">Правила</a>
+        <a href="#mission" class="hover:text-white transition" data-i18n="nav_mission">Наша миссия</a>
+        <a href="#staff" class="hover:text-white transition" data-i18n="nav_staff">Тренерский состав</a>
+        <a href="#merch" class="hover:text-white transition" data-i18n="nav_merch">Мерч</a>
+        <a href="#gallery" class="hover:text-white transition" data-i18n="nav_gallery">Галерея</a>
+        <a href="#price" class="hover:text-white transition" data-i18n="nav_price">Прайс</a>
+        <a href="#contact" class="hover:text-white transition" data-i18n="nav_contact">Контакт</a>
+        <a href="#location" class="hover:text-white transition" data-i18n="nav_location">Локация</a>
+        <a href="#partners" class="hover:text-white transition" data-i18n="nav_partners">Партнёры</a>
       </div>
 
-      <a href="https://wa.me/77019744464" class="hidden md:block bg-white text-black font-head font-bold text-sm uppercase px-6 py-2 hover:bg-brand-orange hover:text-black transition duration-300 transform -skew-x-12">
-        <span class="block skew-x-12">Записаться</span>
-      </a>
+      <!-- Desktop right -->
+      <div class="hidden md:flex items-center gap-4">
+        <div class="lang-pill flex items-center">
+          <button type="button" class="lang-btn" data-set-lang="ru" aria-pressed="true">RU</button>
+          <button type="button" class="lang-btn" data-set-lang="kz" aria-pressed="false">KZ</button>
+        </div>
 
-      <button id="menuBtn" class="md:hidden text-white text-2xl" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu">
-        <i class="fas fa-bars"></i>
-      </button>
+        <a href="https://wa.me/77019744464" class="bg-white text-black font-head font-bold text-sm uppercase px-6 py-2 hover:bg-brand-orange hover:text-black transition duration-300 transform -skew-x-12" data-i18n="btn_signup_wrap">
+          <span class="block skew-x-12" data-i18n="btn_signup">Записаться</span>
+        </a>
+      </div>
+
+      <!-- Mobile right: socials + lang + hamburger -->
+      <div class="md:hidden flex items-center gap-3">
+        <a class="nav-social" href="https://wa.me/77019744464" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a class="nav-social" href="https://www.instagram.com/reel/DRXAn6pDIha/?igsh=bGM1Y2YzOXB3eTFv" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <div class="lang-pill flex items-center">
+          <button type="button" class="lang-btn" data-set-lang="ru" aria-pressed="true">RU</button>
+          <button type="button" class="lang-btn" data-set-lang="kz" aria-pressed="false">KZ</button>
+        </div>
+
+        <button id="menuBtn" class="text-white text-2xl" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
     </div>
 
     <!-- Mobile menu (внутри есть кнопка "Записаться") -->
     <div id="mobileMenu" class="menu-panel md:hidden absolute left-0 right-0 top-full border-t border-white/5 bg-[#121212]/95 backdrop-blur">
       <div class="container mx-auto px-4 sm:px-6 py-4 flex flex-col gap-4 font-mono text-xs text-gray-300 uppercase tracking-widest">
-        <a href="#about" class="hover:text-white transition">О клубе</a>
-        <a href="#method" class="hover:text-white transition">О методике</a>
-        <a href="#rules" class="hover:text-white transition">Правила клуба</a>
-        <a href="#mission" class="hover:text-white transition">Наша миссия</a>
-        <a href="#staff" class="hover:text-white transition">Тренерский состав</a>
-        <a href="#merch" class="hover:text-white transition">Мерч</a>
-        <a href="#price" class="hover:text-white transition">Прайс</a>
-        <a href="#contact" class="hover:text-white transition">Контакт</a>
-        <a href="#location" class="hover:text-white transition">Локация</a>
-        <a href="#partners" class="hover:text-white transition">Наши партнёры</a>
+        <a href="#about" class="hover:text-white transition" data-i18n="nav_about">О клубе</a>
+        <a href="#method" class="hover:text-white transition" data-i18n="nav_method">О методике</a>
+        <a href="#rules" class="hover:text-white transition" data-i18n="nav_rules_full">Правила клуба</a>
+        <a href="#mission" class="hover:text-white transition" data-i18n="nav_mission">Наша миссия</a>
+        <a href="#staff" class="hover:text-white transition" data-i18n="nav_staff">Тренерский состав</a>
+        <a href="#merch" class="hover:text-white transition" data-i18n="nav_merch">Мерч</a>
+        <a href="#gallery" class="hover:text-white transition" data-i18n="nav_gallery">Галерея</a>
+        <a href="#price" class="hover:text-white transition" data-i18n="nav_price">Прайс</a>
+        <a href="#contact" class="hover:text-white transition" data-i18n="nav_contact">Контакт</a>
+        <a href="#location" class="hover:text-white transition" data-i18n="nav_location">Локация</a>
+        <a href="#partners" class="hover:text-white transition" data-i18n="nav_partners_full">Наши партнёры</a>
 
         <a href="https://wa.me/77019744464" class="mt-2 inline-flex items-center justify-center bg-white text-black font-head font-bold text-sm uppercase px-6 py-3 hover:bg-brand-orange hover:text-black transition duration-300 transform -skew-x-12">
-          <span class="block skew-x-12">Записаться на пробную тренировку</span>
+          <span class="block skew-x-12" data-i18n="btn_trial">Записаться на пробную тренировку</span>
         </a>
       </div>
     </div>
@@ -208,15 +297,15 @@
           One Team. <br> One Dream.
         </h1>
 
-        <p class="text-white/90 font-mono text-sm sm:text-base md:text-lg max-w-md mb-10 leading-relaxed">
+        <p class="text-white/90 font-mono text-sm sm:text-base md:text-lg max-w-md mb-10 leading-relaxed" data-i18n="hero_desc">
           Футбол — это характер. Тренировки, дисциплина и результат. Без лишних слов — только работа.
         </p>
 
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
-          <a href="#price" class="inline-block bg-brand-orange text-black font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center">
+          <a href="#price" class="inline-block bg-brand-orange text-black font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center" data-i18n="hero_btn_price">
             Смотреть прайс
           </a>
-          <a href="tel:+77019744464" class="inline-flex items-center justify-center border border-white/30 text-white font-head font-bold text-lg uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition text-center">
+          <a href="tel:+77019744464" class="inline-flex items-center justify-center border border-white/30 text-white font-head font-bold text-lg uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition text-center" data-i18n="hero_btn_call">
             Позвонить
           </a>
         </div>
@@ -229,24 +318,19 @@
     <div class="container mx-auto px-4 sm:px-6">
       <div class="max-w-5xl mx-auto">
         <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
-          <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">О клубе</h2>
+          <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="about_title">О клубе</h2>
           <p class="font-mono text-brand-orange mt-2">Astana Jas</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-10 md:gap-12 items-start">
-          <div data-aos="fade-up" class="bg-white/5 border border-white/10 p-6 sm:p-8">
-            <h3 class="font-head text-2xl text-white uppercase mb-4">О школе</h3>
-            <p class="font-mono text-gray-300 text-sm leading-relaxed">
-              Команда молодая — недавно прошла ребрендинг, но школа, коллектив, тренеры и спортсмены работают вместе уже несколько лет.
-              В нашей школе занимаются дети от 6 до 14 лет.
-            </p>
-          </div>
-
+        <!-- УБРАН БЛОК "О ШКОЛЕ", ОСТАЛСЯ ОДИН БЛОК -->
+        <div class="grid md:grid-cols-1 gap-10 md:gap-12 items-start">
           <div data-aos="fade-left" class="bg-white/5 border border-white/10 p-6 sm:p-8">
-            <h3 class="font-head text-2xl text-white uppercase mb-4">Соревнования</h3>
-            <p class="font-mono text-gray-300 text-sm leading-relaxed">
-              Мы активно участвуем в городских и региональных турнирах. На сезон составляем официальный календарь соревнований,
-              включая выездные турниры и матчи. Также сотрудничаем с футбольной академией «Женис».
+            <h3 class="font-head text-2xl text-white uppercase mb-4" data-i18n="about_aboutus_title">О нас</h3>
+            <p class="font-mono text-gray-300 text-sm leading-relaxed" data-i18n="about_aboutus_text" data-i18n-html="true">
+              Мы активно участвуем в городских и региональных турнирах.<br>
+              На каждый сезон формируем официальный календарь соревнований, включая выездные турниры и матчи.<br>
+              Также сотрудничаем с футбольной академией «Женис».<br>
+              Цель нашего сотрудничества — организация просмотров и передача наших юных футболистов в футбольный центр «Женис», где лучшие из них получают возможность продолжить развитие на более высоком уровне ⚽
             </p>
           </div>
         </div>
@@ -259,23 +343,23 @@
     <div class="container mx-auto px-4 sm:px-6">
       <div class="max-w-5xl mx-auto">
         <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
-          <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">О методике</h2>
+          <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="method_title">О методике</h2>
         </div>
 
         <div class="grid lg:grid-cols-2 gap-8">
           <div class="bg-white/5 border border-white/10 p-6 sm:p-8" data-aos="fade-up" data-aos-delay="0">
             <ul class="space-y-4 font-mono text-sm text-gray-300 leading-relaxed">
-              <li class="flex gap-3"><i class="fas fa-clipboard-check text-brand-orange mt-1"></i><span><b class="text-white">Посещаемость</b> — ведём табель, ежемесячно отмечаем лучших игроков по возрастам.</span></li>
-              <li class="flex gap-3"><i class="fas fa-dumbbell text-brand-orange mt-1"></i><span><b class="text-white">Физические данные</b> и общий прогресс.</span></li>
-              <li class="flex gap-3"><i class="fas fa-ear-listen text-brand-orange mt-1"></i><span><b class="text-white">Умение слушать</b> и выполнять задания тренера на тренировках и в играх.</span></li>
-              <li class="flex gap-3"><i class="fas fa-shield text-brand-orange mt-1"></i><span><b class="text-white">Дисциплина</b> — обязательный стандарт.</span></li>
-              <li class="flex gap-3"><i class="fas fa-chart-line text-brand-orange mt-1"></i><span><b class="text-white">Профессиональный рост</b> — тестирование раз в полгода и отслеживание динамики.</span></li>
+              <li class="flex gap-3"><i class="fas fa-clipboard-check text-brand-orange mt-1"></i><span data-i18n="method_b1"><b class="text-white">Посещаемость</b> — ведём табель, ежемесячно отмечаем лучших игроков по возрастам.</span></li>
+              <li class="flex gap-3"><i class="fas fa-dumbbell text-brand-orange mt-1"></i><span data-i18n="method_b2"><b class="text-white">Физические данные</b> и общий прогресс.</span></li>
+              <li class="flex gap-3"><i class="fas fa-ear-listen text-brand-orange mt-1"></i><span data-i18n="method_b3"><b class="text-white">Умение слушать</b> и выполнять задания тренера на тренировках и в играх.</span></li>
+              <li class="flex gap-3"><i class="fas fa-shield text-brand-orange mt-1"></i><span data-i18n="method_b4"><b class="text-white">Дисциплина</b> — обязательный стандарт.</span></li>
+              <li class="flex gap-3"><i class="fas fa-chart-line text-brand-orange mt-1"></i><span data-i18n="method_b5"><b class="text-white">Профессиональный рост</b> — тестирование раз в полгода и отслеживание динамики.</span></li>
             </ul>
           </div>
 
           <div class="bg-white/5 border border-white/10 p-6 sm:p-8" data-aos="fade-up" data-aos-delay="120">
-            <h3 class="font-head text-2xl text-white uppercase mb-5">Зачем это нужно</h3>
-            <p class="font-mono text-sm text-gray-300 leading-relaxed">
+            <h3 class="font-head text-2xl text-white uppercase mb-5" data-i18n="method_why_title">Зачем это нужно</h3>
+            <p class="font-mono text-sm text-gray-300 leading-relaxed" data-i18n="method_why_text">
               Талантливые дети получают шанс проявить себя на матчах и турнирах более высокого уровня.
               Это усиливает мотивацию, дисциплину и любовь к спорту — результат становится заметным.
             </p>
@@ -283,7 +367,7 @@
             <div class="mt-8 border-t border-white/10 pt-6">
               <div class="flex items-center gap-3 font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]">
                 <i class="fas fa-star text-brand-orange"></i>
-                Работаем на результат
+                <span data-i18n="method_result">Работаем на результат</span>
               </div>
             </div>
           </div>
@@ -296,38 +380,38 @@
   <section id="rules" class="py-20 sm:py-24 bg-[#121212]">
     <div class="container mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
-        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Правила клуба</h2>
-        <p class="font-mono text-brand-orange mt-2">Для родителей (PDF)</p>
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="rules_title">Правила клуба</h2>
+        <p class="font-mono text-brand-orange mt-2" data-i18n="rules_sub">Для родителей (PDF)</p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
         <div class="bg-white/5 border border-white/10 p-6 sm:p-8" data-aos="fade-up" data-aos-delay="0">
-          <h3 class="font-head text-2xl text-white uppercase mb-5">Ключевые пункты</h3>
+          <h3 class="font-head text-2xl text-white uppercase mb-5" data-i18n="rules_key_title">Ключевые пункты</h3>
           <ul class="space-y-4 font-mono text-sm text-gray-300 leading-relaxed">
-            <li class="flex gap-3"><i class="fas fa-heart-pulse text-brand-orange mt-1"></i><span><b class="text-white">Меддопуск</b>: справка обязательна до начала тренировок.</span></li>
-            <li class="flex gap-3"><i class="fas fa-clock text-brand-orange mt-1"></i><span><b class="text-white">Посещаемость</b>: регулярность и пунктуальность обязательны</span></li>
-            <li class="flex gap-3"><i class="fas fa-users text-brand-orange mt-1"></i><span><b class="text-white">Родители</b>: не вмешиваться в тренировку, уважать решения тренера.</span></li>
-            <li class="flex gap-3"><i class="fas fa-credit-card text-brand-orange mt-1"></i><span><b class="text-white">Оплата</b>: согласно условиям клуба, заранее.</span></li>
+            <li class="flex gap-3"><i class="fas fa-heart-pulse text-brand-orange mt-1"></i><span data-i18n="rules_b1"><b class="text-white">Меддопуск</b>: справка обязательна до начала тренировок.</span></li>
+            <li class="flex gap-3"><i class="fas fa-clock text-brand-orange mt-1"></i><span data-i18n="rules_b2"><b class="text-white">Посещаемость</b>: регулярность и пунктуальность обязательны</span></li>
+            <li class="flex gap-3"><i class="fas fa-users text-brand-orange mt-1"></i><span data-i18n="rules_b3"><b class="text-white">Родители</b>: не вмешиваться в тренировку, уважать решения тренера.</span></li>
+            <li class="flex gap-3"><i class="fas fa-credit-card text-brand-orange mt-1"></i><span data-i18n="rules_b4"><b class="text-white">Оплата</b>: согласно условиям клуба, заранее.</span></li>
           </ul>
         </div>
 
         <div class="bg-white/5 border border-white/10 p-6 sm:p-8" data-aos="fade-up" data-aos-delay="120">
-          <h3 class="font-head text-2xl text-white uppercase mb-5">PDF документ</h3>
-          <p class="font-mono text-sm text-gray-300 leading-relaxed mb-6">
+          <h3 class="font-head text-2xl text-white uppercase mb-5" data-i18n="rules_pdf_title">PDF документ</h3>
+          <p class="font-mono text-sm text-gray-300 leading-relaxed mb-6" data-i18n="rules_pdf_text">
             Откройте или скачайте документ с правилами клуба.
           </p>
 
           <div class="flex flex-col sm:flex-row gap-3">
             <a href="Правила.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-brand-orange text-black font-head font-bold uppercase px-8 py-4 clip-btn">
-              <i class="fas fa-file-pdf"></i> Открыть PDF
+              <i class="fas fa-file-pdf"></i> <span data-i18n="rules_open_pdf">Открыть PDF</span>
             </a>
             <a href="Правила.pdf" download class="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-head font-bold uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition">
-              <i class="fas fa-download"></i> Скачать
+              <i class="fas fa-download"></i> <span data-i18n="rules_download">Скачать</span>
             </a>
           </div>
 
           <div class="mt-8 border-t border-white/10 pt-6">
-            <p class="font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]">Файл: Правила.pdf</p>
+            <p class="font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]" data-i18n="rules_file">Файл: Правила.pdf</p>
           </div>
         </div>
       </div>
@@ -339,61 +423,48 @@
     <div class="container mx-auto px-4 sm:px-6">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
-          <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Наша миссия</h2>
-          <p class="font-mono text-brand-orange mt-2">Ценности • Видение • Принципы</p>
+          <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="mission_title">Наша миссия</h2>
+          <!-- ПОДЗАГОЛОВОК УБРАН -->
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-8 items-start">
-          <div class="bg-white/5 border border-white/10 p-6 sm:p-8" data-aos="fade-up" data-aos-delay="0">
-            <div class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-gray-300">
-              <i class="fas fa-bullseye text-brand-orange"></i> Миссия
-            </div>
-            <h3 class="font-head text-3xl sm:text-4xl text-white uppercase mt-4 mb-5">Быть лучшим футбольным клубом</h3>
-            <div class="bg-brand-orange text-black p-6 sm:p-7 rounded-[28px]">
-              <p class="font-mono text-sm leading-relaxed">
-                Быть лучшим футбольным клубом, несущим историю казахстанского футбола,
-                создающим комплексные условия для прогресса футбола в Астане
-                и имеющим эмоциональную и культурную ценность для болельщиков и общества.
-              </p>
-            </div>
-          </div>
-
+        <!-- УБРАН БЛОК "БЫТЬ ЛУЧШИМ ФУТБОЛЬНЫМ КЛУБОМ", ОСТАЛСЯ ОДИН БЛОК -->
+        <div class="grid lg:grid-cols-1 gap-8 items-start">
           <div class="bg-white/5 border border-white/10 p-6 sm:p-8" data-aos="fade-up" data-aos-delay="120">
-            <h3 class="font-head text-2xl text-white uppercase mb-6">Основа клуба</h3>
+            <h3 class="font-head text-2xl text-white uppercase mb-6" data-i18n="mission_core_title">Основа клуба</h3>
             <div class="space-y-5">
               <div class="flex gap-4">
                 <i class="fas fa-gem text-brand-orange mt-1"></i>
                 <div>
-                  <div class="font-head text-lg text-white uppercase">Ценности</div>
-                  <div class="font-mono text-sm text-gray-300">Принципы честной борьбы, стандарты качества, позитивное окружение, лучшие практики и стремление к инновациям.</div>
+                  <div class="font-head text-lg text-white uppercase" data-i18n="mission_v_title">Ценности</div>
+                  <div class="font-mono text-sm text-gray-300" data-i18n="mission_v_text">Принципы честной борьбы, стандарты качества, позитивное окружение, лучшие практики и стремление к инновациям.</div>
                 </div>
               </div>
               <div class="flex gap-4">
                 <i class="fas fa-futbol text-brand-orange mt-1"></i>
                 <div>
-                  <div class="font-head text-lg text-white uppercase">Спорт</div>
-                  <div class="font-mono text-sm text-gray-300">Возродить зрелищность, дух победителей среди юных футболистов и сплочённость среди родителей.</div>
+                  <div class="font-head text-lg text-white uppercase" data-i18n="mission_s_title">Спорт</div>
+                  <div class="font-mono text-sm text-gray-300" data-i18n="mission_s_text">Возродить зрелищность, дух победителей среди юных футболистов и сплочённость среди родителей.</div>
                 </div>
               </div>
               <div class="flex gap-4">
                 <i class="fas fa-people-group text-brand-orange mt-1"></i>
                 <div>
-                  <div class="font-head text-lg text-white uppercase">Общество</div>
-                  <div class="font-mono text-sm text-gray-300">Возродить любовь и причастность к клубу со стороны родителей юных футболистов.</div>
+                  <div class="font-head text-lg text-white uppercase" data-i18n="mission_o_title">Общество</div>
+                  <div class="font-mono text-sm text-gray-300" data-i18n="mission_o_text">Возродить любовь и причастность к клубу со стороны родителей юных футболистов.</div>
                 </div>
               </div>
               <div class="flex gap-4">
                 <i class="fas fa-eye text-brand-orange mt-1"></i>
                 <div>
-                  <div class="font-head text-lg text-white uppercase">Видение</div>
-                  <div class="font-mono text-sm text-gray-300">Вести Казахстан к новым победам и приносить радость всем, кто связан с футболом.</div>
+                  <div class="font-head text-lg text-white uppercase" data-i18n="mission_vv_title">Видение</div>
+                  <div class="font-mono text-sm text-gray-300" data-i18n="mission_vv_text">Вести Казахстан к новым победам и приносить радость всем, кто связан с футболом.</div>
                 </div>
               </div>
               <div class="flex gap-4">
                 <i class="fas fa-scale-balanced text-brand-orange mt-1"></i>
                 <div>
-                  <div class="font-head text-lg text-white uppercase">Принципы</div>
-                  <div class="font-mono text-sm text-gray-300">Доверие, честность, уважение, открытость, ответственность, доступность, сотрудничество и взаимодействие.</div>
+                  <div class="font-head text-lg text-white uppercase" data-i18n="mission_p_title">Принципы</div>
+                  <div class="font-mono text-sm text-gray-300" data-i18n="mission_p_text">Доверие, честность, уважение, открытость, ответственность, доступность, сотрудничество и взаимодействие.</div>
                 </div>
               </div>
             </div>
@@ -407,10 +478,11 @@
   <!-- 5. Тренерский состав -->
   <section id="staff" class="py-20 sm:py-24 bg-[#121212]">
     <div class="container mx-auto px-4 sm:px-6">
-      <h2 class="font-head text-4xl text-white uppercase mb-10 sm:mb-12 border-l-4 border-brand-orange pl-4">Тренерский состав</h2>
+      <h2 class="font-head text-4xl text-white uppercase mb-10 sm:mb-12 border-l-4 border-brand-orange pl-4" data-i18n="staff_title">Тренерский состав</h2>
 
       <div class="grid lg:grid-cols-2 gap-10 items-center">
-        <div class="bg-white/5 border border-white/10 p-3 sm:p-4" data-aos="flip-left">
+        <!-- УБРАНЫ КВАДРАТНЫЕ РАМКИ -->
+        <div data-aos="flip-left">
           <img
             src="images/team_full.jpg"
             alt="Тренерский состав Astana Jas"
@@ -420,25 +492,41 @@
         </div>
 
         <div data-aos="fade-left">
-          <h3 class="font-head text-3xl md:text-5xl text-white uppercase mb-6">
+          <h3 class="font-head text-3xl md:text-5xl text-white uppercase mb-6" data-i18n="staff_h3">
             Игрока делает <span class="text-brand-orange">система</span>
           </h3>
-          <p class="font-mono text-gray-300 text-sm leading-relaxed mb-8">
-            Техника владения мячом, принятие решений, координация, скорость и командная тактика.
-            Тренировки — строгие, но понятные. Прогресс — измеримый.
-          </p>
 
-          <div class="space-y-4">
-            <div class="flex items-start gap-4"><i class="fas fa-check text-brand-orange mt-1"></i><p class="font-mono text-gray-300 text-sm">Техника: пас, приём, ведение, удар, координация</p></div>
-            <div class="flex items-start gap-4"><i class="fas fa-check text-brand-orange mt-1"></i><p class="font-mono text-gray-300 text-sm">Тактика: позиционирование, взаимодействия, игровые ситуации</p></div>
-            <div class="flex items-start gap-4"><i class="fas fa-check text-brand-orange mt-1"></i><p class="font-mono text-gray-300 text-sm">Физика: скорость, выносливость, профилактика травм</p></div>
+          <!-- ПОЛНОСТЬЮ ЗАМЕНЁН ТЕКСТ НИЖЕ + ДОБАВЛЕНЫ ГАЛОЧКИ -->
+          <div class="font-mono text-gray-300 text-sm leading-relaxed mb-8" data-i18n="staff_text" data-i18n-html="true">
+            <div class="space-y-2">
+              <div>В своей работе тренер придерживается</div>
+              <div>современных методик обучения,</div>
+              <div>направленных на:</div>
+            </div>
+
+            <div class="mt-5 space-y-3">
+              <div class="flex items-start gap-3"><i class="fas fa-check text-brand-orange mt-1"></i><span>развитие футбольного мышления, скорости мышления и умения быстро принимать решения;</span></div>
+              <div class="flex items-start gap-3"><i class="fas fa-check text-brand-orange mt-1"></i><span>развитие индивидуальных качеств футболистов;</span></div>
+              <div class="flex items-start gap-3"><i class="fas fa-check text-brand-orange mt-1"></i><span>формирование командной игры;</span></div>
+              <div class="flex items-start gap-3"><i class="fas fa-check text-brand-orange mt-1"></i><span>воспитание ответственности, характера и уверенности в себе.</span></div>
+            </div>
+
+            <div class="mt-6 space-y-2">
+              <div>В тренировочный процесс также входят</div>
+              <div>занятия с профильными специалистами:</div>
+            </div>
+
+            <div class="mt-5 space-y-3">
+              <div class="flex items-start gap-3"><i class="fas fa-check text-brand-orange mt-1"></i><span>тренер по общей физической подготовке (ОФП);</span></div>
+              <div class="flex items-start gap-3"><i class="fas fa-check text-brand-orange mt-1"></i><span>тренер по стретчингу и растяжке, направленной на гибкость, восстановление и профилактику травм.</span></div>
+            </div>
           </div>
 
           <div class="mt-10 flex flex-col sm:flex-row gap-3">
-            <a href="#contact" class="inline-block bg-brand-orange text-black font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center">
+            <a href="#contact" class="inline-block bg-brand-orange text-black font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center" data-i18n="staff_btn_schedule">
               Узнать расписание
             </a>
-            <a href="https://wa.me/77019744464" class="inline-flex items-center justify-center border border-white/30 text-white font-head font-bold text-lg uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition text-center">
+            <a href="https://wa.me/77019744464" class="inline-flex items-center justify-center border border-white/30 text-white font-head font-bold text-lg uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition text-center" data-i18n="staff_btn_wa">
               Написать в WhatsApp
             </a>
           </div>
@@ -451,36 +539,56 @@
   <section id="merch" class="py-20 sm:py-24 bg-[#181818]">
     <div class="container mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
-        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Мерч</h2>
-        <p class="font-mono text-brand-orange mt-2">Экипировка клуба</p>
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="merch_title">Мерч</h2>
+        <p class="font-mono text-brand-orange mt-2" data-i18n="merch_sub">Экипировка клуба</p>
       </div>
 
       <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 items-start">
-        <div class="bg-white/5 border border-white/10 p-3 sm:p-4" data-aos="fade-up" data-aos-delay="0">
+        <!-- УБРАНЫ КВАДРАТНЫЕ РАМКИ -->
+        <div data-aos="fade-up" data-aos-delay="0">
           <img
             src="images/kit.jpg"
             alt="Экипировка Astana Jas"
             class="w-full max-h-[520px] object-contain js-lightbox cursor-zoom-in"
             loading="lazy"
           >
-          <p class="mt-3 font-mono text-[11px] text-gray-400 uppercase tracking-[0.2em]">Экипировка клуба</p>
+          <p class="mt-3 font-mono text-[11px] text-gray-400 uppercase tracking-[0.2em]" data-i18n="merch_caption">Экипировка клуба</p>
         </div>
 
         <div class="bg-white/5 border border-white/10 p-6 sm:p-8" data-aos="fade-up" data-aos-delay="120">
-          <h3 class="font-head text-2xl text-white uppercase mb-4">Комплект</h3>
-          <p class="font-mono text-gray-300 text-sm leading-relaxed">
+          <h3 class="font-head text-2xl text-white uppercase mb-4" data-i18n="merch_set_title">Комплект</h3>
+          <p class="font-mono text-gray-300 text-sm leading-relaxed" data-i18n="merch_text">
             Игровая форма клуба. Подробности по размерам и наличию — в WhatsApp.
           </p>
 
           <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <a href="https://wa.me/77019744464" class="inline-flex items-center justify-center bg-brand-orange text-black font-head font-bold uppercase px-8 py-4 clip-btn">
+            <a href="https://wa.me/77019744464" class="inline-flex items-center justify-center bg-brand-orange text-black font-head font-bold uppercase px-8 py-4 clip-btn" data-i18n="merch_btn_stock">
               Узнать наличие
             </a>
-            <a href="#price" class="inline-flex items-center justify-center border border-white/30 text-white font-head font-bold uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition">
+            <a href="#price" class="inline-flex items-center justify-center border border-white/30 text-white font-head font-bold uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition" data-i18n="merch_btn_price">
               Смотреть прайс
             </a>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.1 Галерея -->
+  <section id="gallery" class="py-20 sm:py-24 bg-[#121212]">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="gallery_title">Галерея</h2>
+        <p class="font-mono text-brand-orange mt-2" data-i18n="gallery_sub">Тренировки и матчи</p>
+      </div>
+
+      <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5" data-aos="fade-up">
+        <img src="images/gallery-1.jpg" alt="Галерея 1" class="w-full aspect-[4/3] object-cover js-lightbox cursor-zoom-in" loading="lazy">
+        <img src="images/gallery-2.jpg" alt="Галерея 2" class="w-full aspect-[4/3] object-cover js-lightbox cursor-zoom-in" loading="lazy">
+        <img src="images/gallery-3.jpg" alt="Галерея 3" class="w-full aspect-[4/3] object-cover js-lightbox cursor-zoom-in" loading="lazy">
+        <img src="images/gallery-4.jpg" alt="Галерея 4" class="w-full aspect-[4/3] object-cover js-lightbox cursor-zoom-in" loading="lazy">
+        <img src="images/gallery-5.jpg" alt="Галерея 5" class="w-full aspect-[4/3] object-cover js-lightbox cursor-zoom-in" loading="lazy">
+        <img src="images/gallery-6.jpg" alt="Галерея 6" class="w-full aspect-[4/3] object-cover js-lightbox cursor-zoom-in" loading="lazy">
       </div>
     </div>
   </section>
@@ -491,16 +599,16 @@
 
     <div class="container mx-auto px-4 sm:px-6 relative z-10">
       <div class="text-center mb-12 sm:mb-16" data-aos="fade-up">
-        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Прайс</h2>
-        <p class="font-mono text-brand-orange mt-2">Программа</p>
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="price_title">Прайс</h2>
+        <p class="font-mono text-brand-orange mt-2" data-i18n="price_sub">Программа</p>
       </div>
 
       <div class="grid md:grid-cols-2 gap-x-16 lg:gap-x-20 gap-y-8 max-w-5xl mx-auto">
         <!-- Baby Start -->
         <div class="flex justify-between items-start border-b border-dashed border-gray-700 pb-3 group" data-aos="fade-up" data-aos-delay="0">
           <div class="pr-4">
-            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Программа Baby Start (2019–20 г.р.)</h4>
-            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Суббота, воскресенье</p>
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition" data-i18n="price_item1">Программа Baby Start (2019–20 г.р.)</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500" data-i18n="price_days">Суббота, воскресенье</p>
           </div>
           <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">21 000 ₸</span>
         </div>
@@ -508,8 +616,8 @@
         <!-- Group training -->
         <div class="flex justify-between items-start border-b border-dashed border-gray-700 pb-3 group" data-aos="fade-up" data-aos-delay="100">
           <div class="pr-4">
-            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Групповая тренировка</h4>
-            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Суббота, воскресенье</p>
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition" data-i18n="price_item2">Групповая тренировка</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500" data-i18n="price_days">Суббота, воскресенье</p>
           </div>
           <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">21 000 ₸</span>
         </div>
@@ -517,8 +625,8 @@
         <!-- Special group -->
         <div class="flex justify-between items-start border-b border-dashed border-gray-700 pb-3 group md:col-span-2" data-aos="fade-up" data-aos-delay="200">
           <div class="pr-4">
-            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Спец группа</h4>
-            <p class="font-mono text-[11px] sm:text-xs text-gray-500">3 раза в неделю + match day. Участие в городских и республиканских соревнованиях.</p>
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition" data-i18n="price_item3">Спец группа</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500" data-i18n="price_item3_desc">3 раза в неделю + match day. Участие в городских и республиканских соревнованиях.</p>
           </div>
           <span class="font-head text-xl sm:text-2xl text-white whitespace-nowrap">25 000 ₸</span>
         </div>
@@ -526,15 +634,15 @@
         <!-- Individual trainings -->
         <div class="flex justify-between items-start border-b border-dashed border-gray-700 pb-3 group md:col-span-2" data-aos="fade-up" data-aos-delay="300">
           <div class="pr-6">
-            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition">Индивидуальные тренировки</h4>
-            <p class="font-mono text-[11px] sm:text-xs text-gray-500">Группа не больше 5 человек, в группе 2 тренера.</p>
+            <h4 class="font-head text-xl sm:text-2xl text-white group-hover:text-brand-orange transition" data-i18n="price_item4">Индивидуальные тренировки</h4>
+            <p class="font-mono text-[11px] sm:text-xs text-gray-500" data-i18n="price_item4_desc">Группа не больше 5 человек, в группе 2 тренера.</p>
             <div class="mt-3 grid sm:grid-cols-2 gap-3">
               <div class="bg-white/5 border border-white/10 p-4">
-                <div class="font-head text-lg text-white uppercase">12 тренировок / месяц</div>
+                <div class="font-head text-lg text-white uppercase" data-i18n="price_12">12 тренировок / месяц</div>
                 <div class="font-mono text-sm text-gray-300 mt-1">80 000 ₸</div>
               </div>
               <div class="bg-white/5 border border-white/10 p-4">
-                <div class="font-head text-lg text-white uppercase">8 тренировок / месяц</div>
+                <div class="font-head text-lg text-white uppercase" data-i18n="price_8">8 тренировок / месяц</div>
                 <div class="font-mono text-sm text-gray-300 mt-1">50 000 ₸</div>
               </div>
             </div>
@@ -546,7 +654,7 @@
       </div>
 
       <div class="text-center mt-12 sm:mt-16">
-        <a href="https://wa.me/77019744464" class="inline-block bg-white hover:bg-brand-orange text-black font-head font-bold uppercase px-8 py-3 transition duration-300">
+        <a href="https://wa.me/77019744464" class="inline-block bg-white hover:bg-brand-orange text-black font-head font-bold uppercase px-8 py-3 transition duration-300" data-i18n="price_btn">
           Записаться онлайн
         </a>
       </div>
@@ -558,7 +666,7 @@
     <div class="container mx-auto px-4 sm:px-6">
       <div class="grid md:grid-cols-2 gap-10 sm:gap-12 items-start md:items-center">
         <div>
-          <h2 class="font-head text-4xl sm:text-5xl md:text-7xl text-white uppercase leading-none mb-6">
+          <h2 class="font-head text-4xl sm:text-5xl md:text-7xl text-white uppercase leading-none mb-6" data-i18n="contact_title" data-i18n-html="true">
             Запись <br>
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-yellow-300">на тренировки</span>
           </h2>
@@ -566,24 +674,24 @@
           <div class="font-mono text-gray-300 space-y-4">
             <p class="flex items-start gap-4">
               <i class="fas fa-user text-brand-orange mt-1"></i>
-              <span><b class="text-white">Контакт:</b> Руслан — <a class="hover:text-white underline decoration-white/20" href="tel:+77019744464">+7 701 974 4464</a></span>
+              <span data-i18n="contact_person"><b class="text-white">Контакт:</b> Руслан — <a class="hover:text-white underline decoration-white/20" href="tel:+77019744464">+7 701 974 4464</a></span>
             </p>
             <p class="flex items-start gap-4">
               <i class="fas fa-school text-brand-orange mt-1"></i>
-              <span><b class="text-white">Локация 1:</b> улица Е-321, 18</span>
+              <span data-i18n="contact_loc1"><b class="text-white">Локация 1:</b> улица Е-321, 18</span>
             </p>
             <p class="flex items-start gap-4">
               <i class="fas fa-school text-brand-orange mt-1"></i>
-              <span><b class="text-white">Локация 2:</b> Проспект Абая 6</span>
+              <span data-i18n="contact_loc2"><b class="text-white">Локация 2:</b> Проспект Абая 6</span>
             </p>
             <p class="flex items-start gap-4">
               <i class="fas fa-school text-brand-orange mt-1"></i>
-              <span><b class="text-white">Локация 3:</b> улица Маскеу, 41</span>
+              <span data-i18n="contact_loc3"><b class="text-white">Локация 3:</b> улица Маскеу, 41</span>
             </p>
             <p class="flex items-start gap-4">
               <i class="fas fa-school text-brand-orange mt-1"></i>
-              <span><b class="text-white">Локация 4:</b> улица Карасай батыра, 10</span>
-            </p>       
+              <span data-i18n="contact_loc4"><b class="text-white">Локация 4:</b> улица Карасай батыра, 10</span>
+            </p>
           </div>
 
           <div class="mt-10 flex items-center gap-4">
@@ -592,7 +700,7 @@
               <div class="font-head text-2xl text-white uppercase tracking-widest italic leading-none">
                 Astana Jas<span class="text-brand-orange">.</span>
               </div>
-              <div class="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em]">Football School</div>
+              <div class="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em]" data-i18n="brand_sub">Football School</div>
             </div>
           </div>
         </div>
@@ -613,8 +721,8 @@
   <section id="location" class="py-20 sm:py-24 bg-[#121212]">
     <div class="container mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
-        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Локация</h2>
-        <p class="font-mono text-brand-orange mt-2">Выберите ближайшую локацию</p>
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="loc_title">Локация</h2>
+        <p class="font-mono text-brand-orange mt-2" data-i18n="loc_sub">Выберите ближайшую локацию</p>
       </div>
 
       <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-8 items-start">
@@ -623,8 +731,8 @@
           <div class="bg-white/5 border border-white/10 p-5 sm:p-6">
             <div class="flex items-start justify-between gap-4">
               <div>
-                <h3 class="font-head text-2xl text-white uppercase">Все адреса</h3>
-                <p class="font-mono text-xs text-gray-500 mt-2 uppercase tracking-[0.2em]">нажмите — карта обновится</p>
+                <h3 class="font-head text-2xl text-white uppercase" data-i18n="loc_all_title">Все адреса</h3>
+                <p class="font-mono text-xs text-gray-500 mt-2 uppercase tracking-[0.2em]" data-i18n="loc_hint_top">нажмите — карта обновится</p>
               </div>
               <i class="fas fa-location-dot text-brand-orange text-2xl mt-1"></i>
             </div>
@@ -642,7 +750,7 @@
               >
                 <div class="flex items-start justify-between gap-4">
                   <div>
-                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Локация 1</div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition" data-i18n="loc_1">Локация 1</div>
                     <div class="font-mono text-xs text-gray-400 mt-1">улица Е-321, 18</div>
                   </div>
                   <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
@@ -661,7 +769,7 @@
               >
                 <div class="flex items-start justify-between gap-4">
                   <div>
-                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Локация 2</div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition" data-i18n="loc_2">Локация 2</div>
                     <div class="font-mono text-xs text-gray-400 mt-1">Проспект Абая 6</div>
                   </div>
                   <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
@@ -680,7 +788,7 @@
               >
                 <div class="flex items-start justify-between gap-4">
                   <div>
-                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Локация 3</div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition" data-i18n="loc_3">Локация 3</div>
                     <div class="font-mono text-xs text-gray-400 mt-1">улица Маскеу, 41</div>
                   </div>
                   <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
@@ -699,7 +807,7 @@
               >
                 <div class="flex items-start justify-between gap-4">
                   <div>
-                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition">Локация 4</div>
+                    <div class="font-head text-lg text-white uppercase group-hover:text-brand-orange transition" data-i18n="loc_4">Локация 4</div>
                     <div class="font-mono text-xs text-gray-400 mt-1">улица Карасай батыра, 10</div>
                   </div>
                   <i class="fas fa-arrow-right text-brand-orange opacity-0 group-hover:opacity-100 transition mt-1"></i>
@@ -712,18 +820,18 @@
                  href="https://2gis.kz/astana/geo/70000001110249530"
                  target="_blank" rel="noopener noreferrer"
                  class="inline-flex items-center justify-center gap-2 bg-white hover:bg-brand-orange text-black font-head font-bold uppercase px-6 py-3 transition duration-300">
-                <i class="fas fa-arrow-up-right-from-square"></i> Открыть в 2GIS
+                <i class="fas fa-arrow-up-right-from-square"></i> <span data-i18n="loc_open_2gis">Открыть в 2GIS</span>
               </a>
 
               <a id="openGmapsBtn"
                  href="https://www.google.com/maps?q=%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%95-321%2018"
                  target="_blank" rel="noopener noreferrer"
                  class="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-head font-bold uppercase px-6 py-3 hover:border-brand-orange hover:text-brand-orange transition">
-                <i class="fas fa-map"></i> Открыть в Google Maps
+                <i class="fas fa-map"></i> <span data-i18n="loc_open_gmaps">Открыть в Google Maps</span>
               </a>
             </div>
 
-            <p class="mt-5 font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]">
+            <p class="mt-5 font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]" data-i18n="loc_hint_bottom">
               Выберите адрес из списка — карта покажет точное местоположение.
             </p>
           </div>
@@ -734,7 +842,7 @@
           <div class="bg-white/5 border border-white/10 p-5 sm:p-6">
             <div class="flex items-start justify-between gap-4">
               <div>
-                <h3 class="font-head text-2xl text-white uppercase">Просмотр карты</h3>
+                <h3 class="font-head text-2xl text-white uppercase" data-i18n="loc_map_title">Просмотр карты</h3>
                 <p class="font-mono text-xs text-gray-500 mt-2 uppercase tracking-[0.2em]" id="mapTitle">Локация 1</p>
               </div>
               <i class="fas fa-map-location-dot text-brand-orange text-2xl mt-1"></i>
@@ -754,7 +862,7 @@
 
             <div class="mt-6 flex items-center gap-3 font-mono text-[11px] text-gray-500 uppercase tracking-[0.2em]">
               <i class="fas fa-circle-info text-brand-orange"></i>
-              Карта меняется без перезагрузки страницы
+              <span data-i18n="loc_info">Карта меняется без перезагрузки страницы</span>
             </div>
           </div>
         </div>
@@ -766,21 +874,21 @@
   <section id="partners" class="py-20 sm:py-24 bg-[#181818]">
     <div class="container mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
-        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Наши партнёры</h2>
-        <p class="font-mono text-brand-orange mt-2">Надёжная поддержка</p>
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="partners_title">Наши партнёры</h2>
+        <p class="font-mono text-brand-orange mt-2" data-i18n="partners_sub">Надёжная поддержка</p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
-        <div class="bg-white/5 border border-white/10 p-6 sm:p-8 flex items-center justify-center" data-aos="fade-up" data-aos-delay="0">
-          <a href="https://tehprogroup.kz/" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center hover:opacity-90 transition" aria-label="Tehpro Group">
-            <img src="images/tehpro.png" alt="Tehpro Group" class="max-h-24 w-full object-contain" loading="lazy">
-          </a>
-        </div>
-        <div class="bg-white/5 border border-white/10 p-6 sm:p-8 flex items-center justify-center" data-aos="fade-up" data-aos-delay="120">
-          <a href="https://jenisfk.kz/" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center hover:opacity-90 transition" aria-label="Женис">
-            <img src="images/zhenis.png" alt="Женис" class="max-h-24 w-full object-contain" loading="lazy">
-          </a>
-        </div>
+      <!-- УБРАНЫ РАМКИ, СДЕЛАНО ПОНЯТНО ЧТО КЛИКАБЕЛЬНО -->
+      <div class="grid md:grid-cols-2 gap-10 sm:gap-12 max-w-4xl mx-auto">
+        <a href="https://tehprogroup.kz/" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center py-2" aria-label="Tehpro Group">
+          <img src="images/tehpro.png" alt="Tehpro Group" class="max-h-24 w-full object-contain transition duration-300 group-hover:scale-[1.03] group-hover:opacity-90" loading="lazy">
+          <span class="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-gray-500 transition group-hover:text-brand-orange" data-i18n="partners_open">Открыть сайт</span>
+        </a>
+
+        <a href="https://jenisfk.kz/" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center py-2" aria-label="Женис">
+          <img src="images/zhenis.png" alt="Женис" class="max-h-24 w-full object-contain transition duration-300 group-hover:scale-[1.03] group-hover:opacity-90" loading="lazy">
+          <span class="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-gray-500 transition group-hover:text-brand-orange" data-i18n="partners_open">Открыть сайт</span>
+        </a>
       </div>
     </div>
   </section>
@@ -795,7 +903,7 @@
         </div>
 
         <a href="https://anukenn.vercel.app/" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-gray-500 hover:text-brand-orange transition uppercase tracking-widest flex items-center gap-2">
-          <i class="fas fa-code"></i> Разработчик сайта - Anuken
+          <i class="fas fa-code"></i> <span data-i18n="footer_dev">Разработчик сайта - Anuken</span>
         </a>
       </div>
     </div>
@@ -815,6 +923,7 @@
   <div id="lightbox" class="lightbox" aria-hidden="true">
     <button class="lb-close" id="lbClose" aria-label="Закрыть"><i class="fas fa-xmark"></i></button>
     <img id="lbImg" src="" alt="Просмотр изображения">
+    <div class="lb-hint" data-i18n="lb_hint">Клик — увеличить • Тяни — двигать</div>
   </div>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -824,26 +933,29 @@
     // Mobile menu
     const btn = document.getElementById('menuBtn');
     const menu = document.getElementById('mobileMenu');
-    const hashLinks = menu.querySelectorAll('a[href^="#"]');
+    const hashLinks = menu ? menu.querySelectorAll('a[href^="#"]') : [];
 
     function setExpanded(isOpen){
+      if (!btn) return;
       btn.setAttribute('aria-expanded', String(isOpen));
     }
 
-    btn.addEventListener('click', () => {
-      const willOpen = !menu.classList.contains('open');
-      menu.classList.toggle('open');
-      setExpanded(willOpen);
-      btn.innerHTML = willOpen
-        ? '<i class="fas fa-xmark"></i>'
-        : '<i class="fas fa-bars"></i>';
-    });
+    if (btn && menu){
+      btn.addEventListener('click', () => {
+        const willOpen = !menu.classList.contains('open');
+        menu.classList.toggle('open');
+        setExpanded(willOpen);
+        btn.innerHTML = willOpen
+          ? '<i class="fas fa-xmark"></i>'
+          : '<i class="fas fa-bars"></i>';
+      });
 
-    hashLinks.forEach(a => a.addEventListener('click', () => {
-      menu.classList.remove('open');
-      setExpanded(false);
-      btn.innerHTML = '<i class="fas fa-bars"></i>';
-    }));
+      hashLinks.forEach(a => a.addEventListener('click', () => {
+        menu.classList.remove('open');
+        setExpanded(false);
+        btn.innerHTML = '<i class="fas fa-bars"></i>';
+      }));
+    }
 
     // Back to top
     const toTop = document.getElementById('toTop');
@@ -858,10 +970,39 @@
       });
     }
 
-    // Lightbox (открытие всех картинок по клику)
+    // Lightbox + Zoom (клик — зум, drag — пан)
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lbImg');
     const lbClose = document.getElementById('lbClose');
+
+    let zoom = 1;
+    let tx = 0, ty = 0;
+    let dragging = false;
+    let startX = 0, startY = 0;
+    let baseX = 0, baseY = 0;
+
+    function applyTransform(){
+      lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${zoom})`;
+    }
+
+    function resetZoom(){
+      zoom = 1;
+      tx = 0;
+      ty = 0;
+      lb.classList.remove('zoomed');
+      applyTransform();
+    }
+
+    function toggleZoom(){
+      if (zoom === 1){
+        zoom = 1.8;
+        tx = 0; ty = 0;
+        lb.classList.add('zoomed');
+      } else {
+        resetZoom();
+      }
+      applyTransform();
+    }
 
     function openLightbox(src, alt){
       lbImg.src = src;
@@ -869,12 +1010,15 @@
       lb.classList.add('open');
       document.body.classList.add('lb-open');
       lb.setAttribute('aria-hidden', 'false');
+      resetZoom();
     }
 
     function closeLightbox(){
       lb.classList.remove('open');
+      lb.classList.remove('zoomed');
       document.body.classList.remove('lb-open');
       lb.setAttribute('aria-hidden', 'true');
+      resetZoom();
       setTimeout(() => { lbImg.src = ''; }, 150);
     }
 
@@ -887,6 +1031,55 @@
     // Закрытие по клику на фон
     lb.addEventListener('click', (e) => {
       if (e.target === lb) closeLightbox();
+    });
+
+    // Клик по картинке — увеличить/уменьшить
+    lbImg.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleZoom();
+    });
+
+    // Drag (mouse)
+    lbImg.addEventListener('mousedown', (e) => {
+      if (zoom === 1) return;
+      dragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      baseX = tx;
+      baseY = ty;
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      tx = baseX + (e.clientX - startX);
+      ty = baseY + (e.clientY - startY);
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+    });
+
+    // Drag (touch)
+    lbImg.addEventListener('touchstart', (e) => {
+      if (zoom === 1) return;
+      if (e.touches.length !== 1) return;
+      dragging = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      baseX = tx;
+      baseY = ty;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!dragging) return;
+      if (e.touches.length !== 1) return;
+      tx = baseX + (e.touches[0].clientX - startX);
+      ty = baseY + (e.touches[0].clientY - startY);
+      applyTransform();
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      dragging = false;
     });
 
     // ESC
@@ -923,6 +1116,340 @@
 
     // Инициализация по первой локации
     if (locButtons[0]) selectLocation(locButtons[0]);
+
+    // =========================
+    // Language switch (RU/KZ) — без перезагрузки
+    // =========================
+    const i18n = {
+      ru: {
+        brand_sub: "Football School",
+
+        nav_about: "О клубе",
+        nav_method: "О методике",
+        nav_rules: "Правила",
+        nav_rules_full: "Правила клуба",
+        nav_mission: "Наша миссия",
+        nav_staff: "Тренерский состав",
+        nav_merch: "Мерч",
+        nav_gallery: "Галерея",
+        nav_price: "Прайс",
+        nav_contact: "Контакт",
+        nav_location: "Локация",
+        nav_partners: "Партнёры",
+        nav_partners_full: "Наши партнёры",
+
+        btn_signup: "Записаться",
+        btn_trial: "Записаться на пробную тренировку",
+
+        hero_desc: "Футбол — это характер. Тренировки, дисциплина и результат. Без лишних слов — только работа.",
+        hero_btn_price: "Смотреть прайс",
+        hero_btn_call: "Позвонить",
+
+        about_title: "О клубе",
+        about_aboutus_title: "О нас",
+        about_aboutus_text:
+          "Мы активно участвуем в городских и региональных турнирах.<br>" +
+          "На каждый сезон формируем официальный календарь соревнований, включая выездные турниры и матчи.<br>" +
+          "Также сотрудничаем с футбольной академией «Женис».<br>" +
+          "Цель нашего сотрудничества — организация просмотров и передача наших юных футболистов в футбольный центр «Женис», где лучшие из них получают возможность продолжить развитие на более высоком уровне ⚽",
+
+        method_title: "О методике",
+        method_b1: "<b class=\"text-white\">Посещаемость</b> — ведём табель, ежемесячно отмечаем лучших игроков по возрастам.",
+        method_b2: "<b class=\"text-white\">Физические данные</b> и общий прогресс.",
+        method_b3: "<b class=\"text-white\">Умение слушать</b> и выполнять задания тренера на тренировках и в играх.",
+        method_b4: "<b class=\"text-white\">Дисциплина</b> — обязательный стандарт.",
+        method_b5: "<b class=\"text-white\">Профессиональный рост</b> — тестирование раз в полгода и отслеживание динамики.",
+        method_why_title: "Зачем это нужно",
+        method_why_text:
+          "Талантливые дети получают шанс проявить себя на матчах и турнирах более высокого уровня. " +
+          "Это усиливает мотивацию, дисциплину и любовь к спорту — результат становится заметным.",
+        method_result: "Работаем на результат",
+
+        rules_title: "Правила клуба",
+        rules_sub: "Для родителей (PDF)",
+        rules_key_title: "Ключевые пункты",
+        rules_b1: "<b class=\"text-white\">Меддопуск</b>: справка обязательна до начала тренировок.",
+        rules_b2: "<b class=\"text-white\">Посещаемость</b>: регулярность и пунктуальность обязательны",
+        rules_b3: "<b class=\"text-white\">Родители</b>: не вмешиваться в тренировку, уважать решения тренера.",
+        rules_b4: "<b class=\"text-white\">Оплата</b>: согласно условиям клуба, заранее.",
+        rules_pdf_title: "PDF документ",
+        rules_pdf_text: "Откройте или скачайте документ с правилами клуба.",
+        rules_open_pdf: "Открыть PDF",
+        rules_download: "Скачать",
+        rules_file: "Файл: Правила.pdf",
+
+        mission_title: "Наша миссия",
+        mission_core_title: "Основа клуба",
+        mission_v_title: "Ценности",
+        mission_v_text: "Принципы честной борьбы, стандарты качества, позитивное окружение, лучшие практики и стремление к инновациям.",
+        mission_s_title: "Спорт",
+        mission_s_text: "Возродить зрелищность, дух победителей среди юных футболистов и сплочённость среди родителей.",
+        mission_o_title: "Общество",
+        mission_o_text: "Возродить любовь и причастность к клубу со стороны родителей юных футболистов.",
+        mission_vv_title: "Видение",
+        mission_vv_text: "Вести Казахстан к новым победам и приносить радость всем, кто связан с футболом.",
+        mission_p_title: "Принципы",
+        mission_p_text: "Доверие, честность, уважение, открытость, ответственность, доступность, сотрудничество и взаимодействие.",
+
+        staff_title: "Тренерский состав",
+        staff_h3: "Игрока делает <span class=\"text-brand-orange\">система</span>",
+        staff_text:
+          "<div class=\"space-y-2\">" +
+            "<div>В своей работе тренер придерживается</div>" +
+            "<div>современных методик обучения,</div>" +
+            "<div>направленных на:</div>" +
+          "</div>" +
+          "<div class=\"mt-5 space-y-3\">" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>развитие футбольного мышления, скорости мышления и умения быстро принимать решения;</span></div>" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>развитие индивидуальных качеств футболистов;</span></div>" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>формирование командной игры;</span></div>" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>воспитание ответственности, характера и уверенности в себе.</span></div>" +
+          "</div>" +
+          "<div class=\"mt-6 space-y-2\">" +
+            "<div>В тренировочный процесс также входят</div>" +
+            "<div>занятия с профильными специалистами:</div>" +
+          "</div>" +
+          "<div class=\"mt-5 space-y-3\">" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>тренер по общей физической подготовке (ОФП);</span></div>" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>тренер по стретчингу и растяжке, направленной на гибкость, восстановление и профилактику травм.</span></div>" +
+          "</div>",
+        staff_btn_schedule: "Узнать расписание",
+        staff_btn_wa: "Написать в WhatsApp",
+
+        merch_title: "Мерч",
+        merch_sub: "Экипировка клуба",
+        merch_caption: "Экипировка клуба",
+        merch_set_title: "Комплект",
+        merch_text: "Игровая форма клуба. Подробности по размерам и наличию — в WhatsApp.",
+        merch_btn_stock: "Узнать наличие",
+        merch_btn_price: "Смотреть прайс",
+
+        gallery_title: "Галерея",
+        gallery_sub: "Тренировки и матчи",
+
+        price_title: "Прайс",
+        price_sub: "Программа",
+        price_item1: "Программа Baby Start (2019–20 г.р.)",
+        price_item2: "Групповая тренировка",
+        price_item3: "Спец группа",
+        price_item3_desc: "3 раза в неделю + match day. Участие в городских и республиканских соревнованиях.",
+        price_item4: "Индивидуальные тренировки",
+        price_item4_desc: "Группа не больше 5 человек, в группе 2 тренера.",
+        price_12: "12 тренировок / месяц",
+        price_8: "8 тренировок / месяц",
+        price_days: "Суббота, воскресенье",
+        price_btn: "Записаться онлайн",
+
+        contact_title: "Запись <br><span class=\"text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-yellow-300\">на тренировки</span>",
+        contact_person: "<b class=\"text-white\">Контакт:</b> Руслан — <a class=\"hover:text-white underline decoration-white/20\" href=\"tel:+77019744464\">+7 701 974 4464</a>",
+        contact_loc1: "<b class=\"text-white\">Локация 1:</b> улица Е-321, 18",
+        contact_loc2: "<b class=\"text-white\">Локация 2:</b> Проспект Абая 6",
+        contact_loc3: "<b class=\"text-white\">Локация 3:</b> улица Маскеу, 41",
+        contact_loc4: "<b class=\"text-white\">Локация 4:</b> улица Карасай батыра, 10",
+
+        loc_title: "Локация",
+        loc_sub: "Выберите ближайшую локацию",
+        loc_all_title: "Все адреса",
+        loc_hint_top: "нажмите — карта обновится",
+        loc_hint_bottom: "Выберите адрес из списка — карта покажет точное местоположение.",
+        loc_open_2gis: "Открыть в 2GIS",
+        loc_open_gmaps: "Открыть в Google Maps",
+        loc_map_title: "Просмотр карты",
+        loc_info: "Карта меняется без перезагрузки страницы",
+        loc_1: "Локация 1",
+        loc_2: "Локация 2",
+        loc_3: "Локация 3",
+        loc_4: "Локация 4",
+
+        partners_title: "Наши партнёры",
+        partners_sub: "Надёжная поддержка",
+        partners_open: "Открыть сайт",
+
+        footer_dev: "Разработчик сайта - Anuken",
+
+        lb_hint: "Клик — увеличить • Тяни — двигать"
+      },
+
+      kz: {
+        brand_sub: "Футбол мектебі",
+
+        nav_about: "Клуб туралы",
+        nav_method: "Әдістеме туралы",
+        nav_rules: "Ережелер",
+        nav_rules_full: "Клуб ережелері",
+        nav_mission: "Біздің миссия",
+        nav_staff: "Жаттықтырушылар",
+        nav_merch: "Экипировка",
+        nav_gallery: "Галерея",
+        nav_price: "Бағалар",
+        nav_contact: "Байланыс",
+        nav_location: "Орындар",
+        nav_partners: "Серіктестер",
+        nav_partners_full: "Біздің серіктестер",
+
+        btn_signup: "Жазылу",
+        btn_trial: "Сынақ жаттығуына жазылу",
+
+        hero_desc: "Футбол — мінез. Жаттығу, тәртіп және нәтиже. Артық сөз жоқ — тек жұмыс.",
+        hero_btn_price: "Бағаларды көру",
+        hero_btn_call: "Қоңырау шалу",
+
+        about_title: "Клуб туралы",
+        about_aboutus_title: "Біз туралы",
+        about_aboutus_text:
+          "Біз қалалық және өңірлік турнирлерге белсенді қатысамыз.<br>" +
+          "Әр маусымға ресми жарыстар күнтізбесін қалыптастырамыз, оның ішінде сыртқа шығатын турнирлер мен матчтар бар.<br>" +
+          "Сондай-ақ «Женис» футбол академиясымен ынтымақтасамыз.<br>" +
+          "Ынтымақтастықтың мақсаты — қаралымдар ұйымдастыру және жас футболшыларымызды «Женис» футбол орталығына жіберу, онда үздіктері жоғары деңгейде дамуын жалғастыра алады ⚽",
+
+        method_title: "Әдістеме туралы",
+        method_b1: "<b class=\"text-white\">Қатысу</b> — табель жүргіземіз, ай сайын жас бойынша үздіктерді белгілейміз.",
+        method_b2: "<b class=\"text-white\">Физикалық көрсеткіштер</b> және жалпы прогресс.",
+        method_b3: "<b class=\"text-white\">Тыңдай білу</b> және жаттығуда/ойында тапсырмаларды орындау.",
+        method_b4: "<b class=\"text-white\">Тәртіп</b> — міндетті стандарт.",
+        method_b5: "<b class=\"text-white\">Кәсіби өсу</b> — жарты жыл сайын тест және динамиканы бақылау.",
+        method_why_title: "Неге керек",
+        method_why_text:
+          "Дарынды балалар жоғары деңгейдегі матчтар мен турнирлерде өзін көрсету мүмкіндігін алады. " +
+          "Бұл мотивацияны, тәртіпті және спортқа деген сүйіспеншілікті күшейтеді — нәтиже байқалады.",
+        method_result: "Нәтижеге жұмыс істейміз",
+
+        rules_title: "Клуб ережелері",
+        rules_sub: "Ата-аналарға (PDF)",
+        rules_key_title: "Негізгі тармақтар",
+        rules_b1: "<b class=\"text-white\">Медициналық рұқсат</b>: анықтама жаттығуға дейін міндетті.",
+        rules_b2: "<b class=\"text-white\">Қатысу</b>: жүйелілік және уақыттылық міндетті",
+        rules_b3: "<b class=\"text-white\">Ата-аналар</b>: жаттығуға араласпау, жаттықтырушы шешімін құрметтеу.",
+        rules_b4: "<b class=\"text-white\">Төлем</b>: клуб шарттарына сай, алдын ала.",
+        rules_pdf_title: "PDF құжаты",
+        rules_pdf_text: "Клуб ережелері құжатын ашыңыз немесе жүктеңіз.",
+        rules_open_pdf: "PDF ашу",
+        rules_download: "Жүктеу",
+        rules_file: "Файл: Правила.pdf",
+
+        mission_title: "Біздің миссия",
+        mission_core_title: "Клуб негізі",
+        mission_v_title: "Құндылықтар",
+        mission_v_text: "Әділ бәсеке қағидалары, сапа стандарттары, позитивті орта, үздік тәжірибелер және инновацияға ұмтылыс.",
+        mission_s_title: "Спорт",
+        mission_s_text: "Жас футболшылар арасында жеңімпаз рухын және ата-аналар арасында бірлікті күшейту, ойынның қызығын арттыру.",
+        mission_o_title: "Қоғам",
+        mission_o_text: "Ата-аналар тарапынан клубқа деген сүйіспеншілік пен қатыстылық сезімін жаңғырту.",
+        mission_vv_title: "Көзқарас",
+        mission_vv_text: "Қазақстанды жаңа жеңістерге жетелеп, футболға қатысы бар әр адамға қуаныш сыйлау.",
+        mission_p_title: "Қағидалар",
+        mission_p_text: "Сенім, адалдық, құрмет, ашықтық, жауапкершілік, қолжетімділік, ынтымақтастық және өзара әрекет.",
+
+        staff_title: "Жаттықтырушылар",
+        staff_h3: "Ойыншыны <span class=\"text-brand-orange\">жүйе</span> қалыптастырады",
+        staff_text:
+          "<div class=\"space-y-2\">" +
+            "<div>Жаттықтырушы өз жұмысында</div>" +
+            "<div>заманауи оқыту әдістемелерін ұстанады,</div>" +
+            "<div>олар төмендегілерге бағытталған:</div>" +
+          "</div>" +
+          "<div class=\"mt-5 space-y-3\">" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>футболдық ойлауды, ойлау жылдамдығын және шешімді тез қабылдау қабілетін дамыту;</span></div>" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>футболшылардың жеке қасиеттерін дамыту;</span></div>" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>командалық ойынды қалыптастыру;</span></div>" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>жауапкершілікті, мінезді және өзіне сенімділікті тәрбиелеу.</span></div>" +
+          "</div>" +
+          "<div class=\"mt-6 space-y-2\">" +
+            "<div>Жаттығу процесіне сондай-ақ</div>" +
+            "<div>бейінді мамандармен сабақтар кіреді:</div>" +
+          "</div>" +
+          "<div class=\"mt-5 space-y-3\">" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>жалпы дене дайындығы (ЖДД) бойынша жаттықтырушы;</span></div>" +
+            "<div class=\"flex items-start gap-3\"><i class=\"fas fa-check text-brand-orange mt-1\"></i><span>стретчинг және созылу жаттықтырушысы — икемділікке, қалпына келуге және жарақаттың алдын алуға бағытталған.</span></div>" +
+          "</div>",
+        staff_btn_schedule: "Кестені білу",
+        staff_btn_wa: "WhatsApp-қа жазу",
+
+        merch_title: "Экипировка",
+        merch_sub: "Клуб формасы",
+        merch_caption: "Клуб формасы",
+        merch_set_title: "Жинақ",
+        merch_text: "Клубтың ойын формасы. Өлшемдер мен қолжетімділік — WhatsApp арқылы.",
+        merch_btn_stock: "Қолжетімділікті білу",
+        merch_btn_price: "Бағаларды көру",
+
+        gallery_title: "Галерея",
+        gallery_sub: "Жаттығулар және матчтар",
+
+        price_title: "Бағалар",
+        price_sub: "Бағдарлама",
+        price_item1: "Baby Start бағдарламасы (2019–20 ж.т.)",
+        price_item2: "Топтық жаттығу",
+        price_item3: "Арнайы топ",
+        price_item3_desc: "Аптасына 3 рет + match day. Қалалық және республикалық жарыстарға қатысу.",
+        price_item4: "Жеке жаттығулар",
+        price_item4_desc: "Топ 5 адамнан аспайды, топта 2 жаттықтырушы.",
+        price_12: "12 жаттығу / ай",
+        price_8: "8 жаттығу / ай",
+        price_days: "Сенбі, жексенбі",
+        price_btn: "Онлайн жазылу",
+
+        contact_title: "Жаттығуға <br><span class=\"text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-yellow-300\">жазылу</span>",
+        contact_person: "<b class=\"text-white\">Байланыс:</b> Руслан — <a class=\"hover:text-white underline decoration-white/20\" href=\"tel:+77019744464\">+7 701 974 4464</a>",
+        contact_loc1: "<b class=\"text-white\">Орын 1:</b> Е-321 көшесі, 18",
+        contact_loc2: "<b class=\"text-white\">Орын 2:</b> Абай даңғылы, 6",
+        contact_loc3: "<b class=\"text-white\">Орын 3:</b> Маскеу көшесі, 41",
+        contact_loc4: "<b class=\"text-white\">Орын 4:</b> Қарасай батыр көшесі, 10",
+
+        loc_title: "Орындар",
+        loc_sub: "Ең жақын орынды таңдаңыз",
+        loc_all_title: "Барлық мекенжайлар",
+        loc_hint_top: "басыңыз — карта жаңарады",
+        loc_hint_bottom: "Тізімнен мекенжайды таңдаңыз — карта нақты орынды көрсетеді.",
+        loc_open_2gis: "2GIS-та ашу",
+        loc_open_gmaps: "Google Maps-та ашу",
+        loc_map_title: "Картаны көру",
+        loc_info: "Карта бет жаңартусыз өзгереді",
+        loc_1: "Орын 1",
+        loc_2: "Орын 2",
+        loc_3: "Орын 3",
+        loc_4: "Орын 4",
+
+        partners_title: "Серіктестер",
+        partners_sub: "Сенімді қолдау",
+        partners_open: "Сайтқа өту",
+
+        footer_dev: "Сайт жасаушы - Anuken",
+
+        lb_hint: "Клик — үлкейту • Тарту — жылжыту"
+      }
+    };
+
+    function applyLang(lang){
+      const isKz = lang === 'kz';
+      document.documentElement.setAttribute('lang', isKz ? 'kk' : 'ru');
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        const val = i18n[lang] && i18n[lang][key];
+        if (typeof val === 'undefined') return;
+
+        const isHtml = el.dataset.i18nHtml === 'true';
+        if (isHtml) el.innerHTML = val;
+        else el.textContent = val;
+      });
+
+      document.querySelectorAll('[data-set-lang]').forEach(b => {
+        b.setAttribute('aria-pressed', String(b.dataset.setLang === lang));
+      });
+
+      try { localStorage.setItem('siteLang', lang); } catch(e){}
+    }
+
+    // init
+    let savedLang = 'ru';
+    try { savedLang = localStorage.getItem('siteLang') || 'ru'; } catch(e){}
+    if (!i18n[savedLang]) savedLang = 'ru';
+    applyLang(savedLang);
+
+    document.querySelectorAll('[data-set-lang]').forEach(b => {
+      b.addEventListener('click', () => applyLang(b.dataset.setLang));
+    });
   </script>
 </body>
 </html>
