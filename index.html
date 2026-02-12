@@ -6,9 +6,9 @@
   <title>Astana Jas | Football Club</title>
   <meta name="description" content="Футбольный клуб Astana Jas. Тренировки для детей и подростков в Астане, сборы, турниры, экипировка. Дисциплина, характер, результат." />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <!-- Fonts (local) -->
+  <link rel="preload" href="fonts/Akrobat-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/FSJoeyPro-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,8 +19,8 @@
       theme: {
         extend: {
           fontFamily: {
-            head: ['"Oswald"', 'sans-serif'],
-            mono: ['"Roboto Mono"', 'monospace'],
+            head: ['"Akrobat ExtraBold"', 'sans-serif'],
+            mono: ['"FS Joey Pro"', 'sans-serif'],
           },
           colors: {
             brand: {
@@ -36,8 +36,25 @@
   </script>
 
   <style>
+    @font-face{
+      font-family: "Akrobat ExtraBold";
+      src: url("fonts/Akrobat-ExtraBold.woff2") format("woff2"),
+           url("fonts/Akrobat-ExtraBold.woff") format("woff");
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face{
+      font-family: "FS Joey Pro";
+      src: url("fonts/FSJoeyPro-Regular.woff2") format("woff2"),
+           url("fonts/FSJoeyPro-Regular.woff") format("woff");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root{ --nav-safe: 88px; }
-    body { background-color: #121212; color: #E0E0E0; overflow-x: hidden; }
+    body { background-color: #121212; color: #E0E0E0; overflow-x: hidden; font-family: "FS Joey Pro", sans-serif; }
     section, footer { scroll-margin-top: var(--nav-safe); }
 
     /* Шум */
@@ -110,7 +127,7 @@
       bottom: 14px;
       left: 50%;
       transform: translateX(-50%);
-      font-family: "Roboto Mono", monospace;
+      font-family: "FS Joey Pro", sans-serif;
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .22em;
@@ -151,7 +168,7 @@
       overflow: hidden;
     }
     .lang-btn{
-      font-family: "Roboto Mono", monospace;
+      font-family: "FS Joey Pro", sans-serif;
       font-size: 11px;
       letter-spacing: .22em;
       text-transform: uppercase;
@@ -480,15 +497,89 @@
     <div class="container mx-auto px-4 sm:px-6">
       <h2 class="font-head text-4xl text-white uppercase mb-10 sm:mb-12 border-l-4 border-brand-orange pl-4" data-i18n="staff_title">Тренерский состав</h2>
 
-      <div class="grid lg:grid-cols-2 gap-10 items-center">
-        <!-- УБРАНЫ КВАДРАТНЫЕ РАМКИ -->
-        <div data-aos="flip-left">
-          <img
-            src="images/team_full.jpg"
-            alt="Тренерский состав Astana Jas"
-            class="w-full max-h-[560px] object-contain js-lightbox cursor-zoom-in"
-            loading="lazy"
-          >
+      <div class="grid lg:grid-cols-2 gap-10 items-start">
+        <!-- ВМЕСТО ОДНОГО ОБЩЕГО ФОТО: 3 ФОТО + ТЕКСТЫ -->
+        <div class="space-y-6" data-aos="fade-up">
+          <article class="bg-white/5 border border-white/10 p-5 sm:p-6">
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start">
+              <img
+                src="images/coach-1.jpg"
+                alt="Абугалиев Чингиз Нурланович"
+                class="w-full sm:w-32 aspect-square rounded-2xl object-cover js-lightbox cursor-zoom-in"
+                loading="lazy"
+              >
+              <div class="min-w-0">
+                <div class="font-head text-2xl sm:text-3xl text-white uppercase leading-tight">
+                  <span data-i18n="coach1_last">Абугалиев</span><br>
+                  <span class="text-brand-orange" data-i18n="coach1_first">Чингиз Нурланович</span>
+                </div>
+
+                <div class="mt-4 space-y-1.5 font-mono text-sm text-gray-300 leading-snug">
+                  <div class="font-head text-base sm:text-lg text-white uppercase" data-i18n="coach1_role">Главный тренер</div>
+                  <div data-i18n="coach1_birth">Родился - 10 октября 1986 г</div>
+                  <div>
+                    <span data-i18n="coach1_cit">Гражданство - Казахстан</span>
+                    <span aria-label="Флаг Казахстана">🇰🇿</span>
+                  </div>
+                  <div data-i18n="coach1_place">Место рождения - Актау</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="bg-white/5 border border-white/10 p-5 sm:p-6">
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start">
+              <img
+                src="images/coach-2.jpg"
+                alt="Умеркулов Имран Исаевич"
+                class="w-full sm:w-32 aspect-square rounded-2xl object-cover js-lightbox cursor-zoom-in"
+                loading="lazy"
+              >
+              <div class="min-w-0">
+                <div class="font-head text-2xl sm:text-3xl text-white uppercase leading-tight">
+                  <span data-i18n="coach2_last">Умеркулов</span><br>
+                  <span class="text-brand-orange" data-i18n="coach2_first">Имран Исаевич</span>
+                </div>
+
+                <div class="mt-4 space-y-1.5 font-mono text-sm text-gray-300 leading-snug">
+                  <div class="font-head text-base sm:text-lg text-white uppercase" data-i18n="coach2_role">Ассистент главного тренера</div>
+                  <div data-i18n="coach2_birth">Родился - 4 сентября 2002 г</div>
+                  <div>
+                    <span data-i18n="coach2_cit">Гражданство - Казахстан</span>
+                    <span aria-label="Флаг Казахстана">🇰🇿</span>
+                  </div>
+                  <div data-i18n="coach2_place">Место рождения - Атбасар</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="bg-white/5 border border-white/10 p-5 sm:p-6">
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start">
+              <img
+                src="images/coach-3.jpg"
+                alt="Цыгановкин Роман Вячеславович"
+                class="w-full sm:w-32 aspect-square rounded-2xl object-cover js-lightbox cursor-zoom-in"
+                loading="lazy"
+              >
+              <div class="min-w-0">
+                <div class="font-head text-2xl sm:text-3xl text-white uppercase leading-tight">
+                  <span data-i18n="coach3_last">Цыгановкин</span><br>
+                  <span class="text-brand-orange" data-i18n="coach3_first">Роман Вячеславович</span>
+                </div>
+
+                <div class="mt-4 space-y-1.5 font-mono text-sm text-gray-300 leading-snug">
+                  <div class="font-head text-base sm:text-lg text-white uppercase" data-i18n="coach3_role">Тренер вратарей</div>
+                  <div data-i18n="coach3_birth">Родился - 23 августа 1990 г</div>
+                  <div>
+                    <span data-i18n="coach3_cit">Гражданство - Казахстан</span>
+                    <span aria-label="Флаг Казахстана">🇰🇿</span>
+                  </div>
+                  <div data-i18n="coach3_place">Место рождения - Астана</div>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
 
         <div data-aos="fade-left">
@@ -496,7 +587,6 @@
             Игрока делает <span class="text-brand-orange">система</span>
           </h3>
 
-          <!-- ПОЛНОСТЬЮ ЗАМЕНЁН ТЕКСТ НИЖЕ + ДОБАВЛЕНЫ ГАЛОЧКИ -->
           <div class="font-mono text-gray-300 text-sm leading-relaxed mb-8" data-i18n="staff_text" data-i18n-html="true">
             <div class="space-y-2">
               <div>В своей работе тренер придерживается</div>
@@ -544,14 +634,23 @@
       </div>
 
       <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 items-start">
-        <!-- УБРАНЫ КВАДРАТНЫЕ РАМКИ -->
+        <!-- ВМЕСТО 1 ФОТО: 2 ФОТО (на мобиле в колонку по порядку) -->
         <div data-aos="fade-up" data-aos-delay="0">
-          <img
-            src="images/kit.jpg"
-            alt="Экипировка Astana Jas"
-            class="w-full max-h-[520px] object-contain js-lightbox cursor-zoom-in"
-            loading="lazy"
-          >
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            <img
+              src="images/kit-1.jpg"
+              alt="Экипировка Astana Jas 1"
+              class="w-full max-h-[520px] object-cover js-lightbox cursor-zoom-in rounded-2xl"
+              loading="lazy"
+            >
+            <img
+              src="images/kit-2.jpg"
+              alt="Экипировка Astana Jas 2"
+              class="w-full max-h-[520px] object-cover js-lightbox cursor-zoom-in rounded-2xl"
+              loading="lazy"
+            >
+          </div>
+
           <p class="mt-3 font-mono text-[11px] text-gray-400 uppercase tracking-[0.2em]" data-i18n="merch_caption">Экипировка клуба</p>
         </div>
 
@@ -1247,6 +1346,27 @@
         staff_btn_schedule: "Узнать расписание",
         staff_btn_wa: "Написать в WhatsApp",
 
+        coach1_last: "Абугалиев",
+        coach1_first: "Чингиз Нурланович",
+        coach1_role: "Главный тренер",
+        coach1_birth: "Родился - 10 октября 1986 г",
+        coach1_cit: "Гражданство - Казахстан",
+        coach1_place: "Место рождения - Актау",
+
+        coach2_last: "Умеркулов",
+        coach2_first: "Имран Исаевич",
+        coach2_role: "Ассистент главного тренера",
+        coach2_birth: "Родился - 4 сентября 2002 г",
+        coach2_cit: "Гражданство - Казахстан",
+        coach2_place: "Место рождения - Атбасар",
+
+        coach3_last: "Цыгановкин",
+        coach3_first: "Роман Вячеславович",
+        coach3_role: "Тренер вратарей",
+        coach3_birth: "Родился - 23 августа 1990 г",
+        coach3_cit: "Гражданство - Казахстан",
+        coach3_place: "Место рождения - Астана",
+
         merch_title: "Мерч",
         merch_sub: "Экипировка клуба",
         merch_caption: "Экипировка клуба",
@@ -1395,6 +1515,27 @@
           "</div>",
         staff_btn_schedule: "Кестені білу",
         staff_btn_wa: "WhatsApp-қа жазу",
+
+        coach1_last: "Абугалиев",
+        coach1_first: "Чингиз Нурланович",
+        coach1_role: "Бас жаттықтырушы",
+        coach1_birth: "Туған күні - 10 қазан 1986 ж",
+        coach1_cit: "Азаматтығы - Қазақстан",
+        coach1_place: "Туған жері - Ақтау",
+
+        coach2_last: "Умеркулов",
+        coach2_first: "Имран Исаевич",
+        coach2_role: "Бас жаттықтырушының ассистенті",
+        coach2_birth: "Туған күні - 4 қыркүйек 2002 ж",
+        coach2_cit: "Азаматтығы - Қазақстан",
+        coach2_place: "Туған жері - Атбасар",
+
+        coach3_last: "Цыгановкин",
+        coach3_first: "Роман Вячеславович",
+        coach3_role: "Қақпашылар жаттықтырушысы",
+        coach3_birth: "Туған күні - 23 тамыз 1990 ж",
+        coach3_cit: "Азаматтығы - Қазақстан",
+        coach3_place: "Туған жері - Астана",
 
         merch_title: "Экипировка",
         merch_sub: "Клуб формасы",
