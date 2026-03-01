@@ -290,7 +290,7 @@
   </nav>
 
   <!-- HERO (видео-фон) -->
-  <header id="top" class="relative min-h-[100svh] flex items-center overflow-hidden bg-[#121212]">
+  <header id="top" class="relative min-h-[100svh] flex items-end overflow-hidden bg-[#121212]">
     <div class="absolute inset-0 z-0">
       <video
         class="w-full h-full object-cover"
@@ -306,17 +306,13 @@
       </video>
     </div>
 
-    <div class="container mx-auto px-4 sm:px-6 relative z-10 pt-24 md:pt-0">
+    <div class="container mx-auto px-4 sm:px-6 relative z-10 pt-24 md:pt-0 pb-16 sm:pb-20 md:pb-24">
       <div class="border-l-4 border-brand-orange pl-5 sm:pl-6 md:pl-10 hero-shadow" data-aos="fade-right">
         <p class="font-mono text-brand-orange text-xs sm:text-sm md:text-base mb-2 tracking-[0.2em]">EST. 2026 • ASTANA</p>
 
         <h1 class="hero-title font-head text-5xl sm:text-6xl md:text-9xl text-white font-bold uppercase leading-[0.9] mb-6 glitch-hover cursor-default">
           One Team. <br> One Dream.
         </h1>
-
-        <p class="text-white/90 font-mono text-sm sm:text-base md:text-lg max-w-md mb-10 leading-relaxed" data-i18n="hero_desc">
-          Футбол — это характер. Тренировки, дисциплина и результат. Без лишних слов — только работа.
-        </p>
 
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
           <a href="#price" class="inline-block bg-brand-orange text-black font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center" data-i18n="hero_btn_price">
@@ -634,18 +630,12 @@
       </div>
 
       <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 items-start">
-        <!-- ВМЕСТО 1 ФОТО: 2 ФОТО (на мобиле в колонку по порядку) -->
+        <!-- ВМЕСТО 2 ФОТО: 1 ФОТО -->
         <div data-aos="fade-up" data-aos-delay="0">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+          <div class="grid grid-cols-1 gap-4 sm:gap-5">
             <img
               src="images/kit-1.jpg"
               alt="Экипировка Astana Jas 1"
-              class="w-full max-h-[520px] object-cover js-lightbox cursor-zoom-in rounded-2xl"
-              loading="lazy"
-            >
-            <img
-              src="images/kit-2.jpg"
-              alt="Экипировка Astana Jas 2"
               class="w-full max-h-[520px] object-cover js-lightbox cursor-zoom-in rounded-2xl"
               loading="lazy"
             >
