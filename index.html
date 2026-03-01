@@ -290,7 +290,7 @@
   </nav>
 
   <!-- HERO (видео-фон) -->
-  <header id="top" class="relative min-h-[100svh] flex items-end overflow-hidden bg-[#121212]">
+  <header id="top" class="relative min-h-[100svh] flex items-center overflow-hidden bg-[#121212]">
     <div class="absolute inset-0 z-0">
       <video
         class="w-full h-full object-cover"
@@ -305,31 +305,35 @@
         <source src="images/hero.mp4" type="video/mp4">
       </video>
     </div>
-
-    <div class="container mx-auto px-4 sm:px-6 relative z-10 pt-24 md:pt-0 pb-16 sm:pb-20 md:pb-24">
-      <div class="border-l-4 border-brand-orange pl-5 sm:pl-6 md:pl-10 hero-shadow" data-aos="fade-right">
-        <p class="font-mono text-brand-orange text-xs sm:text-sm md:text-base mb-2 tracking-[0.2em]">EST. 2026 • ASTANA</p>
-
-        <h1 class="hero-title font-head text-5xl sm:text-6xl md:text-9xl text-white font-bold uppercase leading-[0.9] mb-6 glitch-hover cursor-default">
-          One Team. <br> One Dream.
-        </h1>
-
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
-          <a href="#price" class="inline-block bg-brand-orange text-black font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center" data-i18n="hero_btn_price">
-            Смотреть прайс
-          </a>
-          <a href="tel:+77019744464" class="inline-flex items-center justify-center border border-white/30 text-white font-head font-bold text-lg uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition text-center" data-i18n="hero_btn_call">
-            Позвонить
-          </a>
-        </div>
-      </div>
-    </div>
   </header>
 
   <!-- 1. О Клубе -->
   <section id="about" class="py-20 sm:py-24 bg-[#121212]">
     <div class="container mx-auto px-4 sm:px-6">
       <div class="max-w-5xl mx-auto">
+
+        <!-- Перенесено из HERO: EST + слоган + кнопки (вверх панели "О клубе") -->
+        <div class="mb-10 sm:mb-12 hero-shadow" data-aos="fade-up">
+          <div class="bg-white/5 border border-white/10 p-6 sm:p-8">
+            <p class="font-mono text-brand-orange text-xs sm:text-sm mb-3 tracking-[0.2em]">
+              EST. 2026 • ASTANA
+            </p>
+
+            <div class="font-head text-4xl sm:text-5xl md:text-6xl text-white font-bold uppercase leading-[0.9] mb-6 glitch-hover cursor-default">
+              One Team. <br> One Dream.
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+              <a href="#price" class="inline-block bg-brand-orange text-black font-head font-bold text-lg uppercase px-10 py-4 clip-btn text-center" data-i18n="hero_btn_price">
+                Смотреть прайс
+              </a>
+              <a href="tel:+77019744464" class="inline-flex items-center justify-center border border-white/30 text-white font-head font-bold text-lg uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition text-center" data-i18n="hero_btn_call">
+                Позвонить
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
           <h2 class="font-head text-4xl sm:text-5xl text-white uppercase" data-i18n="about_title">О клубе</h2>
           <p class="font-mono text-brand-orange mt-2">Astana Jas</p>
@@ -630,17 +634,14 @@
       </div>
 
       <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 items-start">
-        <!-- ВМЕСТО 2 ФОТО: 1 ФОТО -->
+        <!-- Сокращено до 1 фото (lightbox/zoom уже работает через .js-lightbox) -->
         <div data-aos="fade-up" data-aos-delay="0">
-          <div class="grid grid-cols-1 gap-4 sm:gap-5">
-            <img
-              src="images/kit-1.jpg"
-              alt="Экипировка Astana Jas 1"
-              class="w-full max-h-[520px] object-cover js-lightbox cursor-zoom-in rounded-2xl"
-              loading="lazy"
-            >
-          </div>
-
+          <img
+            src="images/kit-1.jpg"
+            alt="Экипировка Astana Jas"
+            class="w-full max-h-[560px] object-cover js-lightbox cursor-zoom-in rounded-2xl"
+            loading="lazy"
+          >
           <p class="mt-3 font-mono text-[11px] text-gray-400 uppercase tracking-[0.2em]" data-i18n="merch_caption">Экипировка клуба</p>
         </div>
 
@@ -981,37 +982,37 @@
   </section>
 
   <!-- 10. Наши партнёры -->
-<section id="partners" class="py-20 sm:py-24 bg-[#181818]">
-  <div class="container mx-auto px-4 sm:px-6">
-    <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
-      <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Наши партнёры</h2>
-      <p class="font-mono text-brand-orange mt-2">Надёжная поддержка</p>
-    </div>
+  <section id="partners" class="py-20 sm:py-24 bg-[#181818]">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 sm:mb-14" data-aos="fade-up">
+        <h2 class="font-head text-4xl sm:text-5xl text-white uppercase">Наши партнёры</h2>
+        <p class="font-mono text-brand-orange mt-2">Надёжная поддержка</p>
+      </div>
 
-    <div class="grid md:grid-cols-2 gap-10 sm:gap-12 max-w-4xl mx-auto">
-      <!-- ЖЕНИС ВЫШЕ -->
-      <a href="https://jenisfk.kz/" target="_blank" rel="noopener noreferrer"
-         class="group flex flex-col items-center justify-center py-2" aria-label="Женис">
-        <img src="images/zhenis.png" alt="Женис"
-             class="max-h-24 w-full object-contain transition duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
-             loading="lazy">
-        <span class="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-gray-500 transition group-hover:text-brand-orange">
-          Открыть сайт
-        </span>
-      </a>
+      <div class="grid md:grid-cols-2 gap-10 sm:gap-12 max-w-4xl mx-auto">
+        <!-- ЖЕНИС ВЫШЕ -->
+        <a href="https://jenisfk.kz/" target="_blank" rel="noopener noreferrer"
+           class="group flex flex-col items-center justify-center py-2" aria-label="Женис">
+          <img src="images/zhenis.png" alt="Женис"
+               class="max-h-24 w-full object-contain transition duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+               loading="lazy">
+          <span class="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-gray-500 transition group-hover:text-brand-orange">
+            Открыть сайт
+          </span>
+        </a>
 
-      <a href="https://tehprogroup.kz/" target="_blank" rel="noopener noreferrer"
-         class="group flex flex-col items-center justify-center py-2" aria-label="Tehpro Group">
-        <img src="images/tehpro.png" alt="Tehpro Group"
-             class="max-h-24 w-full object-contain transition duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
-             loading="lazy">
-        <span class="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-gray-500 transition group-hover:text-brand-orange">
-          Открыть сайт
-        </span>
-      </a>
+        <a href="https://tehprogroup.kz/" target="_blank" rel="noopener noreferrer"
+           class="group flex flex-col items-center justify-center py-2" aria-label="Tehpro Group">
+          <img src="images/tehpro.png" alt="Tehpro Group"
+               class="max-h-24 w-full object-contain transition duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+               loading="lazy">
+          <span class="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-gray-500 transition group-hover:text-brand-orange">
+            Открыть сайт
+          </span>
+        </a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- FOOTER -->
   <footer class="bg-[#050505] border-t border-white/5 py-10">
