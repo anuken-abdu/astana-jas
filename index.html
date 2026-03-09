@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="kk" class="scroll-smooth lang-kz">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -94,6 +94,19 @@
     :root{ --nav-safe: 88px; }
     body { background-color: #121212; color: #E0E0E0; overflow-x: hidden; font-family: "Akrobat", "Jost", sans-serif; font-weight: 400; }
     section, footer { scroll-margin-top: var(--nav-safe); }
+
+    /* When KZ language is active — use Jost as primary font */
+    html.lang-kz body,
+    html.lang-kz .font-head,
+    html.lang-kz .nav-link,
+    html.lang-kz .nav-link a,
+    html.lang-kz .body-text,
+    html.lang-kz .caption-text,
+    html.lang-kz .lang-btn,
+    html.lang-kz .lb-hint,
+    html.lang-kz [class*="font-head"] {
+      font-family: "Jost", "Akrobat", sans-serif !important;
+    }
 
     /* Шум */
     .noise-bg {
@@ -234,9 +247,9 @@
     .nav-link {
       font-family: "Akrobat", "Jost", sans-serif;
       font-weight: 600;
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: .18em;
+      letter-spacing: .12em;
     }
     .body-text {
       font-family: "Akrobat", "Jost", sans-serif;
@@ -272,7 +285,7 @@
         </div>
       </a>
 
-      <div class="hidden md:flex gap-6 nav-link text-gray-400">
+      <div class="hidden md:flex gap-3 lg:gap-4 xl:gap-5 nav-link text-gray-400 whitespace-nowrap">
         <a href="#about" class="hover:text-white transition" data-i18n="nav_about">О клубе</a>
         <a href="#method" class="hover:text-white transition" data-i18n="nav_method">О методике</a>
         <a href="#rules" class="hover:text-white transition" data-i18n="nav_rules">Правила</a>
@@ -289,8 +302,8 @@
       <!-- Desktop right -->
       <div class="hidden md:flex items-center gap-4">
         <div class="lang-pill flex items-center">
-          <button type="button" class="lang-btn" data-set-lang="ru" aria-pressed="true">RU</button>
-          <button type="button" class="lang-btn" data-set-lang="kz" aria-pressed="false">KZ</button>
+          <button type="button" class="lang-btn" data-set-lang="kz" aria-pressed="true">KZ</button>
+          <button type="button" class="lang-btn" data-set-lang="ru" aria-pressed="false">RU</button>
         </div>
 
         <a href="https://wa.me/77019744464" class="bg-white text-black font-head font-extrabold text-sm uppercase px-6 py-2 hover:bg-brand-orange hover:text-black transition duration-300 transform -skew-x-12" data-i18n="btn_signup_wrap">
@@ -308,8 +321,8 @@
         </a>
 
         <div class="lang-pill flex items-center">
-          <button type="button" class="lang-btn" data-set-lang="ru" aria-pressed="true">RU</button>
-          <button type="button" class="lang-btn" data-set-lang="kz" aria-pressed="false">KZ</button>
+          <button type="button" class="lang-btn" data-set-lang="kz" aria-pressed="true">KZ</button>
+          <button type="button" class="lang-btn" data-set-lang="ru" aria-pressed="false">RU</button>
         </div>
 
         <button id="menuBtn" class="text-white text-2xl" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu">
@@ -1546,6 +1559,13 @@
       const isKz = lang === 'kz';
       document.documentElement.setAttribute('lang', isKz ? 'kk' : 'ru');
 
+      // Toggle font class for KZ language
+      if (isKz) {
+        document.documentElement.classList.add('lang-kz');
+      } else {
+        document.documentElement.classList.remove('lang-kz');
+      }
+
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         const val = i18n[lang] && i18n[lang][key];
@@ -1571,9 +1591,9 @@
     }
 
     // init
-    let savedLang = 'ru';
-    try { savedLang = localStorage.getItem('siteLang') || 'ru'; } catch(e){}
-    if (!i18n[savedLang]) savedLang = 'ru';
+    let savedLang = 'kz';
+    try { savedLang = localStorage.getItem('siteLang') || 'kz'; } catch(e){}
+    if (!i18n[savedLang]) savedLang = 'kz';
     applyLang(savedLang);
 
     document.querySelectorAll('[data-set-lang]').forEach(b => {
