@@ -461,10 +461,10 @@
           </p>
 
           <div class="flex flex-col sm:flex-row gap-3">
-            <a href="Правила.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-brand-orange text-black font-head font-extrabold uppercase px-8 py-4 clip-btn">
+            <a id="rulesOpenPdf" href="Правила.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-brand-orange text-black font-head font-extrabold uppercase px-8 py-4 clip-btn">
               <i class="fas fa-file-pdf"></i> <span data-i18n="rules_open_pdf">Открыть PDF</span>
             </a>
-            <a href="Правила.pdf" download class="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-head font-bold uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition">
+            <a id="rulesDownloadPdf" href="Правила.pdf" download class="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-head font-bold uppercase px-8 py-4 hover:border-brand-orange hover:text-brand-orange transition">
               <i class="fas fa-download"></i> <span data-i18n="rules_download">Скачать</span>
             </a>
           </div>
@@ -1426,7 +1426,7 @@
         rules_pdf_text: "Клуб ережелері құжатын ашыңыз немесе жүктеңіз.",
         rules_open_pdf: "PDF ашу",
         rules_download: "Жүктеу",
-        rules_file: "Файл: Правила.pdf",
+        rules_file: "Файл: ПравилаKZ.pdf",
 
         mission_title: "Біздің миссия",
         mission_core_title: "Клуб негізі",
@@ -1555,6 +1555,13 @@
       document.querySelectorAll('[data-set-lang]').forEach(b => {
         b.setAttribute('aria-pressed', String(b.dataset.setLang === lang));
       });
+
+      // Switch PDF links based on language
+      const pdfFile = isKz ? 'ПравилаKZ.pdf' : 'Правила.pdf';
+      const openPdf = document.getElementById('rulesOpenPdf');
+      const dlPdf = document.getElementById('rulesDownloadPdf');
+      if (openPdf) openPdf.href = pdfFile;
+      if (dlPdf) dlPdf.href = pdfFile;
 
       try { localStorage.setItem('siteLang', lang); } catch(e){}
     }
